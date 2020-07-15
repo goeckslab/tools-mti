@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<macros>
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="3.6">python</requirement>
+            <requirement type="package">scikit-learn</requirement>
+            <requirement type="package">scikit-image</requirement>
+            <requirement type="package">matplotlib</requirement>
+            <requirement type="package">tifffile</requirement>
+            <requirement type="package">opencv</requirement>
+        </requirements>
+    </xml>
+
+    <xml name="version_cmd">
+        <version_command>echo @VERSION@</version_command>
+    </xml>
+    <xml name="citations">
+        <citations>
+        </citations>
+    </xml>
+
+    <token name="@VERSION@">0.1</token>
+    <token name="@CMD_BEGIN@">python3 $__tool_directory__/code/s3segmenter.py</token>
+</macros>
