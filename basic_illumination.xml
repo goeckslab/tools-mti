@@ -1,0 +1,39 @@
+<tool id="basic_illumination" name="basic_illumination" version="@VERSION@" profile="20.05">
+    <description></description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+ 
+    <expand macro="requirements"/>
+    @VERSION_CMD@
+
+    <command detect_errors="exit_code"><![CDATA[
+    #set $ix = 1
+
+    #for $file in $in_files
+    ln -s $file ./input_$ix;
+    @CMD_BEGIN@
+    "filename='input_$ix',output_dir='.',experiment_name='output_$ix'";
+
+    #set $ix = $ix+1
+    #end for
+    ]]></command>
+
+    <inputs>
+        <param name="in_files" type="data" format="tiff" multiple="true" label="Raw Cycle Images"/>
+   </inputs>/
+
+    <outputs>
+        <collection type="list" name="output-dfp" label="${tool.name} on ${on_string}: DFP">
+            <discover_datasets pattern="(?P&lt;designation&gt;.*)-dfp\.(?P&lt;ext&gt;[^\._]+)?"/>
+        </collection>
+
+        <collection type="list" name="output-ffp" label="${tool.name} on ${on_string}: FFP">
+            <discover_datasets pattern="(?P&lt;designation&gt;.*)-ffp\.(?P&lt;ext&gt;[^\._]+)?"/>
+        </collection>
+    </outputs>
+
+    <help><![CDATA[
+    ]]></help>
+    <expand macro="citations" />
+</tool>
