@@ -1,0 +1,90 @@
+<tool id="ashlar" name="ashlar" version="@VERSION@" profile="20.05">
+    <description></description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+ 
+    <expand macro="requirements"/>
+    @VERSION_CMD@
+
+    <command detect_errors="exit_code"><![CDATA[
+
+        @CMD_BEGIN@ `echo '$lraw' | tr ',' ' '`
+
+        ##the other opts
+        -m 30 
+
+        #set $runIlluminationFiles = True
+        #if $runIlluminationFiles
+        --ffp `echo '$lffp' | tr ',' ' '`
+        --dfp `echo '$ldfp' | tr ',' ' '`
+        #end if
+
+        --pyramid
+        -f registered.ome.tif;
+
+        
+
+    ]]></command>
+
+
+    <inputs>
+        <param name="lraw" type="data" format="tiff" multiple="true" label="Raw Images"/>
+        <param name="lffp" type="data" format="tiff" multiple="true" label="Flat Field Profile Images"/>
+        <param name="ldfp" type="data" format="tiff" multiple="true" label="Deep Field Profile Images"/>
+    </inputs>/
+
+    <outputs>
+        <data format="tiff" name="output" from_work_dir="registered.ome.tif" label="${tool.name} on ${on_string}"/>
+    </outputs>
+    <help><![CDATA[
+Ashlar python package for microscopy registration, developed by HMS (repo: https://github.com/labsyspharm/ashlar)
+        ashlar [-h] [-o DIR] [-c [CHANNEL]]
+       [--output-channels [CHANNEL [CHANNEL ...]]] [-m SHIFT]
+       [--filter-sigma SIGMA] [-f FORMAT] [--pyramid]
+       [--tile-size PIXELS] [--ffp [FILE [FILE ...]]]
+       [--dfp [FILE [FILE ...]]] [--plates] [-q] [--version]
+       [FILE [FILE ...]]
+
+Stitch and align one or more multi-series images
+
+positional arguments:
+  FILE                  an image file to be processed (one file per cycle)
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -o DIR, --output DIR  write output image files to DIR; default is the
+                        current directory
+  -c [CHANNEL], --align-channel [CHANNEL]
+                        align images using channel number CHANNEL; numbering
+                        starts at 0
+  --output-channels [CHANNEL [CHANNEL ...]]
+                        output only channels listed in CHANNELS; numbering
+                        starts at 0
+  -m SHIFT, --maximum-shift SHIFT
+                        maximum allowed per-tile corrective shift in microns
+  --filter-sigma SIGMA  width in pixels of Gaussian filter to apply to images
+                        before alignment; default is 0 which disables
+                        filtering
+  -f FORMAT, --filename-format FORMAT
+                        use FORMAT to generate output filenames, with {cycle}
+                        and {channel} as required placeholders for the cycle
+                        and channel numbers; default is
+                        cycle_{cycle}_channel_{channel}.tif
+  --pyramid             write output as a single pyramidal TIFF
+  --tile-size PIXELS    set tile width and height to PIXELS (pyramid output
+                        only); default is 1024
+  --ffp [FILE [FILE ...]]
+                        read flat field profile image from FILES; if specified
+                        must be one common file for all cycles or one file for
+                        each cycle
+  --dfp [FILE [FILE ...]]
+                        read dark field profile image from FILES; if specified
+                        must be one common file for all cycles or one file for
+                        each cycle
+  --plates              enable plate mode for HTS data
+  -q, --quiet           suppress progress display
+  --version             print version
+    ]]></help>
+    <expand macro="citations" />
+</tool>
