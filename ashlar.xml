@@ -1,16 +1,45 @@
-# ASHLAR: Alignment by Simultaneous Harmonization of Layer/Adjacency Registration
+<tool id="ashlar" name="ashlar" version="@VERSION@" profile="20.05">
+    <description></description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+ 
+    <expand macro="requirements"/>
+    @VERSION_CMD@
 
-## Usage
+    <command detect_errors="exit_code"><![CDATA[
 
-```
-** Note from OHSU Fork
-To install, clone the repo and run `pip3 install path/to/ashlar` while the
-desired environment is active. 
+        @CMD_BEGIN@ `echo '$lraw' | tr ',' ' '`
 
-Requires python 3.7.5
-**
+        ##the other opts
+        -m 30 
 
-ashlar [-h] [-o DIR] [-c [CHANNEL]]
+        #set $runIlluminationFiles = True
+        #if $runIlluminationFiles
+        --ffp `echo '$lffp' | tr ',' ' '`
+        --dfp `echo '$ldfp' | tr ',' ' '`
+        #end if
+
+        --pyramid
+        -f registered.ome.tif;
+
+        
+
+    ]]></command>
+
+
+    <inputs>
+        <param name="lraw" type="data" format="tiff" multiple="true" label="Raw Images"/>
+        <param name="lffp" type="data" format="tiff" multiple="true" label="Flat Field Profile Images"/>
+        <param name="ldfp" type="data" format="tiff" multiple="true" label="Deep Field Profile Images"/>
+    </inputs>/
+
+    <outputs>
+        <data format="tiff" name="output" from_work_dir="registered.ome.tif" label="${tool.name} on ${on_string}"/>
+    </outputs>
+    <help><![CDATA[
+Ashlar python package for microscopy registration, developed by HMS (repo: https://github.com/labsyspharm/ashlar)
+        ashlar [-h] [-o DIR] [-c [CHANNEL]]
        [--output-channels [CHANNEL [CHANNEL ...]]] [-m SHIFT]
        [--filter-sigma SIGMA] [-f FORMAT] [--pyramid]
        [--tile-size PIXELS] [--ffp [FILE [FILE ...]]]
@@ -56,36 +85,6 @@ optional arguments:
   --plates              enable plate mode for HTS data
   -q, --quiet           suppress progress display
   --version             print version
-```
-
-## Installation
-
-### Linux
-
-On Linux, installation is fairly straightforward, but you must first install
-your distribution's development package for libfftw3 and a JDK (any one of
-versions 1.6, 1.7 or 1.8). You will also have to manually run `pip install
-numpy` before `pip install ashlar` due to a requirement of one of the required
-packages.
-
-### Using Anaconda Python for MacOS (or Linux)
-
-On MacOS, obtaining and configuring the necessary native libraries can be a bit
-challenging. For users on those platforms, or for Linux users having trouble
-with the instructions above, the Anaconda Python distribution can simplify the
-process.
-
-If you don't already have Anaconda, download it from
-https://www.anaconda.com/download/ and install. Then, run the following
-commands from a terminal:
-
-```bash
-conda install -q -y -c conda-forge pyfftw
-pip install -q -U ashlar
-```
-
-### Windows
-
-The pyfftw dependency is not currently supported on Windows. We are currently
-investigating a workaround. There is an experimental Docker image on DockerHub
-at `sorgerlab/ashlar` which should be suitable for many use cases.
+    ]]></help>
+    <expand macro="citations" />
+</tool>
