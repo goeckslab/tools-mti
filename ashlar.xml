@@ -9,22 +9,33 @@
 
     <command detect_errors="exit_code"><![CDATA[
 
-        @CMD_BEGIN@ `echo '$lraw' | tr ',' ' '`
+        ## Link the illumination files to appropriate file extension
+        #for $dfp in $ldfp:
+            ln -s $dfp ${dfp.name}.ome.tiff &&
+        #end for
+        #for $ffp in $lffp:
+            ln -s $ffp ${ffp.name}.ome.tiff &&
+        #end for
 
-        ##the other opts
-        -m 30 
+        @CMD_BEGIN@
 
-        #set $runIlluminationFiles = True
-        #if $runIlluminationFiles
-        --ffp `echo '$lffp' | tr ',' ' '`
-        --dfp `echo '$ldfp' | tr ',' ' '`
-        #end if
+        ## Supply the raw images
+        #for $raw in $lraw:
+            $raw
+        #end for
 
+        ## Additional arguments
+        -m 30
+        --ffp
+        #for $ffp in $lffp:
+            ${ffp.name}.ome.tiff
+        #end for
+        --dfp
+        #for $dfp in $ldfp:
+            ${dfp.name}.ome.tiff
+        #end for
         --pyramid
-        -f registered.ome.tif;
-
-        
-
+        -f registered.ome.tif
     ]]></command>
 
 

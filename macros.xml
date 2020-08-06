@@ -3,15 +3,6 @@
     <xml name="requirements">
         <requirements>
             <requirement type="package" version="3.7.5">python</requirement>
-            <!--requirement type="package">numpy</requirement>
-            <requirement type="package">matplotlib</requirement>
-            <requirement type="package">networkx</requirement>
-            <requirement type="package">pyfftw</requirement>
-            <requirement type="package">scipy</requirement>
-            <requirement type="package" version="0.16.2">scikit-image</requirement>
-            <requirement type="package">scikit-learn</requirement>
-            <requirement type="package">pyjnius</requirement>
-            <requirement type="package">blessed</requirement-->
         </requirements>
     </xml>
 
