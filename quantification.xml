@@ -1,0 +1,59 @@
+<tool id="quantification" name="quantification" version="@VERSION@" profile="20.05">
+    <description></description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+ 
+    <expand macro="requirements"/>
+    @VERSION_CMD@
+
+    <command detect_errors="exit_code"><![CDATA[
+    ln -s '$core' '${core.name}'.ome.tiff;
+    ln -s '$maskSpt' '${maskSpt.name}'.ome.tiff;
+
+    mkdir ./tool_out;
+
+    @CMD_BEGIN@
+    --mask '${maskSpt.name}'.ome.tiff
+    --image '${core.name}'.ome.tiff
+    --output ./tool_out
+    --channel_names '$markerFile';
+
+    mv ./tool_out/*.csv ./tool_out/quantified.csv;
+    ]]></command>
+
+    <inputs>
+        <param name="core" type="data" format="tiff" label="Registered TIFF"/>
+        <param name="maskSpt" type="data" format="tiff" label="Cell Mask TIFF"/>
+        <param name="markerFile" type="data" format="csv" label="Marker Channels"/>
+    </inputs>
+
+    <outputs>
+        <data format="csv" name="quant_out" from_work_dir="./tool_out/quantified.csv" label="${tool.name} on ${on_string}"/>
+    </outputs>
+    <help><![CDATA[
+# Single cell quantification
+Module for single-cell data extraction given a segmentation mask and multi-channel image. The CSV structure is aligned with histoCAT output.
+
+**CommandSingleCellExtraction.py**:
+
+* `--masks` Paths to where masks are stored (Ex: ./segmentation/cellMask.tif) -> If multiple masks are selected the first mask will be used for spatial feature extraction but all will be quantified
+
+* `--image` Path to image(s) for quantification.  (Ex: ./registration/*.h5) -> works with .h(df)5 or .tif(f)
+
+* `--output` Path to output directory. (Ex: ./feature_extraction)
+
+* `--channel_names` csv file containing the channel names for the z-stack (Ex: ./my_channels.csv)
+
+# Run script
+`python CommandSingleCellExtraction.py --masks ./segmentation/cellMask.tif ./segmentation/membraneMask.tif --image ./registration/Exemplar_001.h5  --output ./feature_extraction --channel_names ./my_channels.csv`
+
+# Main developer
+Denis Schapiro (https://github.com/DenisSch)
+
+Joshua Hess (https://github.com/JoshuaHess12)
+
+Jeremy Muhlich (https://github.com/jmuhlich)
+    ]]></help>
+    <expand macro="citations" />
+</tool>
