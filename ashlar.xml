@@ -11,10 +11,10 @@
 
         ## Link the illumination files to appropriate file extension
         #for $dfp in $ldfp:
-            ln -s $dfp ${dfp.name}.ome.tiff &&
+            ln -s $dfp ${dfp.name}_dfp.ome.tiff &&
         #end for
         #for $ffp in $lffp:
-            ln -s $ffp ${ffp.name}.ome.tiff &&
+            ln -s $ffp ${ffp.name}_ffp.ome.tiff &&
         #end for
 
         @CMD_BEGIN@
@@ -28,11 +28,11 @@
         -m 30
         --ffp
         #for $ffp in $lffp:
-            ${ffp.name}.ome.tiff
+            ${ffp.name}_ffp.ome.tiff
         #end for
         --dfp
         #for $dfp in $ldfp:
-            ${dfp.name}.ome.tiff
+            ${dfp.name}_dfp.ome.tiff
         #end for
         --pyramid
         -f registered.ome.tif
@@ -40,9 +40,9 @@
 
 
     <inputs>
-        <param name="lraw" type="data" format="tiff" multiple="true" label="Raw Images"/>
-        <param name="lffp" type="data" format="tiff" multiple="true" label="Flat Field Profile Images"/>
-        <param name="ldfp" type="data" format="tiff" multiple="true" label="Deep Field Profile Images"/>
+        <param name="lraw" type="data_collection" format="tiff" collection_type="list" label="Raw Images"/>
+        <param name="ldfp" type="data_collection" format="tiff" collection_type="list" label="Deep Field Profile Images"/>
+        <param name="lffp" type="data_collection" format="tiff" collection_type="list" label="Flat Field Profile Images"/>
     </inputs>/
 
     <outputs>
@@ -96,6 +96,9 @@ optional arguments:
   --plates              enable plate mode for HTS data
   -q, --quiet           suppress progress display
   --version             print version
+
+OHSU Wrapper Repo: https://github.com/ohsu-comp-bio/ashlar
+Conda Package Available From: https://anaconda.org/ohsu-comp-bio/ashlar
     ]]></help>
     <expand macro="citations" />
 </tool>
