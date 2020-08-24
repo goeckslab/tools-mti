@@ -20,5 +20,5 @@
     </xml>
 
     <token name="@VERSION@">0.1</token>
-    <token name="@CMD_BEGIN@">python3 $__tool_directory__/code/s3segmenter.py</token>
+    <token name="@CMD_BEGIN@">python3 $__tool_directory__/s3segmenter.py</token>
 </macros>

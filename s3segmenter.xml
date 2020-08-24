@@ -9,11 +9,12 @@
 
     <command detect_errors="exit_code"><![CDATA[
         ln -s '${image_path}' ./segmentation.tif;
+        ln -s '${stack_path}' ./Probabilities.tif;
 
         @CMD_BEGIN@ 
         --imagePath ./segmentation.tif
         --maskPath 'NO_MASK'
-        --stackProbPath '${stack_path}'
+        --stackProbPath ./Probabilities.tif
         --probMapChan '$nuc_chan'
         --outputPath .
         --crop '$crop';
@@ -25,8 +26,8 @@
         <param name="stack_path" type="data" format="tiff" label="Stack Probabilities"/>
         <param name="nuc_chan" type="integer" value="1" label="Nuclei Segmentation Channel"/>
         <param name="crop" type="select" label="Crop Strategy">
-            <option value="interactiveCrop">Interactive Crop</option>
             <option value="noCrop">No Crop</option>
+            <option value="interactiveCrop">Interactive Crop</option>
             <option value="dearray">De-array</option>
             <option value="plate">Plate</option>
         </param>
@@ -46,6 +47,7 @@ The centers of each nuclei are obtained by finding local maxima from the nuclei 
 To segment cytoplasm, the nuclei are in turn used for a marker-controlled watershed segmentation constrained by a cytoplasmic marker such as B-catenin. The channel number of this marker must be specified. A 3-pixel annulus around each nucleus will also be used to segment cytoplasm.
 
 The source repository can be found here: https://github.com/HMS-IDAC/S3segmenter
+OHSU Wrapper Repo: https://github.com/ohsu-comp-bio/S3segmenter
     ]]></help>
     <expand macro="citations" />
 </tool>
