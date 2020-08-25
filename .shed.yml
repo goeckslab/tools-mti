@@ -8,6 +8,5 @@ repositories:
     include: 
       - basic_illumination.xml
       - macros.xml
-      - build.sh
       - imagej_basic_ashlar.py
       - imagej_basic_ashlar_filepattern.py

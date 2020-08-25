@@ -1,4 +1,4 @@
-<tool id="basic_illumination" name="basic_illumination" version="@VERSION@" profile="17.09">
+<tool id="basic_illumination" name="basic_illumination" version="@VERSION@.1" profile="17.09">
     <description></description>
     <macros>
         <import>macros.xml</import>
