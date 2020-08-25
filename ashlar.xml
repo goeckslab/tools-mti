@@ -1,4 +1,4 @@
-<tool id="ashlar" name="ashlar" version="@VERSION@" profile="17.09">
+<tool id="ashlar" name="ashlar" version="@VERSION@.1" profile="17.09">
     <description></description>
     <macros>
         <import>macros.xml</import>
