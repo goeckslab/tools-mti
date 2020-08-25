@@ -1,0 +1,11 @@
+owner: perssond
+remote_repository_url: https://github.com/ohsu-comp-bio/ashlar
+categories: 
+  - "CompBio Galaxy Wrappers"
+repositories:
+  ashlar:
+    description: "Alignment by Simultaneous Harmonization of Layer/Adjacency Registration
+Usage"
+    include: 
+      - ashlar.xml
+      - macros.xml
