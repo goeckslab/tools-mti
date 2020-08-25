@@ -1,4 +1,4 @@
-<tool id="basic_illumination" name="basic_illumination" version="@VERSION@" profile="20.05">
+<tool id="basic_illumination" name="basic_illumination" version="@VERSION@" profile="17.09">
     <description></description>
     <macros>
         <import>macros.xml</import>
@@ -21,14 +21,14 @@
 
     <inputs>
         <param name="in_files" type="data_collection" format="tiff" collection_type="list" label="Raw Cycle Images"/>
-   </inputs>/
+   </inputs>
 
     <outputs>
-        <collection type="list" name="output-dfp" label="${tool.name} on ${on_string}: DFP">
+        <collection type="list" name="output_dfp" label="${tool.name} on ${on_string}: DFP">
             <discover_datasets pattern="(?P&lt;designation&gt;.*)-dfp\.(?P&lt;ext&gt;[^\._]+)?"/>
         </collection>
 
-        <collection type="list" name="output-ffp" label="${tool.name} on ${on_string}: FFP">
+        <collection type="list" name="output_ffp" label="${tool.name} on ${on_string}: FFP">
             <discover_datasets pattern="(?P&lt;designation&gt;.*)-ffp\.(?P&lt;ext&gt;[^\._]+)?"/>
         </collection>
     </outputs>
