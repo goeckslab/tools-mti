@@ -1,4 +1,4 @@
-<tool id="quantification" name="quantification" version="@VERSION@" profile="20.05">
+<tool id="quantification" name="quantification" version="@VERSION@" profile="17.09">
     <description></description>
     <macros>
         <import>macros.xml</import>
