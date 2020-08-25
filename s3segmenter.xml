@@ -1,4 +1,4 @@
-<tool id="s3segmenter" name="s3segmenter" version="@VERSION@" profile="20.05">
+<tool id="s3segmenter" name="s3segmenter" version="@VERSION@" profile="17.09">
     <description>S3segmenter is a Python-based set of functions that generates single cell (nuclei and cytoplasm) label masks.</description>
     <macros>
         <import>macros.xml</import>
@@ -31,10 +31,10 @@
             <option value="dearray">De-array</option>
             <option value="plate">Plate</option>
         </param>
-    </inputs>/
+    </inputs>
     <outputs>
         <data format="tiff" name="cell_mask" from_work_dir="segmentation/cellMask.tif" label="Cell Masks"/>
-        <data forma="tiff" name="nuclei_mask" from_work_dir="segmentation/nucleiMask.tif" label="Nuclei Masks"/>
+        <data format="tiff" name="nuclei_mask" from_work_dir="segmentation/nucleiMask.tif" label="Nuclei Masks"/>
     </outputs>
     <help><![CDATA[
 Inputs are:
