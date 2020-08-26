@@ -1,5 +1,5 @@
-<tool id="ashlar" name="ashlar" version="@VERSION@.1" profile="17.09">
-    <description></description>
+<tool id="ashlar" name="ASHLAR" version="@VERSION@.2" profile="17.09">
+    <description>Alignment by Simultaneous Harmonization of Layer/Adjacency Registration</description>
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -9,30 +9,44 @@
 
     <command detect_errors="exit_code"><![CDATA[
 
+        #def clean(file,type)
+          #set name_clean = str($file.element_identifier).replace('.ome.tiff','').replace('.tiff','').replace('.tiff.','')
+
+          #if $type == "raw"
+            #set file_clean = $name_clean + ".ome.tiff"
+          #elif $type == "ffp"
+            #set file_clean = $name_clean + "_ffp.ome.tiff"
+          #elif $type == "dfp"
+            #set file_clean = $name_clean + "_dfp.ome.tiff"
+          #end if
+
+          #return $file_clean
+        #end def
+
         ## Link the illumination files to appropriate file extension
         #for $dfp in $ldfp:
-            ln -s $dfp ${dfp.name}_dfp.ome.tiff &&
+            ln -s $dfp $clean($dfp,"dfp") &&
         #end for
         #for $ffp in $lffp:
-            ln -s $ffp ${ffp.name}_ffp.ome.tiff &&
+            ln -s $ffp $clean($ffp,"ffp") &&
         #end for
 
         @CMD_BEGIN@
 
         ## Supply the raw images
         #for $raw in $lraw:
-            $raw
+            $clean($raw,"raw")
         #end for
 
         ## Additional arguments
         -m 30
         --ffp
         #for $ffp in $lffp:
-            ${ffp.name}_ffp.ome.tiff
+            $clean($ffp,"ffp")
         #end for
         --dfp
         #for $dfp in $ldfp:
-            ${dfp.name}_dfp.ome.tiff
+            $clean($dfp,"dfp")
         #end for
         --pyramid
         -f registered.ome.tif
