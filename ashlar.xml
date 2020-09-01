@@ -35,7 +35,7 @@
 
         ## Supply the raw images
         #for $raw in $lraw:
-            $clean($raw,"raw")
+            $raw
         #end for
 
         ## Additional arguments
