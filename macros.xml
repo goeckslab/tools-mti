@@ -3,12 +3,12 @@
     <xml name="requirements">
         <requirements>
             <requirement type="package" version="3.7.5">python</requirement>
-            <requirement type="package">cudatoolkit</requirement>
-            <requirement type="package">tensorflow</requirement>
+            <requirement type="package" version="2.1.0">tensorflow</requirement>
             <requirement type="package">cudnn</requirement>
-            <requirement type="package">scikit-image</requirement>
-            <requirement type="package">scipy</requirement>
-            <requirement type="package">tifffile</requirement>
+            <requirement type="package">cudatoolkit</requirement>
+            <requirement type="package" version="0.17.2">scikit-image</requirement>
+            <requirement type="package" version="1.4.1">scipy</requirement>
+            <requirement type="package" version="2020.7.24">tifffile</requirement>
             <requirement type="package" version="2019.7.2">czifile</requirement>
             <requirement type="package" version="3.2.3">nd2reader</requirement>
         </requirements>
@@ -22,6 +22,6 @@
         </citations>
     </xml>
 
-    <token name="@VERSION@">0.1</token>
+    <token name="@VERSION@">2.1.0</token>
     <token name="@CMD_BEGIN@">python ${__tool_directory__}/UnMicst.py</token>
 </macros>
