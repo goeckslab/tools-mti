@@ -1,0 +1,34 @@
+<tool id="unet_coreograph" name="UNetCoreograph" version="@VERSION@.2" profile="17.09">
+    <description>Coreograph uses UNet, a deep learning model, to identify complete/incomplete tissue cores on a tissue microarray. It has been trained on 9 TMA slides of different sizes and tissue types.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+ 
+    <expand macro="requirements"/>
+    @VERSION_CMD@
+
+    <command detect_errors="exit_code"><![CDATA[
+        tree;
+        echo -----;
+        @CMD_BEGIN@
+        --imagePath '$source_image'
+        --outputPath .;
+        echo -----;
+        tree;
+        
+    ]]></command>
+
+
+    <inputs>
+        <param name="source_image" type="data" format="tiff" label="Registered TIFF"/>
+    </inputs>
+
+    <outputs>
+        <collection name="tma_sections" type="list" label="Separated TMA samples">
+            <discover_datasets pattern="__name_and_ext__" format="tiff" visible="true"/>
+        </collection>
+    </outputs>
+    <help><![CDATA[
+    ]]></help>
+    <expand macro="citations" />
+</tool>

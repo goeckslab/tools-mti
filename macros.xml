@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<macros>
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="3.6">python</requirement>
+            <requirement type="package">cython</requirement>
+            <requirement type="package" version="0.14.2">scikit-image</requirement>
+            <requirement type="package">matplotlib</requirement>
+            <requirement type="package" version="2020.2.16">tifffile</requirement>
+            <requirement type="package" version="1.1.0">scipy</requirement>
+            <requirement type="package">opencv</requirement>
+            <requirement type="package">pytiff</requirement>
+        </requirements>
+    </xml>
+
+    <xml name="version_cmd">
+        <version_command>echo @VERSION@</version_command>
+    </xml>
+    <xml name="citations">
+        <citations>
+        </citations>
+    </xml>
+
+    <token name="@VERSION@">1.12.0</token>
+    <token name="@CMD_BEGIN@">python ${__tool_directory__}/UNetCoreograph.py</token>
+</macros>
