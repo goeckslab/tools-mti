@@ -3,13 +3,15 @@
     <xml name="requirements">
         <requirements>
             <requirement type="package" version="3.6">python</requirement>
+            <requirement type="package" version="1.15.1">tensorflow-estimator</requirement>
+            <requirement type="package" version="1.15">tensorflow</requirement>
             <requirement type="package">cython</requirement>
             <requirement type="package" version="0.14.2">scikit-image</requirement>
             <requirement type="package">matplotlib</requirement>
             <requirement type="package" version="2020.2.16">tifffile</requirement>
             <requirement type="package" version="1.1.0">scipy</requirement>
             <requirement type="package">opencv</requirement>
-            <requirement type="package">pytiff</requirement>
+            <requirement type="package" version="0.8.1">pytiff</requirement>
         </requirements>
     </xml>
 

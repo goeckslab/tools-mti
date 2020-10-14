@@ -8,13 +8,12 @@
     @VERSION_CMD@
 
     <command detect_errors="exit_code"><![CDATA[
-        tree;
-        echo -----;
+        #set $type_corrected = str($source_image)[:-3]+'ome.tif'
+        ln -s $source_image `basename $type_corrected`;
+
         @CMD_BEGIN@
-        --imagePath '$source_image'
+        --imagePath `basename $type_corrected`
         --outputPath .;
-        echo -----;
-        tree;
         
     ]]></command>
 
@@ -24,8 +23,8 @@
     </inputs>
 
     <outputs>
-        <collection name="tma_sections" type="list" label="Separated TMA samples">
-            <discover_datasets pattern="__name_and_ext__" format="tiff" visible="true"/>
+        <collection name="tma_sections" type="list" label="${tool.name} on ${on_string}">
+            <discover_datasets pattern="(?P&lt;designation&gt;[0-9]+)\.tif" format="tiff" visible="false"/>
         </collection>
     </outputs>
     <help><![CDATA[
