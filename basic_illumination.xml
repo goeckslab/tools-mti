@@ -8,7 +8,7 @@
     @VERSION_CMD@
 
     <command detect_errors="exit_code"><![CDATA[
-    ln -s $in_files ${in_files.name} &&
+    ln -s $in_files "${in_files.name}" &&
 
     #set $outname = str($in_files.name).replace('.ome.tiff','')
 
