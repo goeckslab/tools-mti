@@ -25,28 +25,28 @@
 
         ## Link the illumination files to appropriate file extension
         #for $dfp in $ldfp:
-            ln -s $dfp $clean($dfp,"dfp") &&
+            ln -s "$dfp" "$clean($dfp,"dfp")" &&
         #end for
         #for $ffp in $lffp:
-            ln -s $ffp $clean($ffp,"ffp") &&
+            ln -s "$ffp" "$clean($ffp,"ffp")" &&
         #end for
 
         @CMD_BEGIN@
 
         ## Supply the raw images
         #for $raw in $lraw:
-            $raw
+            "$raw"
         #end for
 
         ## Additional arguments
         -m 30
         --ffp
         #for $ffp in $lffp:
-            $clean($ffp,"ffp")
+            "$clean($ffp,"ffp")"
         #end for
         --dfp
         #for $dfp in $ldfp:
-            $clean($dfp,"dfp")
+            "$clean($dfp,"dfp")"
         #end for
         --pyramid
         -f registered.ome.tif

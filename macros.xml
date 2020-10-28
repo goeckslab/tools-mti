@@ -14,6 +14,6 @@
         </citations>
     </xml>
 
-    <token name="@VERSION@">1.12.0</token>
+    <token name="@VERSION@">1.13.0</token>
     <token name="@CMD_BEGIN@">ashlar</token>
 </macros>
