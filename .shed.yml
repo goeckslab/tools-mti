@@ -1,0 +1,12 @@
+owner: perssond
+remote_repository_url: https://github.com/ohsu-comp-bio/S3segmenter
+categories: 
+  - "CompBio Galaxy Wrappers"
+repositories:
+  s3segmenter:
+    description: "S3segmenter is a Matlab-based set of functions that generates single cell (nuclei and cytoplasm) label masks"
+    include: 
+      - s3segmenter.xml
+      - macros.xml
+      - S3segmenter.py
+      - rowit.py
