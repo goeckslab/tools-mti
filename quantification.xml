@@ -1,4 +1,4 @@
-<tool id="quantification" name="quantification" version="@VERSION@.1" profile="17.09">
+<tool id="quantification" name="Quantification" version="@VERSION@.2" profile="17.09">
     <description>Single cell quantification, a module for single-cell data extraction given a segmentation mask and multi-channel image.</description>
     <macros>
         <import>macros.xml</import>
@@ -8,24 +8,32 @@
     @VERSION_CMD@
 
     <command detect_errors="exit_code"><![CDATA[
-    ln -s '$core' '${core.name}'.ome.tiff;
-    ln -s '$maskSpt' '${maskSpt.name}'.ome.tiff;
+    ln -s '$image' '${image.name}'.ome.tiff;
+    
+    #for $mask in $masks:
+    ln -s '$mask' '${mask.name}'.ome.tiff;
+    #end for
 
     mkdir ./tool_out;
 
     @CMD_BEGIN@
-    --mask '${maskSpt.name}'.ome.tiff
-    --image '${core.name}'.ome.tiff
+    
+    --masks 
+    #for $mask in $masks:
+    '${mask.name}'.ome.tiff
+    #end for
+
+    --image '${image.name}'.ome.tiff
     --output ./tool_out
-    --channel_names '$markerFile';
+    --channel_names '$channel_names';
 
     mv ./tool_out/*.csv ./tool_out/quantified.csv;
     ]]></command>
 
     <inputs>
-        <param name="core" type="data" format="tiff" label="Registered TIFF"/>
-        <param name="maskSpt" type="data" format="tiff" label="Cell Mask TIFF"/>
-        <param name="markerFile" type="data" format="csv" label="Marker Channels"/>
+        <param name="image" type="data" format="tiff" label="Registered TIFF"/>
+        <param name="masks" type="data" multiple="true" format="tiff" label="Cell Mask TIFF"/>
+        <param name="channel_names" type="data" format="csv" label="Marker Channels"/>
     </inputs>
 
     <outputs>
