@@ -19,6 +19,6 @@
         </citations>
     </xml>
 
-    <token name="@VERSION@">0.1</token>
+    <token name="@VERSION@">1.2.1</token>
     <token name="@CMD_BEGIN@">python3 $__tool_directory__/S3segmenter.py</token>
 </macros>
