@@ -1,4 +1,4 @@
-<tool id="unmicst" name="unmicst" version="@VERSION@.1" profile="17.09">
+<tool id="unmicst" name="unmicst" version="@VERSION@.2" profile="17.09">
     <description>UNet Model for Identifying Cells and Segmenting Tissue</description>
     <macros>
         <import>macros.xml</import>
@@ -8,10 +8,11 @@
     @VERSION_CMD@
 
     <command detect_errors="exit_code"><![CDATA[
-    #set $typeCorrected = str($core)[:-3]+'ome.tif'
-    ln -s $core $typeCorrected;
+    #set $typeCorrected = str($image.name).replace('.ome.tiff','').replace('.ome.tif').replace('.tiff','').replace('.tif','')+'ome.tif'
 
-    @CMD_BEGIN@ $typeCorrected ###'${core}.ome.tif'
+    ln -s $image $typeCorrected;
+
+    @CMD_BEGIN@ $typeCorrected
     --stackOutput
     --outputPath `pwd`;
 
@@ -21,7 +22,7 @@
     ]]></command>
 
     <inputs>
-        <param name="core" type="data" format="tiff" label="Registered TIFF"/>
+        <param name="image" type="data" format="tiff" label="Registered TIFF"/>
     </inputs>
 
     <outputs>

@@ -12,4 +12,5 @@ repositories:
       - batchUNet2DtCycif.py
       - batchUnMicst.py
       - UnMicst.py
-      - models/*
+      - models/**
+      - toolbox/**
