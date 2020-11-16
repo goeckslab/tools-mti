@@ -1,4 +1,4 @@
-<tool id="ashlar" name="ASHLAR" version="@VERSION@.2" profile="17.09">
+<tool id="ashlar" name="ASHLAR" version="@VERSION@.3" profile="17.09">
     <description>Alignment by Simultaneous Harmonization of Layer/Adjacency Registration</description>
     <macros>
         <import>macros.xml</import>
