@@ -39,7 +39,16 @@
         #end for
 
         ## Additional arguments
-        -m 30
+        -m $max_shift
+
+        #if $flip_x
+        --flip-x
+        #end if
+        #if $flip_y
+        --flip-y
+        #end if
+
+
         --ffp
         #for $ffp in $lffp:
             "$clean($ffp,"ffp")"
@@ -57,6 +66,11 @@
         <param name="lraw" type="data_collection" format="tiff" collection_type="list" label="Raw Images"/>
         <param name="ldfp" type="data_collection" format="tiff" collection_type="list" label="Deep Field Profile Images"/>
         <param name="lffp" type="data_collection" format="tiff" collection_type="list" label="Flat Field Profile Images"/>
+
+        <param name="flip_x" type="boolean" value="false" label="Flip X-axis"/>
+        <param name="flip_y" type="boolean" value="false" label="Flip Y-axis"/>
+
+        <param name="max_shift" type="integer" value="30" label="Maximum allowed per-tile corrective shift" help="In micros"/>
     </inputs>
 
     <outputs>
