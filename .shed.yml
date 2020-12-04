@@ -9,3 +9,4 @@ Usage"
     include: 
       - ashlar.xml
       - macros.xml
+      - pyramid_upgrade.py

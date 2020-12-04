@@ -1,4 +1,4 @@
-<tool id="ashlar" name="ASHLAR" version="@VERSION@.3" profile="17.09">
+<tool id="ashlar" name="ASHLAR" version="@VERSION@.4" profile="17.09">
     <description>Alignment by Simultaneous Harmonization of Layer/Adjacency Registration</description>
     <macros>
         <import>macros.xml</import>
@@ -58,8 +58,29 @@
             "$clean($dfp,"dfp")"
         #end for
         --pyramid
-        -f registered.ome.tif
+        -f registered.ome.tif;
+
+        #if $upgrade.decide == "do_upgrade"
+        python ${__tool_directory__}/pyramid_upgrade.py
+        registered.ome.tif
+
+        #if $upgrade.markers_file
+        -n `python "$get_markers" "${upgrade.markers_file}"`
+        #end if
+        #end if
     ]]></command>
+
+    <configfiles>
+        <configfile name="get_markers">
+import pandas as pd
+import sys
+
+marker_file = sys.argv[1]
+df = pd.read_csv(marker_file)
+print(' '.join(df['marker_name'].array)) 
+        </configfile>
+    </configfiles>
+
 
 
     <inputs>
@@ -71,6 +92,19 @@
         <param name="flip_y" type="boolean" value="false" label="Flip Y-axis"/>
 
         <param name="max_shift" type="integer" value="30" label="Maximum allowed per-tile corrective shift" help="In micros"/>
+
+        <conditional name="upgrade">
+            <param name="decide" type="select" label="Upgrade to BF6-Compliant OME-TIFF Pyramid">
+                <option value="do_upgrade">Upgrade Pyramid</option>
+                <option value="dont_upgrade">Leave Legacy Pyramid</option>
+            </param>
+            <when value="do_upgrade">
+                <param name="markers_file" type="data" format="csv,tabular" optional="true" label="Markers File (optional)"/>
+            </when>
+            <when value="dont_upgrade">
+            </when>
+
+        </conditional>
     </inputs>
 
     <outputs>
