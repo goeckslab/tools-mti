@@ -4,14 +4,14 @@
         <requirements>
             <requirement type="package" version="3.7">python</requirement>
             <requirement type="package" version="1.15.0">tensorflow</requirement>
-            <requirement type="package" version="1.15.1">tensorflow-estimator</requirement>
-            <requirement type="package">cudnn</requirement>
-            <requirement type="package" version="10.0">cudatoolkit</requirement>
             <requirement type="package" version="0.17.2">scikit-image</requirement>
             <requirement type="package" version="1.4.1">scipy</requirement>
             <requirement type="package" version="2020.7.24">tifffile</requirement>
             <requirement type="package" version="2019.7.2">czifile</requirement>
             <requirement type="package" version="3.2.3">nd2reader</requirement>
+            <!--requirement type="package" version="1.15.1">tensorflow-estimator</requirement-->
+            <!--requirement type="package">cudnn</requirement-->
+            <!--requirement type="package" version="10.0">cudatoolkit</requirement-->
         </requirements>
     </xml>
 

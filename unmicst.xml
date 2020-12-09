@@ -8,13 +8,17 @@
     @VERSION_CMD@
 
     <command detect_errors="exit_code"><![CDATA[
-    #set $typeCorrected = str($image.name).replace('.ome.tiff','').replace('.ome.tif').replace('.tiff','').replace('.tif','')+'ome.tif'
+    #set $typeCorrected = str($image.name).replace('.ome.tiff','').replace('.ome.tif','').replace('.tiff','').replace('.tif','')+'.ome.tif'
 
-    ln -s $image $typeCorrected;
+    ln -s $image '$typeCorrected';
 
-    @CMD_BEGIN@ $typeCorrected
+    @CMD_BEGIN@ '$typeCorrected'
     --stackOutput
-    --outputPath `pwd`;
+    --outputPath `pwd`
+    --channel $channel
+    --model $model
+    --mean $mean
+    --std $stdev;
 
     ## Move files to different files for from_work_dir differentiation
     mv *Probabilities*.tif Probabilities.tif;
@@ -23,6 +27,15 @@
 
     <inputs>
         <param name="image" type="data" format="tiff" label="Registered TIFF"/>
+        <param name="model" type="select" label="Model">
+            <option value="nucleiDAPI">nucleiDAPI</option>
+            <option value="CytoplasmIncell">CytoplasmIncell</option>
+            <option value="mousenucleiDAPI">mousenucleiDAPI</option>
+            <option value="CytoplasmZeissNikon">CytoplasmZeissNikos</option>
+        </param>
+        <param name="mean" type="float" value="-1" label="Mean (-1 for model default)"/>
+        <param name="stdev" type="float" value="-1" label="Standard Deviation (-1 for model default)"/>
+        <param name="channel" type="integer" value="0" label="Channel to perform inference on"/>
     </inputs>
 
     <outputs>
