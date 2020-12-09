@@ -9,8 +9,8 @@
 
     <command detect_errors="exit_code"><![CDATA[
     ln -s '$image' '${image.name}'.ome.tiff;
-    
-    #for $mask in $masks:
+    ln -s '$primary_mask' '${primary_mask.name}'.ome.tiff; 
+    #for $mask in $supp_masks:
     ln -s '$mask' '${mask.name}'.ome.tiff;
     #end for
 
@@ -19,7 +19,8 @@
     @CMD_BEGIN@
     
     --masks 
-    #for $mask in $masks:
+    '${primary_mask.name}'.ome.tiff
+    #for $mask in $supp_masks:
     '${mask.name}'.ome.tiff
     #end for
 
@@ -32,7 +33,8 @@
 
     <inputs>
         <param name="image" type="data" format="tiff" label="Registered TIFF"/>
-        <param name="masks" type="data" multiple="true" format="tiff" label="Cell Mask TIFF"/>
+        <param name="primary_mask" type="data" format="tiff" label="Primary Cell Mask"/>
+        <param name="supp_masks" type="data" multiple="true" format="tiff" label="Additional Cell Masks"/>
         <param name="channel_names" type="data" format="csv" label="Marker Channels"/>
     </inputs>
 
