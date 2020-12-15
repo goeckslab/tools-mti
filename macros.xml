@@ -2,9 +2,8 @@
 <macros>
     <xml name="requirements">
         <requirements>
-            <requirement type="package" version="3.7">python</requirement>
             <requirement type="package" version="@VERSION@">ashlar</requirement>
-            <requirement type="package">pandas</requirement>
+            <requirement type="package" version="1.1.5">pandas</requirement>
         </requirements>
     </xml>
 
