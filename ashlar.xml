@@ -1,4 +1,4 @@
-<tool id="ashlar" name="ASHLAR" version="@VERSION@.5" profile="17.09">
+<tool id="ashlar" name="ASHLAR" version="@VERSION@.6" profile="17.09">
     <description>Alignment by Simultaneous Harmonization of Layer/Adjacency Registration</description>
     <macros>
         <import>macros.xml</import>
@@ -44,10 +44,20 @@
         #if $flip_x
         --flip-x
         #end if
+
         #if $flip_y
         --flip-y
         #end if
 
+        -c $adv.align_channel
+
+        #if $adv.filter_sigma
+        --filter-sigma $adv.filter_sigma
+        #end if
+
+        #if $adv.tile_size
+        --tile-size $adv.tile_size
+        #end if
 
         --ffp
         #for $ffp in $lffp:
@@ -103,8 +113,12 @@ print(' '.join(df['marker_name'].array))
             </when>
             <when value="dont_upgrade">
             </when>
-
         </conditional>
+        <section name="adv" title="Advanced Options" expanded="false">
+            <param name="align_channel" type="integer" value="0" label="Align Channel Number"/>
+            <param name="filter_sigma" type="float" optional="true" label="Sigma"/>
+            <param name="tile_size" type="integer"  optional="true" label="Cyto Mask Channel"/>
+        </section>
     </inputs>
 
     <outputs>
