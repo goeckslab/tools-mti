@@ -1,4 +1,4 @@
-<tool id="unmicst" name="unmicst" version="@VERSION@.2" profile="17.09">
+<tool id="unmicst" name="UnMicst" version="@VERSION@.3" profile="17.09">
     <description>UNet Model for Identifying Cells and Segmenting Tissue</description>
     <macros>
         <import>macros.xml</import>
@@ -13,16 +13,26 @@
     ln -s $image '$typeCorrected';
 
     @CMD_BEGIN@ '$typeCorrected'
+    
+    #if $stackoutput
     --stackOutput
+    #end if
+
     --outputPath `pwd`
     --channel $channel
     --model $model
     --mean $mean
-    --std $stdev;
+    --std $stdev
+    --scalingFactor $scalingfactor;
 
     ## Move files to different files for from_work_dir differentiation
+    #if $stackoutput
     mv *Probabilities*.tif Probabilities.tif;
     mv *Preview*.tif Preview.tif
+    #else
+    mv *ContoursPM*.tif ContoursPM.tif;
+    mv *NucleiPM*.tif NucleiPM.tif
+    #end if
     ]]></command>
 
     <inputs>
@@ -36,11 +46,23 @@
         <param name="mean" type="float" value="-1" label="Mean (-1 for model default)"/>
         <param name="stdev" type="float" value="-1" label="Standard Deviation (-1 for model default)"/>
         <param name="channel" type="integer" value="0" label="Channel to perform inference on"/>
+        <param name="stackoutput" type="boolean"  label="Stack probability map outputs"/>
+        <param name="scalingfactor" type="float" value="1.0" label="Factor to scale by"/>
     </inputs>
 
     <outputs>
-        <data format="tiff" name="previews" from_work_dir="Preview.tif" label="${tool.name} on ${on_string}: Preview"/>
-        <data format="tiff" name="probabilities" from_work_dir="Probabilities.tif" label="${tool.name} on ${on_string}: Probabilities"/>
+        <data format="tiff" name="previews" from_work_dir="Preview.tif" label="${tool.name} on ${on_string}: Preview">
+            <filter>stackoutput</filter>
+        </data>
+        <data format="tiff" name="probabilities" from_work_dir="Probabilities.tif" label="${tool.name} on ${on_string}: Probabilities">
+            <filter>stackoutput</filter>
+        </data>
+        <data format="tiff" name="contours" from_work_dir="ContoursPM.tif" label="${tool.name} on ${on_string}: ContoursPM">
+            <filter>not stackoutput</filter>
+        </data>
+        <data format="tiff" name="nuclei" from_work_dir="NucleiPM.tif" label="${tool.name} on ${on_string}: NucleiPM">
+            <filter>not stackoutput</filter>
+        </data>
     </outputs>
     <help><![CDATA[
 UnMicst - UNet Model for Identifying Cells and Segmenting Tissue
