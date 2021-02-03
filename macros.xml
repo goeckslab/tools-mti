@@ -23,6 +23,6 @@
         </citations>
     </xml>
 
-    <token name="@VERSION@">1.12.0</token>
+    <token name="@VERSION@">2.2.0</token>
     <token name="@CMD_BEGIN@">python ${__tool_directory__}/UNetCoreograph.py</token>
 </macros>
