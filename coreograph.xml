@@ -1,4 +1,4 @@
-<tool id="unet_coreograph" name="UNetCoreograph" version="@VERSION@.2" profile="17.09">
+<tool id="unet_coreograph" name="UNetCoreograph" version="@VERSION@.3" profile="17.09">
     <description>Coreograph uses UNet, a deep learning model, to identify complete/incomplete tissue cores on a tissue microarray. It has been trained on 9 TMA slides of different sizes and tissue types.</description>
     <macros>
         <import>macros.xml</import>
@@ -13,6 +13,19 @@
 
         @CMD_BEGIN@
         --imagePath `basename $type_corrected`
+        --downsampleFactor $downsamplefactor
+        --channel $channel
+        --buffer $buffer
+        --sensitivity $sensitivity
+
+        ##if $usegrid
+        ##--useGrid
+        ##end if
+
+        #if $cluster
+        --cluster
+        #end if
+
         --outputPath .;
         
     ]]></command>
@@ -20,12 +33,22 @@
 
     <inputs>
         <param name="source_image" type="data" format="tiff" label="Registered TIFF"/>
+        <param name="downsamplefactor" type="integer" value="5" label="Down Sample Factor"/>
+        <param name="channel" type="integer" value="0" label="Channel"/>
+        <param name="buffer" type="float" value="2.0" label="Buffer"/>
+        <param name="sensitivity" type="float" value="0.3" label="Sensitivity"/>
+        <!--<param name="usegrid" type="boolean" label="Use Grid"/>-->
+        <param name="cluster" type="boolean" checked="false" label="Cluster"/>
     </inputs>
 
     <outputs>
         <collection name="tma_sections" type="list" label="${tool.name} on ${on_string}">
             <discover_datasets pattern="(?P&lt;designation&gt;[0-9]+)\.tif" format="tiff" visible="false"/>
         </collection>
+        <collection name="masks" type="list" directory="masks" label="${tool.name} on ${on_string}: Masks">
+            <discover_datasets pattern="(?P&lt;designation&gt;[0-9]+)_mask\.tif" format="tiff" visible="false"/>
+        </collection>
+        <data name="TMA_MAP" format="tiff" from_work_dir="TMA_MAP.tif"/>
     </outputs>
     <help><![CDATA[
     ]]></help>

@@ -1,0 +1,15 @@
+owner: perssond
+remote_repository_url: https://github.com/ohsu-comp-bio/UNetCoreograph
+categories:
+  - "CompBio Galaxy Wrappers"
+repositories:
+  coreograph:
+    description: "Coreograph uses UNet, a deep learning model, to identify complete/incomplete tissue cores on a tissue microarray."
+    include:
+      - images
+      - model
+      - toolbox
+      - UNet2DtCycifTRAINCoreograph.py
+      - UNetCoreograph.py
+      - coreograph.xml
+      - macros.xml
