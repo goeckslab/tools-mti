@@ -1,4 +1,4 @@
-<tool id="unmicst" name="UnMicst" version="@VERSION@.3" profile="17.09">
+<tool id="unmicst" name="UnMicst" version="@VERSION@.4" profile="17.09">
     <description>UNet Model for Identifying Cells and Segmenting Tissue</description>
     <macros>
         <import>macros.xml</import>
