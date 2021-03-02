@@ -1,4 +1,4 @@
-<tool id="quantification" name="Quantification" version="@VERSION@.2" profile="17.09">
+<tool id="quantification" name="Quantification" version="@VERSION@.4" profile="17.09">
     <description>Single cell quantification, a module for single-cell data extraction given a segmentation mask and multi-channel image.</description>
     <macros>
         <import>macros.xml</import>
@@ -20,9 +20,11 @@
     
     --masks 
     '${primary_mask.name}'.ome.tiff
+    #if $supp_masks
     #for $mask in $supp_masks:
     '${mask.name}'.ome.tiff
     #end for
+    #end if
 
     --image '${image.name}'.ome.tiff
     --output ./tool_out
@@ -34,7 +36,7 @@
     <inputs>
         <param name="image" type="data" format="tiff" label="Registered TIFF"/>
         <param name="primary_mask" type="data" format="tiff" label="Primary Cell Mask"/>
-        <param name="supp_masks" type="data" multiple="true" format="tiff" label="Additional Cell Masks"/>
+        <param name="supp_masks" type="data" multiple="true" optional="true" format="tiff" label="Additional Cell Masks"/>
         <param name="channel_names" type="data" format="csv" label="Marker Channels"/>
     </inputs>
 
