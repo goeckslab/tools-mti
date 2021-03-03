@@ -1,4 +1,4 @@
-<tool id="quantification" name="Quantification" version="@VERSION@.4" profile="17.09">
+<tool id="quantification" name="Quantification" version="@VERSION@.5" profile="17.09">
     <description>Single cell quantification, a module for single-cell data extraction given a segmentation mask and multi-channel image.</description>
     <macros>
         <import>macros.xml</import>
