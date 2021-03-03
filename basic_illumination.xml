@@ -1,4 +1,4 @@
-<tool id="basic_illumination" name="BaSiC Illumination" version="@VERSION@.2" profile="17.09">
+<tool id="basic_illumination" name="BaSiC Illumination" version="@VERSION@.3" profile="17.09">
     <description>ImageJ BaSiC shading correction for use with Ashlar</description>
     <macros>
         <import>macros.xml</import>
