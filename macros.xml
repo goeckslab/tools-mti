@@ -23,6 +23,6 @@
         </citations>
     </xml>
 
-    <token name="@VERSION@">2.1.0</token>
+    <token name="@VERSION@">3.1.1</token>
     <token name="@CMD_BEGIN@">python ${__tool_directory__}/UnMicst.py</token>
 </macros>
