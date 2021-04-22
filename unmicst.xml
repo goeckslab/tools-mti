@@ -43,7 +43,6 @@
             <option value="CytoplasmIncell2">CytoplasmIncell2</option>
             <option value="CytoplasmZeissNikon">CytoplasmZeissNikon</option>
             <option value="mousenucleiDAPI">mousenucleiDAPI</option>
-            <option value="nucleiDAPI">nucleiDAPI</option>
             <option value="nucleiDAPI1-5">nucleiDAPI1-5</option>
             <option value="nucleiDAPILAMIN">nucleiDAPILAMIN</option>
         </param>
@@ -68,6 +67,14 @@
             <filter>not stackoutput</filter>
         </data>
     </outputs>
+    <tests>
+        <test>
+            <param name="image" value="105.tif" ftype="tiff" />
+            <param name="model" value="nucleiDAPI" />
+            <output name="probabilities" file="105_NucleiPM_1.tif" compare="sim_size" delta="10" />
+            <output name="contours" file="105_ContoursPM_1.tif" compare="sim_size" delta="10" />
+        </test>
+    </tests>
     <help><![CDATA[
 UnMicst - UNet Model for Identifying Cells and Segmenting Tissue
 Image Preprocessing
