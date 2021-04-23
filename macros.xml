@@ -2,6 +2,7 @@
 <macros>
     <xml name="requirements">
         <requirements>
+            <container type="docker">labsyspharm/basic-illumination:1.0.2</container>
             <requirement type="package" version="3.8">python</requirement>
             <requirement type="package" version="1.0.2">basic-illumination</requirement>
         </requirements>
