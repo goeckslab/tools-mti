@@ -2,9 +2,9 @@
 <macros>
     <xml name="requirements">
         <requirements>
-            <container type="docker">labsyspharm/basic-illumination:@VERSION@</container>
             <requirement type="package" version="3.8">python</requirement>
-            <requirement type="package" version="1.0.2">basic-illumination</requirement>
+            <requirement type="package" version="@VERSION@">basic-illumination</requirement>
+            <container type="docker">labsyspharm/basic-illumination:@VERSION@</container>
         </requirements>
     </xml>
 
