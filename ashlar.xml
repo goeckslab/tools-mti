@@ -71,27 +71,14 @@
         -f registered.ome.tif;
 
         #if $upgrade.decide == "do_upgrade"
-        python ${__tool_directory__}/pyramid_upgrade.py
+        python3 ${__tool_directory__}/pyramid_upgrade.py
         registered.ome.tif
 
         #if $upgrade.markers_file
-        -n `python "$get_markers" "${upgrade.markers_file}"`
+        -n `echo \$(cat $upgrade.markers_file | tail -n +2 | awk -F, '{print \$3}')`;
         #end if
         #end if
     ]]></command>
-
-    <configfiles>
-        <configfile name="get_markers">
-import pandas as pd
-import sys
-
-marker_file = sys.argv[1]
-df = pd.read_csv(marker_file)
-print(' '.join(df['marker_name'].array)) 
-        </configfile>
-    </configfiles>
-
-
 
     <inputs>
         <param name="lraw" type="data_collection" format="tiff" collection_type="list" label="Raw Images"/>
