@@ -1,0 +1,9 @@
+<repositories description="MCMICRO tool suite for Multiplex Tissue Imaging Analysis">
+  <repository changeset_revision="0:fd8dfd64f25e" name="basic_illumination" owner="perssond" toolshed="https://toolshed.g2.bx.psu.edu"/>
+  <repository changeset_revision="0:b3054f3d42b2" name="ashlar" owner="perssond" toolshed="https://toolshed.g2.bx.psu.edu"/>
+  <repository changeset_revision="0:6bec4fef6b2e" name="unmicst" owner="perssond" toolshed="https://toolshed.g2.bx.psu.edu"/>
+  <repository changeset_revision="0:99308601eaa6" name="coreograph" owner="perssond" toolshed="https://toolshed.g2.bx.psu.edu"/>
+  <repository changeset_revision="0:37acf42a824b" name="s3segmenter" owner="perssond" toolshed="https://toolshed.g2.bx.psu.edu"/>
+  <repository changeset_revision="0:928db0f952e3" name="quantification" owner="perssond" toolshed="https://toolshed.g2.bx.psu.edu"/>
+  <repository changeset_revision="1:a62b0c62270e" name="naivestates" owner="perssond" toolshed="https://toolshed.g2.bx.psu.edu"/>
+</repositories>
