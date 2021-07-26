@@ -1,4 +1,4 @@
-<tool id="ashlar" name="ASHLAR" version="@VERSION@.7" profile="17.09">
+<tool id="ashlar" name="ASHLAR" version="@VERSION@.1" profile="17.09">
     <description>Alignment by Simultaneous Harmonization of Layer/Adjacency Registration</description>
     <macros>
         <import>macros.xml</import>
@@ -63,11 +63,24 @@
         #for $ffp in $lffp:
             "$clean($ffp,"ffp")"
         #end for
+
         --dfp
         #for $dfp in $ldfp:
             "$clean($dfp,"dfp")"
         #end for
+
+        #if $adv.pyramid
         --pyramid
+        #end if
+
+        #if $adv.flip_mosaic_x
+        --flip-mosaic-x
+        #end if
+
+        #if $adv.flip_mosaic_y
+        --flip-mosaic-y
+        #end if
+
         -f registered.ome.tif;
 
         #if $upgrade.decide == "do_upgrade"
@@ -105,12 +118,16 @@
             <param name="align_channel" type="integer" value="0" label="Align Channel Number"/>
             <param name="filter_sigma" type="float" optional="true" label="Sigma"/>
             <param name="tile_size" type="integer"  optional="true" label="Cyto Mask Channel"/>
+            <param name="flip_mosaic_x" type="boolean" value="false" label="Flip output image horizontally"/>
+            <param name="flip_mosaic_y" type="boolean" value="false" label="Flip output image vertically"/>
+            <param name="pyramid" type="boolean" value="true" label="Write output as a single pyramidal TIFF"/>
         </section>
     </inputs>
 
     <outputs>
         <data format="ome.tiff" name="output" from_work_dir="registered.ome.tif" label="${tool.name} on ${on_string}"/>
     </outputs>
+    
     <help><![CDATA[
 Ashlar python package for microscopy registration, developed by HMS (repo: https://github.com/labsyspharm/ashlar)
         ashlar [-h] [-o DIR] [-c [CHANNEL]]
