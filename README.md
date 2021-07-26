@@ -3,14 +3,6 @@
 ## Usage
 
 ```
-** Note from OHSU Fork
-To install, clone the repo and run `pip3 install path/to/ashlar` while the
-desired environment is active. 
-
-Requires python 3.7.5
-**
-
-ashlar [-h] [-o DIR] [-c [CHANNEL]]
        [--output-channels [CHANNEL [CHANNEL ...]]] [-m SHIFT]
        [--filter-sigma SIGMA] [-f FORMAT] [--pyramid]
        [--tile-size PIXELS] [--ffp [FILE [FILE ...]]]
@@ -29,6 +21,12 @@ optional arguments:
   -c [CHANNEL], --align-channel [CHANNEL]
                         align images using channel number CHANNEL; numbering
                         starts at 0
+  --flip-x              flip tile positions left-to-right to account for
+                        unusual microscope configurations
+  --flip-y              flip tile positions top-to-bottom to account for
+                        unusual microscope configurations
+  --flip-mosaic-x       flip output image horizontally
+  --flip-mosaic-y       flip output image vertically
   --output-channels [CHANNEL [CHANNEL ...]]
                         output only channels listed in CHANNELS; numbering
                         starts at 0
@@ -60,32 +58,37 @@ optional arguments:
 
 ## Installation
 
-### Linux
+### Pip install
 
-On Linux, installation is fairly straightforward, but you must first install
-your distribution's development package for libfftw3 and a JDK (any one of
-versions 1.6, 1.7 or 1.8). You will also have to manually run `pip install
-numpy` before `pip install ashlar` due to a requirement of one of the required
-packages.
-
-### Using Anaconda Python for MacOS (or Linux)
-
-On MacOS, obtaining and configuring the necessary native libraries can be a bit
-challenging. For users on those platforms, or for Linux users having trouble
-with the instructions above, the Anaconda Python distribution can simplify the
-process.
-
-If you don't already have Anaconda, download it from
-https://www.anaconda.com/download/ and install. Then, run the following
-commands from a terminal:
-
-```bash
-conda install -q -y -c conda-forge pyfftw
-pip install -q -U ashlar
+Ashlar can be installed in most Python environments using `pip`:
+``` bash
+pip install ashlar
 ```
 
-### Windows
+### Using a conda environment
 
-The pyfftw dependency is not currently supported on Windows. We are currently
-investigating a workaround. There is an experimental Docker image on DockerHub
-at `sorgerlab/ashlar` which should be suitable for many use cases.
+If you don't already have [miniconda](https://docs.conda.io/en/latest/miniconda.html)
+or [Anaconda](https://www.anaconda.com/products/individual), download the python
+3.x version and install. Then, run the following commands from a terminal (Linux/Mac)
+or command prompt (Windows):
+
+Create a named conda environment with python 3.7:
+```bash
+conda create -y -n ashlar python=3.7
+```
+
+Activate the conda environment:
+```bash
+conda activate ashlar
+```
+
+In the activated environment, install dependencies and ashlar itself:
+```bash
+conda install -y -c conda-forge numpy scipy matplotlib networkx scikit-image=0.16.2 scikit-learn pyjnius
+pip install ashlar
+```
+
+### Docker image
+
+The docker image of ashlar is on DockerHub at `sorgerlab/ashlar` which should be
+suitable for many use cases.
