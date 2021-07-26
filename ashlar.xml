@@ -81,9 +81,9 @@
     ]]></command>
 
     <inputs>
-        <param name="lraw" type="data_collection" format="tiff" collection_type="list" label="Raw Images"/>
-        <param name="ldfp" type="data_collection" format="tiff" collection_type="list" label="Deep Field Profile Images"/>
-        <param name="lffp" type="data_collection" format="tiff" collection_type="list" label="Flat Field Profile Images"/>
+        <param name="lraw" type="data_collection" format="ome.tiff,tiff" collection_type="list" label="Raw Images"/>
+        <param name="ldfp" type="data_collection" format="ome.tiff,tiff" collection_type="list" label="Deep Field Profile Images"/>
+        <param name="lffp" type="data_collection" format="ome.tiff,tiff" collection_type="list" label="Flat Field Profile Images"/>
 
         <param name="flip_x" type="boolean" value="false" label="Flip X-axis"/>
         <param name="flip_y" type="boolean" value="false" label="Flip Y-axis"/>
@@ -109,7 +109,7 @@
     </inputs>
 
     <outputs>
-        <data format="tiff" name="output" from_work_dir="registered.ome.tif" label="${tool.name} on ${on_string}"/>
+        <data format="ome.tiff" name="output" from_work_dir="registered.ome.tif" label="${tool.name} on ${on_string}"/>
     </outputs>
     <help><![CDATA[
 Ashlar python package for microscopy registration, developed by HMS (repo: https://github.com/labsyspharm/ashlar)
