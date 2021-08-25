@@ -1,7 +1,7 @@
-owner: perssond
+owner: creason
 remote_repository_url: https://github.com/ohsu-comp-bio/quantification
 categories: 
-  - "CompBio Galaxy Wrappers"
+  - "Imaging"
 repositories:
   quantification:
     description: "Module for single-cell data extraction given a segmentation mask and multi-channel image"

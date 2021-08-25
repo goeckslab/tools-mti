@@ -28,6 +28,14 @@
 
     --image '${image.name}'.ome.tiff
     --output ./tool_out
+   
+    #if $mask_props
+    --mask_props $mask_props
+    #end if
+    #if $intensity_props
+    --intensity_props $intensity_props
+    #end if
+
     --channel_names '$channel_names';
 
     mv ./tool_out/*.csv ./tool_out/quantified.csv;
@@ -38,6 +46,8 @@
         <param name="primary_mask" type="data" format="tiff" label="Primary Cell Mask"/>
         <param name="supp_masks" type="data" multiple="true" optional="true" format="tiff" label="Additional Cell Masks"/>
         <param name="channel_names" type="data" format="csv" label="Marker Channels"/>
+        <param name="mask_props" type="text" label="Mask Metrics" help="Space separated list of additional metrics to be calculated for every mask."/>
+        <param name="intensity_props" type="text" label="Intensity Metrics" help="Space separated list of additional metrics to be calculated for every marker separately."/>
     </inputs>
 
     <outputs>
