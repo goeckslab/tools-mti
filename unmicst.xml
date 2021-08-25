@@ -1,4 +1,4 @@
-<tool id="unmicst" name="UnMicst" version="@VERSION@.1" profile="17.09">
+<tool id="unmicst" name="UnMicst" version="@VERSION@.0" profile="17.09">
     <description>UNet Model for Identifying Cells and Segmenting Tissue</description>
     <macros>
         <import>macros.xml</import>
@@ -13,6 +13,9 @@
     ln -s $image '$typeCorrected';
 
     @CMD_BEGIN@ '$typeCorrected'
+
+    --tool $tool
+
     
     #if $stackoutput
     --stackOutput
@@ -23,7 +26,8 @@
     --model $model
     --mean $mean
     --std $stdev
-    --scalingFactor $scalingfactor;
+    --scalingFactor $scalingfactor
+    --outlier $outlier;
 
     ## Move files to different files for from_work_dir differentiation
     #if $stackoutput
@@ -36,6 +40,12 @@
     ]]></command>
 
     <inputs>
+        <param name="tool" type="select" label="UnMicst Tool">
+            <option selected="true" value="unmicst-solo">unmicst-solo</option>
+            <option value="unmicst-duo">unmicst-duo</option>
+            <option value="unmicst-legacy">unmicst-legacy</option>
+            <option value="UnMicstCyto2">UnMicstCyto2</option>
+        </param>
         <param name="image" type="data" format="tiff" label="Registered TIFF"/>
         <param name="model" type="select" label="Model">
             <option value="nucleiDAPI">nucleiDAPI</option>
@@ -51,6 +61,7 @@
         <param name="channel" type="integer" value="0" label="Channel to perform inference on"/>
         <param name="stackoutput" type="boolean"  label="Stack probability map outputs"/>
         <param name="scalingfactor" type="float" value="1.0" label="Factor to scale by"/>
+        <param name="outlier" type="float" value="-1.0" label="Map percentile intensity to max when rescaling intensity values"/>
     </inputs>
 
     <outputs>
