@@ -1,4 +1,4 @@
-<tool id="s3segmenter" name="s3segmenter" version="@VERSION@.3" profile="17.09">
+<tool id="s3segmenter" name="s3segmenter" version="@VERSION@.0" profile="17.09">
     <description>S3segmenter is a Python-based set of functions that generates single cell (nuclei and cytoplasm) label masks.</description>
     <macros>
         <import>macros.xml</import>
@@ -39,12 +39,22 @@
         --stackProbPath ./Probabilities.tif
         #end if
 
-        --mask $mask
         --probMapChan $probMapChan
-        --crop $crop
+        --crop $crop_select.crop
+        
+        #if $crop_select.crop == "dearray"
+          --maskPath $crop_select.maskPath
+        #end if
+
         --cytoMethod $cytoMethod
         --nucleiFilter $nucleiFilter
-        --nucleiRegion $nucleiRegion
+        --nucleiRegion $nucleiRegion_select.nucleiRegion
+
+        #if $nucleiRegion_select.nucleiRegion == "pixellevel"
+          --pixelThreshold $nucleiRegion_select.pixelThreshold
+          --pixelMaskChan $nucleiRegion_select.pixelMaskChan
+        #end if
+
         --segmentCytoplasm $segmentCytoplasm
         --cytoDilation $adv.cytoDilation
         --logSigma $adv.logSigma
@@ -72,18 +82,20 @@
         <param name="contoursClassProbPath" type="data" format="tiff" optional="true" label="Contours Class Probabilities"/>
         <param name="nucleiClassProbPath" type="data" format="tiff" optional="true" label="Nuclei Class Probabilities"/>
         <param name="stackProbPath" type="data" format="tiff" optional="true" label="Stack Probabilities"/>
-        <param name="mask" type="select" label="Choose mask: TMA, tissue, none.">
-            <option selected="true" value="tissue">tissue</option>
-            <option value="TMA">TMA</option>
-            <option value="none">none</option>
-        </param>
         <param name="probMapChan" type="integer" value="-1" label="Probability Maps Channel"/>
-        <param name="crop" type="select" label="Crop Strategy">
-            <option selected="true" value="noCrop">No Crop</option>
-            <option value="autoCrop">Automatic Crop</option>
-            <option value="dearray">De-array</option>
-            <option value="plate">Plate</option>
-        </param>
+
+        <conditional name="crop_select">
+            <param name="crop" type="select" label="Crop Strategy">
+                <option selected="true" value="noCrop">No Crop</option>
+                <option value="autoCrop">Automatic Crop</option>
+                <option value="dearray">De-array</option>
+                <option value="plate">Plate</option>
+            </param>
+            <when value="dearray">
+                <param name="maskPath" type="data" format="tiff" label="TMA Mask File"/>
+            </when>
+        </conditional>
+
         <param name="cytoMethod" type="select" label="Cyto Method">
             <option value="hybrid">Hybrid</option>
             <option selected="true" value="distanceTransform">Distance Transform</option>
@@ -96,13 +108,24 @@
             <option value="Int">Int</option>
             <option value="none">none</option>
         </param>
-        <param name="nucleiRegion" type="select" label="Nuclei Region">
-            <option value="watershedContourDist">watershedContourDist</option>
-            <option selected="true" value="watershedContourInt">watershedContourInt</option>
-            <option value="watershedBWDist">watershedBWDist</option>
-            <option value="dilation">dilation</option>
-            <option value="localThreshold">localThreshold</option>
-        </param>
+
+        <conditional name="nucleiRegion_select">
+            <param name="nucleiRegion" type="select" label="Nuclei Region">
+                <option value="watershedContourDist">watershedContourDist</option>
+                <option selected="true" value="watershedContourInt">watershedContourInt</option>
+                <option value="watershedBWDist">watershedBWDist</option>
+                <option value="dilation">dilation</option>
+                <option value="localThreshold">localThreshold</option>
+                <option value="localMax">localMax</option>
+                <option value="bypass">bypass</option>
+                <option value="pixellevel">pixellevel</option>
+            </param>
+            <when value="pixellevel">
+                <param name="pixelThreshold" type="float" value="-1.0" Label="Pixel Threshold"/>
+                <param name="pixelMaskChan" type="text" value="2" Label="Pixel Mask Channel"/>
+            </when>
+        </conditional>
+
         <param name="segmentCytoplasm" type="select" label="Segment Cytoplasm">
             <option value="segmentCytoplasm">segmentCytoplasm</option>
             <option selected="true" value="ignoreCytoplasm">ignoreCytoplasm</option>
@@ -113,7 +136,7 @@
         <section name="adv" title="Advanced Options" expanded="false">
             <param name="cytoDilation" type="integer" value="5" label="Cyto Dilation"/>
             <param name="logSigma" type="text" value="3 60" label="logSigma"/>
-            <param name="CytoMaskChan" type="text" value="1" label="Cyto Mask Channel"/>
+            <param name="CytoMaskChan" type="text" value="2" label="Cyto Mask Channel"/>
             <!-- Bug with S3Segmenter code, expects int not list
             <param name="TissueMaskChan" type="text" value="-1" label="Tissue Mask Channel"/>
             -->
