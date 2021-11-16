@@ -32,7 +32,7 @@
     ## Move files to different files for from_work_dir differentiation
     #if $stackoutput
     mv *Probabilities*.tif Probabilities.tif;
-    mv *Preview*.tif Preview.tif
+    mv qc/*Preview*.tif Preview.tif
     #else
     mv *ContoursPM*.tif ContoursPM.tif;
     mv *NucleiPM*.tif NucleiPM.tif
