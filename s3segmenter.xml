@@ -148,16 +148,16 @@
 
     </inputs>
     <outputs>
-        <data format="tiff" name="cell_mask" from_work_dir="*/cellMask.tif" label="cellMasks">
+        <data format="tiff" name="cell_mask" from_work_dir="image/cell.ome.tif" label="cellMasks">
             <filter>saveMask is True</filter>
         </data>
-        <data format="tiff" name="nuclei_mask" from_work_dir="*/nucleiMask.tif" label="nucleiMasks">
+        <data format="tiff" name="nuclei_mask" from_work_dir="image/nuclei.ome.tif" label="nucleiMasks">
             <filter>saveMask is True</filter>
         </data>
-        <data format="tiff" name="cell_outlines" from_work_dir="*/cellOutlines.tif" label="cellOutlines">
+	<data format="tiff" name="cell_outlines" from_work_dir="image/qc/cellOutlines.ome.tif" label="cellOutlines">
             <filter>saveFig is True</filter>
         </data>
-        <data format="tiff" name="nuclei_outlines" from_work_dir="*/nucleiOutlines.tif" label="nucleiOutlines">
+	<data format="tiff" name="nuclei_outlines" from_work_dir="image/qc/nucleiOutlines.ome.tif" label="nucleiOutlines">
             <filter>saveFig is True</filter>
         </data>
     </outputs>
