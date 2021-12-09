@@ -1,0 +1,59 @@
+<tool id="mesmer" name="Mesmer" version="@VERSION@.0" profile="17.09">
+    <description>Mesmer for whole-cell segmentation of multiplexed tissue imaging data</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <expand macro="requirements"/>
+    @VERSION_CMD@
+
+    <command detect_errors="exit_code"><![CDATA[
+    ln -s $nuclear_image input.tif && 
+    @CMD_BEGIN@ 
+    --output-directory .
+    --output-name mask.tif
+    --nuclear-image input.tif
+    --nuclear-channel $nuclear_channel
+    --compartment $compartment
+    --image-mpp $image_mpp
+
+    #if $membrane_select.membrane_segment == 'True'
+    --membrane-image $membrane_select.membrane_image
+    --membrane-channel $membrane_select.membrane_channel
+    #end if
+    #if $squeeze
+    --squeeze
+    #end if
+
+    ]]></command>
+
+    <inputs>
+        <param name="nuclear_image" type="data" format="tiff, ome.tiff" label="Image containing the nuclear marker(s)"/>
+        <param name="nuclear_channel" type="integer" value="0" label="The numerical index of the channel(s) from nuclear-image"/>
+        <param name="compartment" type="select"  label="Compartment for segmentation prediction: ">
+	  <option selected="true" value="whole-cell">Whole cell</option>
+	  <option value="nuclear">Nuclear</option>
+        </param>
+        <param name="image_mpp" type="float" value="0.5" label="Resolution of the image in microns-per-pixel"/>
+        <param name="squeeze" type="boolean" checked="False" label="Whether to np.squeeze the outputs before saving"/>
+        <conditional name="membrane_select">
+            <param name="membrane_segment" type="select" label="Segment with Cell Membrane">
+                <option selected="True" value="False">No</option>
+                <option value="True">Yes</option>
+            </param>
+            <when value="True">
+                <param name="membrane_image" type="data" format="tiff, ome.tiff" label="The path to an image containing the membrane marker(s)"/>
+                <param name="membrane_channel" type="integer" value="0"  label="The numerical index of the channel(s) from membrane-image"/>
+            </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data format="tiff" name="mask" from_work_dir="mask.tif" label="${tool.name} on ${on_string}: Mask"/>
+    </outputs>
+    <tests>
+    </tests>
+    <help><![CDATA[
+        Mesmer
+    ]]></help>
+    <expand macro="citations" />
+</tool>
