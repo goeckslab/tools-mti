@@ -15,5 +15,5 @@
     </xml>
 
     <token name="@VERSION@">0.3.1</token>
-    <token name="@CMD_BEGIN@">python run_app.py mesmer</token>
+    <token name="@CMD_BEGIN@">python /usr/src/app/run_app.py mesmer</token>
 </macros>
