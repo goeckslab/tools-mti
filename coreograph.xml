@@ -26,6 +26,10 @@
         --cluster
         #end if
 
+        #if $tissue
+        --tissue
+        #end if
+
         --outputPath .;
         
     ]]></command>
@@ -39,6 +43,7 @@
         <param name="sensitivity" type="float" value="0.3" label="Sensitivity"/>
         <!--<param name="usegrid" type="boolean" label="Use Grid"/>-->
         <param name="cluster" type="boolean" checked="false" label="Cluster"/>
+        <param name="tissue" type="boolean" checked="false" label="Tissue"/>
     </inputs>
 
     <outputs>
