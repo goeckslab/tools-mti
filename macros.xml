@@ -20,6 +20,13 @@
         </citations>
     </xml>
 
-    <token name="@VERSION@">1.5.0</token>
-    <token name="@CMD_BEGIN@">python ${__tool_directory__}/CommandSingleCellExtraction.py</token>
+    <token name="@VERSION@">1.5.1</token>
+    <token name="@CMD_BEGIN@"><![CDATA[
+    QUANT_PATH="";
+    if [ -f "/app/CommandSingleCellExtraction.py" ]; then
+        export QUANT_PATH="/app/CommandSingleCellExtraction.py";
+    else
+        export QUANT_PATH="${__tool_directory__}/CommandSingleCellExtraction.py";
+    fi;
+    ]]></token>
 </macros>

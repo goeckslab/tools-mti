@@ -18,6 +18,7 @@
 
     @CMD_BEGIN@
     
+    python \$QUANT_PATH
     --masks 
     '${primary_mask.name}'.ome.tiff
     #if $supp_masks
