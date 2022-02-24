@@ -12,6 +12,8 @@
         ln -s $source_image `basename $type_corrected`;
 
         @CMD_BEGIN@
+
+        python \$UNET_PATH
         --imagePath `basename $type_corrected`
         --downsampleFactor $downsamplefactor
         --channel $channel

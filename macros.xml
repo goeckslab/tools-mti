@@ -25,5 +25,12 @@
     </xml>
 
     <token name="@VERSION@">2.2.8</token>
-    <token name="@CMD_BEGIN@">python ${__tool_directory__}/UNetCoreograph.py</token>
+    <token name="@CMD_BEGIN@"><![CDATA[
+    UNET_PATH="";
+    if [ -f "/app/UNetCoreograph.py" ]; then
+        export UNET_PATH="/app/UNetCoreograph.py";
+    else
+        export UNET_PATH="${__tool_directory__}/UNetCoreograph.py";
+    fi;
+    ]]></token>
 </macros>
