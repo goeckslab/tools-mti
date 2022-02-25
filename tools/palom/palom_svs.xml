@@ -1,0 +1,99 @@
+<tool id="palom" name="palom" version="2021.12.0.0">
+    <description>Piecewise alignment for layers of mosaics. A tool for registering whole-slide images with different IHC stainings</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+        
+        ln -s "$reference_image" ./ref.svs &&
+
+        ln -s "$channels" ./channels.csv &&
+
+        #for $i in $moving_images:
+            ln -s "$i" "${i.name}" &&
+        #end for
+
+        python "$script"
+
+    ]]></command>
+    <configfiles>
+        <configfile name = "script">
+import os
+import pathlib
+import pandas as pd
+import palom
+from palom.cli.svs import run_palom
+
+cwd = os.getcwd()
+
+ref_img = pathlib.Path(os.path.join(cwd,"ref.svs"))
+
+images = [ref_img]
+channels = ["hematoxylin"]
+modes = ["hematoxylin"]
+
+#for $i in $moving_images:
+img = pathlib.Path("${i.name}")
+images.append(img)
+#end for
+
+channel_df = pd.read_csv(os.path.join(cwd, "channels.csv"))
+channel_df = channel_df.astype({'channel':'string'})
+channels += list(channel_df['channel'])
+modes += list(channel_df['mode'])
+
+pixel_size = None
+
+#if $pixel_size:
+pixel_size = int($pixel_size)
+#end if
+
+level = 0
+
+#if $level:
+level = int($level)
+#end if
+
+output_path = pathlib.Path(os.path.join(cwd, "registered.ome.tiff"))
+
+qc_path = output_path.parent / 'qc'
+
+os.mkdir(qc_path)
+
+run_palom(
+    img_paths = images,
+    img_modes = modes,
+    pixel_size = pixel_size,
+    channel_names = channels,
+    output_path = output_path,
+    qc_path = qc_path,
+    level = level
+)
+        </configfile>
+    </configfiles>
+    <inputs>
+        <param name="reference_image" type="data" format="tiff" label="Hematoxylin reference image" help="An H+E image in .svs format"/>
+        <param name="moving_images" type="data_collection" label="Moving Images (data collection)" help="A collection of svs-format images to align to the reference image"/>
+        <param name="channels" type="data" label="Channel and mode dataframe" help="A CSV file with 'channel' and 'mode' columns, with a row corresponding to each moving image"/>
+        <param name="pixel_size" type="integer" optional="true" label="Pixel Size" help="defaults to px size of reference image"/>
+        <param name="level" type="integer" optional="true" label="Level" help="pyramid level, defaults to 0 (lowest level)"/>
+    </inputs>
+    <outputs>
+        <collection name="qc_plots" type="list" label="${tool.name}: qc_plots">
+            <discover_datasets pattern="__name_and_ext__" directory="qc" ext="png" visible="false"/>
+        </collection>
+        <data name="registered.ome.tiff" format="txt"/>
+    </outputs>
+    <help><![CDATA[
+# PALOM
+registration of whole-slide images with different IHC stainings
+
+Tool github: https://github.com/Yu-AnChen/palom
+
+# Main developer 
+
+Yu-An Chen (https://github.com/Yu-AnChen)
+    ]]></help>
+    <expand macro="citations" />
+</tool>

@@ -1,0 +1,12 @@
+<macros>
+    <xml name="requirements">
+        <requirements>
+            <container type="docker">quay.io/goeckslab/palom:2021.12.0</container>
+        </requirements>
+    </xml>
+    <xml name="citations">
+        <citations>
+            <yield />
+        </citations>
+    </xml>
+</macros>
