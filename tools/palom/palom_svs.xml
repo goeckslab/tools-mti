@@ -83,7 +83,7 @@ run_palom(
         <collection name="qc_plots" type="list" label="${tool.name}: qc_plots">
             <discover_datasets pattern="__name_and_ext__" directory="qc" ext="png" visible="false"/>
         </collection>
-        <data name="registered.ome.tiff" format="txt"/>
+        <data name="registered" from_work_dir="registered.ome.tiff" format="ome.tiff"/>
     </outputs>
     <help><![CDATA[
 # PALOM
