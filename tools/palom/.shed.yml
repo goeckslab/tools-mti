@@ -1,0 +1,10 @@
+owner: watsocam
+remote_repository_url: https://github.com/goeckslab/tools-mti/tree/main/tools/palom
+categories:
+  - "Imaging"
+repositories:
+  palom:
+    description: "PALOM is a Python module for registering whole-slide images from the same FFPE section with different IHC stainings."
+    include:
+      - macros.xml
+      - palom_svs.xml
