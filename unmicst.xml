@@ -8,14 +8,15 @@
     @VERSION_CMD@
 
     <command detect_errors="exit_code"><![CDATA[
-    #set $typeCorrected = str($image.name).replace('.ome.tiff','').replace('.ome.tif','').replace('.tiff','').replace('.tif','')+'.ome.tif'
+    #import re
+    #set $cleaned = re.sub('[^\w\-]', '_', str($image.name))
+    #set $typeCorrected = re.match('^(.*?)(_ome)?_tiff?$', $cleaned)[1] + '.ome.tif'
 
     ln -s $image '$typeCorrected';
 
     @CMD_BEGIN@ '$typeCorrected'
 
     --tool $tool
-
     
     #if $stackoutput
     --stackOutput
