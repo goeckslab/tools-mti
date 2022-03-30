@@ -1,0 +1,41 @@
+{% set name = "mxnet-cu102" %}
+{% set version = "1.7.0" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+  host:
+    - python
+    - cython
+    - pip
+    - numpy <=2.0.0
+    - wheel >0.26
+  run:
+    - python
+    - numpy <=2.0.0
+    - requests
+    - graphviz
+    - cudatoolkit =10.2
+    - cudnn
+
+test:
+  imports:
+    - mxnet
+
+about:
+  home: https://github.com/apache/incubator-mxnet
+  summary: Apache MXNet is a deep learning framework designed for both efficiency and flexibility
+  license: Apache License 2.0
+
+extra:
+  recipe-maintainers:
+    - ohsu-comp-bio
+
