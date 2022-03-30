@@ -1,0 +1,62 @@
+<tool id="gate_finder" name="Gate Finder" version="@VERSION@" profile="20.01">
+    <description>displays a series of gating outcomes using Vitessce</description>
+    <macros>
+        <import>main_macros.xml</import>
+    </macros>
+    <expand macro="vitessce_requirements"/>
+    <expand macro="macro_stdio" />
+    <version_command>echo "@VERSION@"</version_command>
+    <expand macro="vitessce_cmd" tool_id="gate_finder" />
+    <configfiles>
+        <inputs name="inputs" />
+    </configfiles>
+    <inputs>
+        <param name="image" type="data" format="ome.tiff" label="Select the image (OME-TIFF)" />
+        <param name="masks" type="data" format="tiff,ome.tiff" optional="true" label="Select masks for the OME Tiff image (Optional)" />
+        <section name="do_phenotyping" title=" ">
+            <param name="phenotyping_choice" type="hidden" value="true"/>
+        </section>
+        <param name="phenotyping_choice" type="hidden" value="yes" />
+        <param name="anndata" type="data" format="h5ad" label="Select the anndata containing marker intensities" />
+        <param name="marker" type="text" value=""  label="Marker for which gate is to be defined" help="E.g.: CD45." />
+        <param name="from_gate" type="integer" value="6" label="Start value gate of interest" help="Integer. Optional" />
+        <param name="to_gate" type="integer" value="8" label="End value of the gate of interest." help="Integer. Optional" />
+        <param name="increment" type="float" value="0.1" label="Increments between the start and end values" help="Float." />
+        <param name="x_coordinate" type="text" value="X_centroid" optional="true" label="X axis coordinate column name in AnnData object" />
+        <param name="y_coordinate" type="text" value="Y_centroid" optional="true" label="X axis coordinate column name in AnnData object" />
+    </inputs>
+    <outputs>
+        <data format="html" name="output" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="image" value="reactive_core.ome.tiff" ftype="ome.tiff" />
+            <param name="anndata" value="tutorial_data_pheno.h5ad" ftype="h5ad" />
+            <param name="marker" value="CD45" />
+            <param name="from_gate" value="5" />
+            <param name="to_gate" value="9" />
+            <param name="increment" value="0.5" />
+            <output name="output" file="tutorial_vitessce.html" compare="sim_size" delta="20" />
+        </test>
+    </tests>
+    <help>
+        <![CDATA[
+**What it does**
+
+
+**Input**
+
+OME-TIFF image.
+Segmentation masks (optional).
+AnnData with marker intensities.
+
+**Output**
+
+An HTML file with Vitessce component. 
+
+
+        ]]>
+    </help>
+    <citations>
+    </citations>
+</tool>

@@ -1,0 +1,61 @@
+<tool id="scimap_mcmicro_to_anndata" name="Convert McMicro Output to Anndata" version="@VERSION@" profile="20.01">
+    <description>to be used in scimap/scanpy</description>
+    <macros>
+        <import>main_macros.xml</import>
+    </macros>
+    <expand macro="scimap_requirements" />
+    <expand macro="macro_stdio" />
+    <version_command>echo "@VERSION@"</version_command>
+    <command>
+        <![CDATA[
+        python '$__tool_directory__/mcmicro_to_anndata.py'
+            --inputs '$inputs'
+            --outfile '$outfile'
+
+        ]]>
+    </command>
+    <configfiles>
+        <inputs name="inputs" data_style="paths"/>
+    </configfiles>
+    <inputs>
+        <param argument="image_path" type="data" format="tabular,csv" multiple="false" label="Select the input image or images" />
+        <param argument="drop_markers" type="text" optional="true" label="List of markers to drop from the analysis" help="No quotes, separated by comma. e.g. CD3D, CD20." />
+        <section name="options" title="Advanced Options" expanded="False">
+            <param argument="remove_dna" optional="true" type="boolean" truevalue="booltrue" falsevalue="boolfalse" checked="true" label="Whether to Remove the DNA channels from the final output" help="Looks for channels with the string 'dna' in it." />
+            <param argument="remove_string_from_name" type="text" optional="true" label="Remove string from name" help="Used to clean up channel names. If a string is given, that particular string will be removed from all marker names.
+        If multiple images are passed, just use the string that appears in the first image." />
+            <param argument="log" optional="true" type="boolean" truevalue="booltrue" falsevalue="boolfalse" checked="true" label="Whether to log the data" help="log1p transformation will be applied" />
+            <param argument="random_sample" optional="true" type="integer" label="The number of random sampling" help="Randomly sub-sample the data with the desired number of cells." />
+            <param argument="CellId" optional="true" type="text" value="CellID" label="Name of the column that contains the cell ID" />
+            <param argument="unique_CellId" optional="true" type="boolean" truevalue="booltrue" falsevalue="boolfalse" checked="true" label="Whether to use unique name for cells/rows" />
+            <param argument="split" optional="true" type="text" value="X_centroid" label="Column name to split the csv into counts table and meta data" />
+            <param argument="custom_imageid" optional="true" type="text" label="Custom image ID" help="By default the name of the CSV file is used." />
+            <param argument="min_cells" optional="true" type="integer" label="Minimum number of cells" help="If these many cells are not in the image, the image will be dropped. Particulary useful when importing multiple images." />
+        </section>
+    </inputs>
+    <outputs>
+        <data format="h5ad" name="outfile" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="image_path" value="mcmicro_output.csv" ftype="csv" />
+            <param name="drop_markers" value="PERK,NOS2,BG1,BG2,BG3,ACTIN" />
+            <output name="outfile" file="tutorial_data.h5ad" compare="sim_size" delta="5" />
+        </test>
+    </tests>
+    <help>
+        <![CDATA[
+**What it does**
+
+The tool allows users to directly convert the output from [mcmicro](https://mcmicro.org/) into Anndata which is ready for downstrem analyses in `scimap` or scanpy tools.
+
+
+**Return**
+
+Anndata.
+
+        ]]>
+    </help>
+    <citations>
+    </citations>
+</tool>
