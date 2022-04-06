@@ -9,7 +9,7 @@
 
     <command detect_errors="exit_code"><![CDATA[
         cp "$image" "$renamed_image" ; 
-        @CMD_BEGIN "$image" "$channel_csv" out.xml ;
+        @CMD_BEGIN@ "$image" "$channel_csv" out.xml ;
         tiffcomment -set out.xml "$renamed_image" ;
     ]]></command>
 
