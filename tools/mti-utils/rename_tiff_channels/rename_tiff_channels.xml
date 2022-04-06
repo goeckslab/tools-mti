@@ -19,7 +19,7 @@
     </inputs>
 
     <outputs>
-        <data name="renamed_image" format="tiff" label="${tool.name} on ${on_string}"/>
+        <data name="renamed_image" format="ome.tiff" label="${tool.name} on ${on_string}"/>
     </outputs>
     
     <help><![CDATA[
