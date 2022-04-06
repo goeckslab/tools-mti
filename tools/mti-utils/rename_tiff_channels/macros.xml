@@ -2,12 +2,7 @@
 <macros>
     <xml name="requirements">
         <requirements>
-            <requirement type="package">pandas</requirement>
-            <requirement type="package">click</requirement>
-            <requirement type="package">tifffilt</requirement>
-            <requirement type="package">python-bioformats</requirement>
-            <requirement type="package">python-javabridge</requirement>
-            <requirement type="package">bftools</requirement>
+            <container type="docker">quay.io/goeckslab/rename_tiff_channels:0.0.1</container>
         </requirements>
     </xml>
 
