@@ -1,4 +1,4 @@
-<tool id="quantification" name="Quantification" version="@VERSION@.6" profile="17.09">
+<tool id="quantification" name="Quantification" version="@VERSION@.7" profile="17.09">
     <description>Single cell quantification, a module for single-cell data extraction given a segmentation mask and multi-channel image.</description>
     <macros>
         <import>macros.xml</import>
@@ -52,7 +52,7 @@
     <outputs>
         <data format="csv" name="cellmask" from_work_dir="primary_mask.csv" label="CellMaskQuant"/>
         <collection type="list" name="quantification" label="${tool.name} on ${on_string}">
-          <discover_datasets pattern="__designation_and_ext__" format="csv" directory="tool_out/" visible="true"/>
+          <discover_datasets pattern="__designation_and_ext__" format="csv" directory="tool_out/" visible="false"/>
         </collection>
      </outputs>
     <help><![CDATA[
