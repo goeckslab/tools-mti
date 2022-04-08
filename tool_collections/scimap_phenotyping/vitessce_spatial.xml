@@ -1,0 +1,127 @@
+<tool id="vitessce_spatial" name="Vitessce Visualization" version="@VERSION@" profile="20.01">
+    <description>displays various view components for single cell analysis</description>
+    <macros>
+        <import>main_macros.xml</import>
+    </macros>
+    <expand macro="vitessce_requirements"/>
+    <expand macro="macro_stdio" />
+    <version_command>echo "@VERSION@"</version_command>
+    <expand macro="vitessce_cmd" />
+    <configfiles>
+        <inputs name="inputs" />
+    </configfiles>
+    <inputs>
+        <param name="image" type="data" format="ome.tiff" label="Select the OME Tiff image" />
+        <param name="masks" type="data" format="tiff,ome.tiff" optional="true" label="Select masks for the OME Tiff image (Optional)" />
+        <conditional name="do_phenotyping">
+            <param name="phenotyping_choice" type="boolean" checked="true" label="Whether to do phenotyping">
+            </param>
+            <when value="true">
+                <param name="anndata" type="data" format="h5ad" label="Select the anndata contaning phenotyping info" />
+                <conditional name="scatterplot_embeddings">
+                    <param name="embedding" type="select" label="Select an embedding algorithm for scatterplot">
+                        <option value="umap" selected="true">UMAP</option>
+                        <option value="tsne">tSNE</option>
+                        <option value="pca">PCA</option>
+                    </param>
+                    <when value="umap">
+                        <section name="options" title="Advance Options for neighbor search">
+                            <param argument="n_neighbors" type="integer" value="30" label="The size of local neighborhood used for manifold approximation" />
+                            <param argument="n_pcs" type="integer" value="10" label="Number of PCs" />
+                            <param argument="knn" type="boolean" checked="true" label="Whether to use knn graph" help="If false, use a Gaussian Kernel to assign low weights to neighbors more distant than the n_neighbors nearest neighbor." />
+                            <param argument="random_state" type="integer" value="0" optional="true" label="Randomness seed" />
+                        </section>
+                    </when>
+                    <when value="tsne">
+                        <section name="options" title="Advance Options for computing tSNE">
+                            <param argument="n_pcs" type="integer" value="10" label="Number of PCs" />
+                            <param argument="learning_rate" type="float" value="1000" label="Learning rate" help="Should be 100-1000." />
+                            <param argument="random_state" type="integer" value="0" optional="true" label="Randomness seed" />
+                        </section>
+                    </when>
+                    <when value="pca">
+                        <section name="options" title="Advance Options for computing PCA">
+                            <param argument="n_comps" type="integer" value="" optional="true" label="Number of principal components to compute" help="Defaults to 50, or 1 - minimum dimension size of selected representation." />
+                            <param argument="zero_center" type="boolean" checked="true" label="Whether to compute standard PCA from covariance matrix" help="If False, omit zero-centering variables (uses TruncatedSVD)" />
+                            <param argument="svd_solver" type="select" label="Select the SVD solver">
+                                <option value="arpack" selected="true">arpack</option>
+                                <option value="randomized">randomized</option>
+                                <option value="auto">auto</option>
+                                <option value="lobpcg">lobpcg</option>
+                            </param>
+                            <param argument="random_state" type="integer" value="0" optional="true" label="Randomness seed" />
+                        </section>
+                    </when>
+                </conditional>
+                <conditional name="phenotype_factory">
+                    <param name="phenotype_mode" type="select" label="Input phenotyping keys">
+                        <option value="choices" selected="true">Multiple choices</option>
+                        <option value="type_in">Type in</option>
+                    </param>
+                    <when value="choices">
+                        <param name="phenotypes" type="select" multiple="true" display="checkboxes" label="Select the key(s)" >
+                            <option value="phenotype" selected="true">'phenotype' (via scimap phenotyping)</option>
+                            <option value="kmeans">'kmeans' (via clustering)</option>
+                            <option value="leiden">'leiden' (via clustering)</option>
+                            <option value="phenograph">'phenograph' (via clustering)</option>
+                            <option value="parc">'parc' (via clustering)</option>
+                        </param>
+                    </when>
+                    <when value="type_in">
+                        <param name="phenotypes" type="text" value="" label="Type in the keys storing phenotypes" help="Comma delimited for multiple keys."/>
+                    </when>
+                </conditional>
+            </when>
+            <when value="false">
+            </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data format="html" name="output" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="image" value="reactive_core.ome.tiff" ftype="ome.tiff" />
+            <conditional name="do_phenotyping">
+                <param name="phenotyping_choice" value="yes" />
+                <param name="anndata" value="tutorial_data_pheno.h5ad" ftype="h5ad" />
+                <conditional name="phenotype_factory">
+                    <param name="phenotype_mode" value="type_in" />
+                    <param name="phenotypes" value="leiden" />
+                </conditional>
+            </conditional>
+            <output name="output" file="tutorial_vitessce.html" compare="sim_size" delta="20" />
+        </test>
+        <test>
+            <param name="image" value="reactive_core.ome.tiff" ftype="ome.tiff" />
+            <conditional name="do_phenotyping">
+                <param name="phenotyping_choice" value="yes" />
+                <param name="anndata" value="tutorial_data_pheno.h5ad" ftype="h5ad" />
+                <conditional name="scatterplot_embeddings">
+                    <param name="embedding" value="pca" />
+                </conditional>
+                <conditional name="phenotype_factory">
+                    <param name="phenotype_mode" value="type_in" />
+                    <param name="phenotypes" value="leiden" />
+                </conditional>
+            </conditional>
+            <output name="output" file="tutorial_vitessce.html" compare="sim_size" delta="20" />
+        </test>
+        <test>
+            <param name="image" value="reactive_core.ome.tiff" ftype="ome.tiff" />
+            <conditional name="do_phenotyping">
+                <param name="phenotyping_choice" value="no" />
+            </conditional>
+            <output name="output" file="tutorial_vitessce.html" compare="sim_size" delta="20" />
+        </test>
+    </tests>
+    <help>
+        <![CDATA[
+**What it does**
+
+
+        ]]>
+    </help>
+    <citations>
+    </citations>
+</tool>

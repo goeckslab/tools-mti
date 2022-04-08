@@ -1,0 +1,71 @@
+<tool id="scimap_phenotyping" name="Single Cell Phenotyping" version="@VERSION@" profile="20.01">
+    <description>using scimap</description>
+    <macros>
+        <import>main_macros.xml</import>
+    </macros>
+
+    <expand macro="scimap_requirements"/>
+    <expand macro="macro_stdio" />
+    <version_command>echo "@VERSION@"</version_command>
+    <command>
+        <![CDATA[
+        python '$__tool_directory__/scimap_phenotyping.py'
+            --adata '$anndata'
+            #if $manual_gates
+                --manual_gates '$manual_gates'
+                --manual_gates_ext '${manual_gates.ext}'
+            #end if
+            --gating_workflow '$gating_workflow'
+            --gating_workflow_ext '${gating_workflow.ext}'
+            #if $rescale_plots
+                --rescale_plots
+            #end if
+            --output '$output'
+
+        ]]>
+    </command>
+    <configfiles>
+        <inputs name="inputs" />
+    </configfiles>
+    <inputs>
+        <param name="anndata" type="data" format="h5ad" label="Select the input anndata" />
+        <param name="manual_gates" type="data" format="tabular,csv" optional="true" label="Select the dataset containing manual gate information" help="First column as markers and second column as the gate values in log1p scale. If a marker is not included, auto gating
+        based on gaussian mixture modeling will be executed. Optional."/>
+        <param name="gating_workflow" type="data" format="tabular,csv" label="Select the dataset containing gating workflow" />
+        <param name="rescale_plots" type="boolean" checked="false" label="Save the GMM gates plots If True"/>
+    </inputs>
+    <outputs>
+        <data format="h5ad" name="output" />
+	    <collection name="gmm_plots" type="list" label="${tool.name}: GMM-plots"> 
+            <filter>rescale_plots</filter>
+            <discover_datasets pattern="__designation_and_ext__" directory="auto_gating" ext="png"/>
+        </collection>
+    </outputs>
+    <tests>
+        <test>
+            <param name="anndata" value="tutorial_data.h5ad" ftype="h5ad" />
+            <param name="manual_gates" value="manual_gates.csv" ftype="csv" />
+            <param name="gating_workflow" value="phenotype_workflow.csv" ftype="csv" />
+            <output name="output" file="tutorial_data_pheno.h5ad" compare="sim_size" delta="10" />
+        </test>
+    </tests>
+    <help>
+        <![CDATA[
+**What it does**
+
+This tool does single cell phenotyping via either manual gating or auto gating (gaussian mixture modeling) using Scimap.
+
+**Input**
+
+AnnData.
+
+**Output**
+
+Anndata with "obs/phenotype" added.
+
+
+        ]]>
+    </help>
+    <citations>
+    </citations>
+</tool>

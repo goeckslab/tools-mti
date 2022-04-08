@@ -1,0 +1,52 @@
+{% set name = "cellpose" %}
+{% set version = "0.6" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
+  sha256: 82b650c554f96c882edcfeead0dc284c9b3a743e07bfddb0ce23660b672d8bc8
+
+build:
+  number: 0
+  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed -vvv
+  skip: true  # [py2]
+
+requirements:
+  host:
+    - python
+    - pip
+    - numpy <=1.19.2
+    - scipy
+    - setuptools_scm
+    - pytest-runner
+    #- matplotlib <=3.3.2
+    #- natsort
+    #- numba
+    #- pillow <=7.0.0
+    #- scikit-image ==0.17.2
+    #- tqdm
+
+  run:
+    - python
+    - numpy >1.14.6,<1.19.4
+    - scipy
+    #- matplotlib <=3.3.3
+    - natsort
+    - numba >=0.43.1
+    - pillow <=7.0.0
+    #- scikit-image ==0.17.2
+    - pyqt
+    - pyqtgraph >=0.11.1
+    - tqdm
+
+test:
+  imports:
+    - cellpose
+
+about:
+  home: "https://github.com/MouseLand/cellpose"
+  license: BSD
+  summary: "anatomical segmentation algorithm"

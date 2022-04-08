@@ -1,0 +1,9 @@
+name: cellpose_segmentation
+owner: goeckslab
+description: A generalist algorithm for cellular segmentation.
+homepage_url: https://github.com/MouseLand/cellpose
+long_description: 
+remote_repository_url: https://github.com/goeckslab/tools-mti/tree/main/tools/cellpose
+type: unrestricted
+categories:
+- Imaging
