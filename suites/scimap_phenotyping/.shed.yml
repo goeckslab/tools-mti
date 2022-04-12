@@ -11,7 +11,7 @@ auto_tool_repositories:
   name_template: "{{ tool_id }}"
   description_template: "Wrapper for tool: {{ tool_name }}"
 suite:
-  name: "scimap_vitessce_tool_suite"
+  name: "suite_scimap_vitessce"
   description: "A suite of Galaxy tools for single cell phenotyping and visualizations"
   
   long_description: |
