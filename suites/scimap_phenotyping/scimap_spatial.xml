@@ -169,6 +169,12 @@
     </outputs>
     <tests>
         <test>
+            <param name="anndata" value="imc.h5ad" />
+            <conditional name="analyses">
+                <param name="selected_tool" value="cluster" />
+                <param name="method" value="kmeans" />
+            </conditional>
+            <output name="output" file="imc_kmeans.h5ad" compare="sim_size" delta="10" />
         </test>
     </tests>
     <help>
