@@ -1,16 +1,14 @@
-<tool id="mesmer" name="Mesmer" version="@VERSION@.0" profile="17.09">
+<tool id="mesmer" name="Mesmer" version="@VERSION@.0" profile="21.05">
     <description>Mesmer for whole-cell segmentation of multiplexed tissue imaging data</description>
     <macros>
         <import>macros.xml</import>
     </macros>
-
     <expand macro="requirements"/>
-    @VERSION_CMD@
-
+    <expand macro="version_cmd"/>
     <command detect_errors="exit_code"><![CDATA[
-    ln -s $nuclear_image input.tif && 
+    ln -s '$nuclear_image' input.tif && 
     @CMD_BEGIN@ 
-    --output-directory .
+    --output-directory ./
     --output-name mask.tif
     --nuclear-image input.tif
     --nuclear-channel $nuclear_channel
@@ -18,11 +16,11 @@
     --image-mpp $image_mpp
 
     #if $membrane_select.membrane_segment == 'True'
-    --membrane-image $membrane_select.membrane_image
-    --membrane-channel $membrane_select.membrane_channel
+        --membrane-image '$membrane_select.membrane_image'
+        --membrane-channel '$membrane_select.membrane_channel'
     #end if
     #if $squeeze
-    --squeeze
+        --squeeze
     #end if
 
     ]]></command>
@@ -31,8 +29,8 @@
         <param name="nuclear_image" type="data" format="tiff, ome.tiff" label="Image containing the nuclear marker(s)"/>
         <param name="nuclear_channel" type="integer" value="0" label="The numerical index of the channel(s) from nuclear-image"/>
         <param name="compartment" type="select"  label="Compartment for segmentation prediction: ">
-	  <option selected="true" value="whole-cell">Whole cell</option>
-	  <option value="nuclear">Nuclear</option>
+            <option selected="true" value="whole-cell">Whole cell</option>
+            <option value="nuclear">Nuclear</option>
         </param>
         <param name="image_mpp" type="float" value="0.5" label="Resolution of the image in microns-per-pixel"/>
         <param name="squeeze" type="boolean" checked="False" label="Whether to np.squeeze the outputs before saving"/>
