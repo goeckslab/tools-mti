@@ -2,10 +2,11 @@ owner: goeckslab
 homepage_url: https://squidpy.readthedocs.io/en/stable/
 remote_repository_url: https://github.com/goeckslab/tools-mti/tree/main/tools/squidpy
 categories:
-  - CompBio Galaxy Wrappers
+  - Single Cell Analysis
+  - Visualization
 repositories:
   squidpy_spatial:
-    description: Spatial Single Cell Analysis in Python.
+    description: Squidpy is a tool for the analysis and visualization of spatial molecular data.
     include:
       - squidpy_spatial.py
       - squidpy_spatial.xml
