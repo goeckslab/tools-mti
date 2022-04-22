@@ -1,0 +1,49 @@
+<macros>
+    <token name="@VERSION@">0.0.1</token>
+
+    <token name="@PROFILE@">20.01</token>
+
+    <xml name="macro_stdio">
+        <stdio>
+            <exit_code range="1:" level="fatal" description="Error occurred. Please check Tool Standard Error" />
+        </stdio>
+    </xml>
+
+    <xml name="squidpy_requirements">
+        <requirements>
+            <container type="docker">quay.io/goeckslab/squidpy:1.1.2</container>
+        </requirements>
+    </xml>
+
+    <xml name="squidpy_spatial_options">
+        <section name="options" title="Advanced Graph Options" expanded="false">
+            <yield/>
+             <!-- <param argument="copy" type="hidden" value="false" help="If True, return the result, otherwise save it to the adata object." /> -->
+        </section>
+    </xml>
+
+    <xml name="squidpy_plotting_options">
+        <section name="plotting_options" title="Plotting Options" expanded="false">
+            <yield />
+            <!-- <param argument="legend_kwargs" type="text" value="" optional="true" label="Keyword arguments for matplotlib.pyplot.legend()" /> -->
+            <param argument="figsize" type="text" value="" optional="true" label="Size of the figure in inches" help="Optional. e.g.: (12, 12)." />
+            <param argument="dpi" type="integer" value="" optional="true" label="Dots per inch" help="Optional" />
+        </section>
+    </xml>
+
+    <xml name="squidpy_plotting_option_palette">
+        <param argument="palette" type="text" value="" optional="true" label="Categorical colormap for the clusters" help="Comma delimited for multiple. If None, use anndata.AnnData.uns ['{cluster_key}_colors'], if available." />
+    </xml>
+
+    <xml name="squidpy_plotting_options_more">
+        <expand macro="squidpy_plotting_options">
+            <yield />
+            <param argument="annotate" type="boolean" checked="false" label="Whether to annotate the cells of the heatmap?" />
+            <param argument="method" type="text" value="" optional="true" label="The linkage method to be used for dendrogram/clustering" help="see scipy.cluster.hierarchy.linkage()." />
+            <param argument="title" type="text" value="" optional="true" label="The title of the plot" help="Optional." />
+            <param argument="cmap" type="text" value="viridis" label="Continuous colormap to use" help="Refer to `matplotlib.pyplot.cmap`." />
+            <!-- <param argument="cbar_kwargs" type="text" value="" label="Keyword arguments for matplotlib.figure.Figure.colorbar()" /> -->
+            <expand macro="squidpy_plotting_option_palette" />
+        </expand>
+    </xml>
+</macros>
