@@ -47,7 +47,7 @@
         <![CDATA[
 **What it does**
 
-The tool allows users to directly convert the output from [mcmicro](https://mcmicro.org/) into Anndata which is ready for downstrem analyses in `scimap` or scanpy tools.
+The tool converts the quantification output from [mcmicro](https://mcmicro.org/) to Anndata which is needed for downstrem analyses, such as phenotyping, neighbourhood identification, and so on.
 
 
 **Return**

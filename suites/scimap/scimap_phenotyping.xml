@@ -46,14 +46,14 @@
             <param name="anndata" value="tutorial_data.h5ad" ftype="h5ad" />
             <param name="manual_gates" value="manual_gates.csv" ftype="csv" />
             <param name="gating_workflow" value="phenotype_workflow.csv" ftype="csv" />
-            <output name="output" file="tutorial_data_pheno.h5ad" compare="sim_size" delta="10" />
+            <output name="output" file="tutorial_data_pheno.h5ad" compare="sim_size" delta="200000" />
         </test>
     </tests>
     <help>
         <![CDATA[
 **What it does**
 
-This tool does single cell phenotyping via either manual gating or auto gating (gaussian mixture modeling) using Scimap.
+This tool generates single cell phenotyping using either manual gating or auto gating (gaussian mixture modeling) implemented in Scimap.
 
 **Input**
 

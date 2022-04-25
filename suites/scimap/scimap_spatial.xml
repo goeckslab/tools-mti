@@ -169,13 +169,19 @@
     </outputs>
     <tests>
         <test>
+            <param name="anndata" value="imc.h5ad" />
+            <conditional name="analyses">
+                <param name="selected_tool" value="cluster" />
+                <param name="method" value="kmeans" />
+            </conditional>
+            <output name="output" file="imc_kmeans.h5ad" compare="sim_size" delta="10" />
         </test>
     </tests>
     <help>
         <![CDATA[
 **What it does**
 
-This tool does single cell phenotyping via either manual gating or auto gating (gaussian mixture modeling) using Scimap.
+This tool does various single cell spatial analyses with Scimap.
 
 **Input**
 
@@ -183,7 +189,7 @@ AnnData.
 
 **Output**
 
-Anndata with "obs/phenotype" added.
+Anndata with a corresponding key added.
 
 
         ]]>
