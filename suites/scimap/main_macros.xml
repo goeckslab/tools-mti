@@ -26,10 +26,4 @@
             <param argument="label" type="text" value="@LABEL@" optional="true" label="Key for the returned data" help="Stored in adata.obs" />
         </section>
     </xml>
-
-    <xml name="squidpy_requirements">
-        <requirements>
-            <container type="docker">quay.io/goeckslab/squidpy:1.1.2</container>
-        </requirements>
-    </xml>
 </macros>
