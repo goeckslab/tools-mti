@@ -9,7 +9,7 @@
 
     <command detect_errors="exit_code"><![CDATA[
         cp "$image" "$renamed_image" ; 
-        @CMD_BEGIN "$image" "$channel_csv" out.xml ;
+        @CMD_BEGIN@ "$image" "$channel_csv" out.xml ;
         tiffcomment -set out.xml "$renamed_image" ;
     ]]></command>
 
@@ -19,7 +19,7 @@
     </inputs>
 
     <outputs>
-        <data name="renamed_image" format="tiff" label="${tool.name} on ${on_string}"/>
+        <data name="renamed_image" format="ome.tiff" label="${tool.name} on ${on_string}"/>
     </outputs>
     
     <help><![CDATA[
