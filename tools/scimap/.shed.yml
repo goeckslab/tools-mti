@@ -1,0 +1,19 @@
+
+owner: goeckslab
+categories:
+  - Single Cell Analysis
+  - Spatial Biology
+remote_repository_url: https://github.com/goeckslab/tools-mti/tree/main/tools/scimap
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "Wrapper for scimap tool: {{ tool_name }}"
+suite:
+  name: suite_scimap
+  description: A suite of tool wrappers for analyzing spatial molecular data using scimap.
+  long_description: |
+    Scimap is a scalable toolkit for analyzing spatial molecular data.
+    The underlying framework is generalizable to spatial datasets mapped to XY coordinates.
+    The package uses the anndata framework making it easy to integrate with other popular
+    single-cell analysis toolkits. It includes preprocessing, phenotyping, visualization,
+    clustering, spatial analysis and differential spatial testing.
+    The Python-based implementation efficiently deals with large datasets of millions of cells.
