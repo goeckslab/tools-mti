@@ -5,3 +5,5 @@ description: Squidpy is a tool for the analysis and visualization of spatial mol
 categories:
   - Single Cell Analysis
   - Visualization
+exclude:
+  - dependencies
