@@ -174,7 +174,22 @@
                 <param name="selected_tool" value="cluster" />
                 <param name="method" value="kmeans" />
             </conditional>
-            <output name="output" file="imc_kmeans.h5ad" compare="sim_size" delta="10" />
+            <output name="output">
+                <assert_contents>
+                    <has_h5_keys keys="obs/kmeans" />
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="anndata" value="tutorial_data_pheno.h5ad" />
+            <conditional name="analyses">
+                <param name="selected_tool" value="spatial_aggregate" />
+            </conditional>
+            <output name="output">
+                <assert_contents>
+                    <has_h5_keys keys="obs/spatial_aggregate" />
+                </assert_contents>
+            </output>
         </test>
     </tests>
     <help>
