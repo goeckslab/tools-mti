@@ -3,6 +3,8 @@ owner: goeckslab
 categories:
   - Single Cell Analysis
   - Spatial Biology
+exclude:
+  - dependencies
 remote_repository_url: https://github.com/goeckslab/tools-mti/tree/main/tools/scimap
 auto_tool_repositories:
   name_template: "{{ tool_id }}"
