@@ -39,7 +39,16 @@
         <expand macro="squidpy_plotting_options">
             <yield />
             <param argument="annotate" type="boolean" checked="false" label="Whether to annotate the cells of the heatmap?" />
-            <param argument="method" type="text" value="" optional="true" label="The linkage method to be used for dendrogram/clustering" help="see scipy.cluster.hierarchy.linkage()." />
+            <param argument="method" type="select" label="The linkage method to be used for dendrogram/clustering" help="see scipy.cluster.hierarchy.linkage().">
+                <option value="none" selected="true">None</option>
+                <option value="single">single</option>
+                <option value="complete">complete</option>
+                <option value="average">average</option>
+                <option value="weighted">weighted</option>
+                <option value="centroid">centroid</option>
+                <option value="median">median</option>
+                <option value="ward">ward</option>
+            </param>
             <param argument="title" type="text" value="" optional="true" label="The title of the plot" help="Optional." />
             <param argument="cmap" type="text" value="viridis" label="Continuous colormap to use" help="Refer to `matplotlib.pyplot.cmap`." />
             <!-- <param argument="cbar_kwargs" type="text" value="" label="Keyword arguments for matplotlib.figure.Figure.colorbar()" /> -->
