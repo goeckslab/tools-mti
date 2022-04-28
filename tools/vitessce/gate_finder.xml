@@ -30,8 +30,8 @@
     </outputs>
     <tests>
         <test>
-            <param name="image" value="reactive_core.ome.tiff" ftype="ome.tiff" />
-            <param name="anndata" value="tutorial_data_pheno.h5ad" ftype="h5ad" />
+            <param name="image" value="cropped_reactive_core.ome.tiff" ftype="ome.tiff" />
+            <param name="anndata" value="cropped_tutorial_data_pheno.h5ad" ftype="h5ad" />
             <param name="marker" value="CD45" />
             <param name="from_gate" value="5" />
             <param name="to_gate" value="9" />
@@ -42,7 +42,7 @@
     <help>
         <![CDATA[
 **What it does**
-
+This tool, built on top of vitessce visualization components, mimics the find_gate function from scimap (https://scimap.xyz/) to do manual gating for single cell quantification data.
 
 **Input**
 
