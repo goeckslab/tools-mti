@@ -3,13 +3,6 @@
 
     <token name="@PROFILE@">20.01</token>
 
-    <xml name="scimap_requirements">
-        <requirements>
-            <container type="docker">quay.io/goeckslab/scimap:0.17.7</container>
-            <yield />
-        </requirements>
-    </xml>
-
     <xml name="vitessce_requirements">
         <requirements>
             <container type="docker">quay.io/goeckslab/vitessce:1.0.4</container>
@@ -20,55 +13,6 @@
         <stdio>
             <exit_code range="1:" level="fatal" description="Error occurred. Please check Tool Standard Error" />
         </stdio>
-    </xml>
-
-    <xml name="scimap_spatial_options" token_label="spatial_aggregate">
-        <section name="options" title="Advanced Options" expanded="false">
-            <param argument="x_coordinate" type="text" value="X_centroid" optional="false" label="Column name containing the x-coordinates values" />
-            <param argument="y_coordinate" type="text" value="Y_centroid" optional="false" label="Column name containing the y-coordinates values" />
-            <yield/>
-            <param argument="imageid" type="text" value="imageid" optional="true" label="Column name of the column containing the image id" />
-            <param argument="subset" type="text" value="" optional="true" label="Imageid of a single image to be subsetted for analyis" />
-            <param argument="label" type="text" value="@LABEL@" optional="true" label="Key for the returned data" help="Stored in adata.obs" />
-        </section>
-    </xml>
-
-    <xml name="squidpy_requirements">
-        <requirements>
-            <container type="docker">quay.io/goeckslab/squidpy:1.1.2</container>
-        </requirements>
-    </xml>
-
-    <xml name="squidpy_spatial_options">
-        <section name="options" title="Advanced Graph Options" expanded="false">
-            <yield/>
-             <!-- <param argument="copy" type="hidden" value="false" help="If True, return the result, otherwise save it to the adata object." /> -->
-        </section>
-    </xml>
-
-    <xml name="squidpy_plotting_options">
-        <section name="plotting_options" title="Plotting Options" expanded="false">
-            <yield />
-            <!-- <param argument="legend_kwargs" type="text" value="" optional="true" label="Keyword arguments for matplotlib.pyplot.legend()" /> -->
-            <param argument="figsize" type="text" value="" optional="true" label="Size of the figure in inches" help="Optional. e.g.: (12, 12)." />
-            <param argument="dpi" type="integer" value="" optional="true" label="Dots per inch" help="Optional" />
-        </section>
-    </xml>
-
-    <xml name="squidpy_plotting_option_palette">
-        <param argument="palette" type="text" value="" optional="true" label="Categorical colormap for the clusters" help="Comma delimited for multiple. If None, use anndata.AnnData.uns ['{cluster_key}_colors'], if available." />
-    </xml>
-
-    <xml name="squidpy_plotting_options_more">
-        <expand macro="squidpy_plotting_options">
-            <yield />
-            <param argument="annotate" type="boolean" checked="false" label="Whether to annotate the cells of the heatmap?" />
-            <param argument="method" type="text" value="" optional="true" label="The linkage method to be used for dendrogram/clustering" help="see scipy.cluster.hierarchy.linkage()." />
-            <param argument="title" type="text" value="" optional="true" label="The title of the plot" help="Optional." />
-            <param argument="cmap" type="text" value="viridis" label="Continuous colormap to use" help="Refer to `matplotlib.pyplot.cmap`." />
-            <!-- <param argument="cbar_kwargs" type="text" value="" label="Keyword arguments for matplotlib.figure.Figure.colorbar()" /> -->
-            <expand macro="squidpy_plotting_option_palette" />
-        </expand>
     </xml>
 
     <xml name="vitessce_cmd" token_tool_id="vitessce_spatial">

@@ -1,19 +1,19 @@
 import argparse
 import json
 import warnings
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from pathlib import Path
 from anndata import read_h5ad
-from sklearn.preprocessing import MinMaxScaler
 from sklearn.mixture import GaussianMixture
+from sklearn.preprocessing import MinMaxScaler
 from vitessce import (
-    VitessceConfig,
-    Component as cm,
     AnnDataWrapper,
-    OmeTiffWrapper,
+    Component as cm,
     MultiImageWrapper,
+    OmeTiffWrapper,
+    VitessceConfig,
 )
 
 
@@ -133,9 +133,9 @@ def main(inputs, output, image, anndata, masks=None):
     cell_set_expression = vc.add_view(dataset, cm.CELL_SET_EXPRESSION)
 
     vc.layout(
-        (status / genes / cell_set_expression) |
-        (cellsets / cell_set_sizes / lc) |
-        (spatial)
+        (status / genes / cell_set_expression)
+        | (cellsets / cell_set_sizes / lc)
+        | (spatial)
     )
     config_dict = vc.export(to='files', base_url='http://localhost', out_dir=output)
 

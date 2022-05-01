@@ -1,16 +1,16 @@
 import argparse
 import json
 import warnings
+from pathlib import Path
 
 import scanpy as sc
-from pathlib import Path
 from anndata import read_h5ad
 from vitessce import (
-    VitessceConfig,
-    Component as cm,
     AnnDataWrapper,
-    OmeTiffWrapper,
+    Component as cm,
     MultiImageWrapper,
+    OmeTiffWrapper,
+    VitessceConfig,
 )
 
 
@@ -98,9 +98,9 @@ def main(inputs, output, image, anndata=None, masks=None):
     cell_set_sizes = vc.add_view(dataset, cm.CELL_SET_SIZES)
     cell_set_expression = vc.add_view(dataset, cm.CELL_SET_EXPRESSION)
     vc.layout(
-        (status / genes / cell_set_expression) |
-        (cellsets / lc / scattorplot) |
-        (cell_set_sizes / heatmap / spatial)
+        (status / genes / cell_set_expression)
+        | (cellsets / lc / scattorplot)
+        | (cell_set_sizes / heatmap / spatial)
     )
     config_dict = vc.export(to='files', base_url='http://localhost', out_dir=output)
 
