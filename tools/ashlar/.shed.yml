@@ -1,7 +1,7 @@
-owner: perssond
+owner: creason
 remote_repository_url: https://github.com/ohsu-comp-bio/ashlar
 categories: 
-  - "CompBio Galaxy Wrappers"
+  - "Imaging"
 repositories:
   ashlar:
     description: "Alignment by Simultaneous Harmonization of Layer/Adjacency Registration
