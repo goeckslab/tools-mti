@@ -1,0 +1,12 @@
+owner: creason
+remote_repository_url: https://github.com/ohsu-comp-bio/ashlar
+categories: 
+  - "Imaging"
+repositories:
+  ashlar:
+    description: "Alignment by Simultaneous Harmonization of Layer/Adjacency Registration
+Usage"
+    include: 
+      - ashlar.xml
+      - macros.xml
+      - pyramid_upgrade.py
