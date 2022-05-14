@@ -1,4 +1,4 @@
-<tool id="mesmer" name="Mesmer" version="@VERSION@.0" profile="21.05">
+<tool id="mesmer" name="Mesmer" version="@VERSION@.0" profile="19.01">
     <description>Mesmer for whole-cell segmentation of multiplexed tissue imaging data</description>
     <macros>
         <import>macros.xml</import>
