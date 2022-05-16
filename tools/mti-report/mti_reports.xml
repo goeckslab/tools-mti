@@ -1,0 +1,85 @@
+<tool id="mti_reports" name="MTI Analysis and QC Reports" version="">
+    <description>Automated generation of HTML analysis and QC reports for Galaxy MTI workflows</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <command detect_errors="exit_code">
+        <![CDATA[
+        #if $reports.selected_report == "QC":
+        python '$__tool_directory__/QC/cycle_concordance.py'
+            --file '$registered_image'
+            --markers '$markers'
+            --pattern '$pattern' &&
+        
+        python '$__tool_directory__/QC/segmentation_thumbnails.py'
+            --file '$registered_image'
+            --segmentation '$segmentation'
+            --channel '$segmentation_channel' &&
+
+        ln -s '$anndata' ./adata.h5ad &&
+
+        python '$QC_script' &&
+
+        ln -s '$__tool_directory__/QC/QC_template.md' ./QC.md &&
+
+        python -m markdown ./QC.md > QC_report.html
+        #end if
+        ]]>
+    </command>
+    <configfiles>
+        <configfile name = "QC_script">
+import os
+import sys
+import re
+import numpy as np
+import pandas as pd
+import anndata as ad
+import plotly.graph_objects as go
+import matplotlib.pyplot as plt
+
+from '$__tool_directory__/MTIreport' import quality
+
+quality.plot_cycle_dropout(os.path.join(os.getcwd(),adata.h5ad), pattern = $pattern)
+        </configfile>
+    </configfiles>
+    <inputs>
+        <conditional name="reports">
+            <param name="selected_report" type="select" label="Select which type of report to generate">
+                <option value="QC" selected="true">Quality Control Report -- Cycle concordance, registration and segmentation QC for one sample</option>
+                <option value="sample_analysis">Sample Analysis Report -- Compositional and spatial analysis for a single sample</option>
+                <option value="multisample_analysis" >Multi-sample Analysis Report -- Compositional and spatial analysis to compare multiple samples</option>
+            </param>
+            <when value="QC">
+                <param name="anndata" type="data" format="h5ad" label="Anndata (h5ad) file" />
+                <param name="registered_image" type="data" format="ome.tiff" label="Registered OME-TIFF image" />
+                <param name="segmentation" type="data" format="tiff" label="Segmentation mask" />
+                <param name="markers" type="data" format="csv" label="CSV file with channel number and marker names" />
+                <param argument="pattern" type="text" value="" optional="false" label="Prefix of nuclear marker in every cycle for registration QC ('DAPI', 'DNA', etc.)" />
+                <param argument="segmentation_channel" type="integer" value="1" label="Channel number that was used for segmentation (1-based)" />
+            </when>
+            <when value="sample_analysis">
+                <param name="anndata" type="data" format="h5ad" label="Anndata (h5ad) file" />
+                <param argument="column" type="text" value="phenotype" optional="false" label="Column name to perform compositional analysis on (default is 'phenotype')" />
+                <param argument="rm_markers" type="text" optional="true" label="List of marker prefixes to remove from the analysis" help="No quotes, separated by comma. Example: entering DAPI will remove all markers with name containing DAPI" />
+                <param argument="resolution" type="float" value="" optional="false" label="Resolution of the image in microns per pixel" />
+                <param argument="radius" type="integer" value="30" label="Radius in pixels for neighborhood analysis (Default is 30px)" />
+                <param argument="leiden" type="boolean" checked="true" optional="true" label="Run leiden clustering with resolution optimization" />
+            </when>
+            <when value="multisample_analysis">
+                <param name="anndata_files" type="data_collection" format="h5ad" label="Collection of Anndata (h5ad) files" />
+                <param name="metadata" type="data" format="csv" label="CSV file mapping file names to sample name and image resolution" />
+                <param argument="rm_markers" type="text" optional="true" label="List of marker prefixes to remove from the analysis" help="No quotes, separated by comma. Example: entering DAPI will remove all markers with name containing DAPI" />
+            </when>
+    </inputs>
+    <outputs>
+        <collection name="qc_plots" type="list" label="${tool.name}: qc_plots">
+            <discover_datasets pattern="__name_and_ext__" directory="qc" ext="png" visible="false"/>
+        </collection>
+        <data name="registered" from_work_dir="registered.ome.tiff" format="ome.tiff"/>
+    </outputs>
+    <help><![CDATA[
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>
