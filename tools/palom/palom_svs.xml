@@ -1,4 +1,4 @@
-<tool id="palom" name="palom" version="2021.12.0.0">
+<tool id="palom" name="palom" version="2021.12.0.1">
     <description>Piecewise alignment for layers of mosaics. A tool for registering whole-slide images with different IHC stainings</description>
     <macros>
         <import>macros.xml</import>
@@ -46,7 +46,7 @@ modes += list(channel_df['mode'])
 pixel_size = None
 
 #if $pixel_size:
-pixel_size = int($pixel_size)
+pixel_size = float($pixel_size)
 #end if
 
 level = 0
@@ -76,7 +76,7 @@ run_palom(
         <param name="reference_image" type="data" format="tiff" label="Hematoxylin reference image" help="An H+E image in .svs format"/>
         <param name="moving_images" type="data_collection" label="Moving Images (data collection)" help="A collection of svs-format images to align to the reference image"/>
         <param name="channels" type="data" label="Channel and mode dataframe" help="A CSV file with 'channel' and 'mode' columns, with a row corresponding to each moving image"/>
-        <param name="pixel_size" type="integer" optional="true" label="Pixel Size" help="defaults to px size of reference image"/>
+        <param name="pixel_size" type="float" optional="true" label="Pixel Size" help="defaults to px size of reference image"/>
         <param name="level" type="integer" optional="true" label="Level" help="pyramid level, defaults to 0 (lowest level)"/>
     </inputs>
     <outputs>
