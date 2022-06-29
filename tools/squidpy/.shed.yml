@@ -1,0 +1,9 @@
+owner: goeckslab
+homepage_url: https://squidpy.readthedocs.io/en/stable/
+remote_repository_url: https://github.com/goeckslab/tools-mti/tree/main/tools/squidpy
+description: Squidpy is a tool for the analysis and visualization of spatial molecular data.
+categories:
+  - Single Cell Analysis
+  - Visualization
+exclude:
+  - dependencies

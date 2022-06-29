@@ -1,4 +1,4 @@
-<tool id="rename_tiff_channels" name="Rename OME-TIFF Channels" version="@VERSION@.1" profile="19.01">
+<tool id="rename_tiff_channels" name="Rename OME-TIFF Channels" version="@VERSION@.2" profile="19.01">
     <description>A simple script to change the channel names in the XML metadata of OME-TIFF images</description>
     <macros>
         <import>macros.xml</import>
@@ -14,12 +14,21 @@
     ]]></command>
 
     <inputs>
-        <param name="image" type="data" format="tiff" label="Input Pyramidal OME-TIFF"/>
+        <param name="image" type="data" format="tiff" label="Input image in either tiff or OME-tiff format"/>
+        <param name="input_type" type="select" optional="false" label="Format of input image">
+            <option value="ome.tiff">ome.tiff</option>
+            <option value="tiff">tiff</option>
+        </param>
         <param name="channel_csv" type="data" format="csv" label="Channel Metadata CSV"/>
     </inputs>
 
     <outputs>
-        <data name="renamed_image" format="ome.tiff" label="${tool.name} on ${on_string}"/>
+        <data name="renamed_image" format="ome.tiff" label="${tool.name} on ${on_string}">
+            <change_format>
+                <when input="input_type" value="ome.tiff" format="ome.tiff" />
+                <when input="input_type" value="tiff" format="tiff" />
+            </change_format>
+        </data>
     </outputs>
     
     <help><![CDATA[

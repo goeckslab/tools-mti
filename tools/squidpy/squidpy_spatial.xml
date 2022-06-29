@@ -260,42 +260,66 @@
         <test>
             <param name="anndata" value="imc.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="spatial_neighbors" />
-            <output name="output" file="imc_sn.h5ad" compare="sim_size" delta="200" />
+            <output name="output">
+                <assert_contents>
+                    <has_h5_keys keys="uns/spatial_neighbors" />
+                </assert_contents>
+            </output>
         </test>
         <test>
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="nhood_enrichment" />
             <param name="cluster_key" value="cell type" />
-            <output name="output" file="imc_nhood_enrichment.h5ad" compare="sim_size" delta="200" />
-            <output name="output_plot" file="imc_nhood_enrichment.png" compare="sim_size" delta="200" />
+            <output name="output">
+                <assert_contents>
+                    <has_h5_keys keys="uns/cell type_nhood_enrichment" />
+                </assert_contents>
+            </output>
+            <output name="output_plot" file="imc_nhood_enrichment.png" compare="sim_size" delta="2000" />
         </test>
         <test>
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="co_occurrence" />
             <param name="cluster_key" value="cell type" />
-            <output name="output" file="imc_co_occurrence.h5ad" compare="sim_size" delta="200" />
-            <output name="output_plot" file="imc_co_occurrence.png" compare="sim_size" delta="200" />
+            <output name="output">
+                <assert_contents>
+                    <has_h5_keys keys="uns/cell type_co_occurrence" />
+                </assert_contents>
+            </output>
+            <output name="output_plot" file="imc_co_occurrence.png" compare="sim_size" delta="2000" />
         </test>
         <test>
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="centrality_scores" />
             <param name="cluster_key" value="cell type" />
-            <output name="output" file="imc_centrality_scores.h5ad" compare="sim_size" delta="200" />
-            <output name="output_plot" file="imc_centrality_scores.png" compare="sim_size" delta="200" />
+            <output name="output">
+                <assert_contents>
+                    <has_h5_keys keys="uns/cell type_centrality_scores" />
+                </assert_contents>
+            </output>
+            <output name="output_plot" file="imc_centrality_scores.png" compare="sim_size" delta="2000" />
         </test>
         <test>
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="interaction_matrix" />
             <param name="cluster_key" value="cell type" />
-            <output name="output" file="imc_interaction_matrix.h5ad" compare="sim_size" delta="200" />
-            <output name="output_plot" file="imc_interaction_matrix.png" compare="sim_size" delta="200" />
+            <output name="output">
+                <assert_contents>
+                    <has_h5_keys keys="uns/cell type_interactions" />
+                </assert_contents>
+            </output>
+            <output name="output_plot" file="imc_interaction_matrix.png" compare="sim_size" delta="2000" />
         </test>
         <test>
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="ripley" />
             <param name="cluster_key" value="cell type" />
-            <output name="output" file="imc_ripley.h5ad" compare="sim_size" delta="200" />
-            <output name="output_plot" file="imc_ripley.png" compare="sim_size" delta="200" />
+            <output name="output">
+                <assert_contents>
+                    <has_h5_keys keys="uns/cell type_ripley_F" />
+                </assert_contents>
+            </output>
+            <output name="output_plot" file="imc_ripley.png" compare="sim_size" delta="2000" />
         </test>
     </tests>
     <help>

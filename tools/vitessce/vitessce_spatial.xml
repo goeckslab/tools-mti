@@ -81,10 +81,10 @@
     </outputs>
     <tests>
         <test>
-            <param name="image" value="reactive_core.ome.tiff" ftype="ome.tiff" />
+            <param name="image" value="cropped_reactive_core.ome.tiff" ftype="ome.tiff" />
             <conditional name="do_phenotyping">
                 <param name="phenotyping_choice" value="yes" />
-                <param name="anndata" value="tutorial_data_pheno.h5ad" ftype="h5ad" />
+                <param name="anndata" value="cropped_tutorial_data_pheno.h5ad" ftype="h5ad" />
                 <conditional name="phenotype_factory">
                     <param name="phenotype_mode" value="type_in" />
                     <param name="phenotypes" value="leiden" />
@@ -93,10 +93,10 @@
             <output name="output" file="tutorial_vitessce.html" compare="sim_size" delta="20" />
         </test>
         <test>
-            <param name="image" value="reactive_core.ome.tiff" ftype="ome.tiff" />
+            <param name="image" value="cropped_reactive_core.ome.tiff" ftype="ome.tiff" />
             <conditional name="do_phenotyping">
                 <param name="phenotyping_choice" value="yes" />
-                <param name="anndata" value="tutorial_data_pheno.h5ad" ftype="h5ad" />
+                <param name="anndata" value="cropped_tutorial_data_pheno.h5ad" ftype="h5ad" />
                 <conditional name="scatterplot_embeddings">
                     <param name="embedding" value="pca" />
                 </conditional>
@@ -108,7 +108,7 @@
             <output name="output" file="tutorial_vitessce.html" compare="sim_size" delta="20" />
         </test>
         <test>
-            <param name="image" value="reactive_core.ome.tiff" ftype="ome.tiff" />
+            <param name="image" value="cropped_reactive_core.ome.tiff" ftype="ome.tiff" />
             <conditional name="do_phenotyping">
                 <param name="phenotyping_choice" value="no" />
             </conditional>
@@ -118,7 +118,17 @@
     <help>
         <![CDATA[
 **What it does**
+This tools provides web-based, interactive and scalable visualizations of single cell data.
 
+**Input**
+
+OME-TIFF image.
+Segmentation masks (optional).
+AnnData with marker intensities.
+
+**Output**
+
+An HTML file with Vitessce component. 
 
         ]]>
     </help>
