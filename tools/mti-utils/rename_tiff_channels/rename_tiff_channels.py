@@ -1,8 +1,8 @@
-import click
-import pandas
 import bioformats
-import tifffile
+import click
 import javabridge
+import pandas
+import tifffile
 
 
 @click.command()
