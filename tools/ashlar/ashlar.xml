@@ -1,0 +1,184 @@
+<tool id="ashlar" name="ASHLAR" version="@VERSION@.1" profile="17.09">
+    <description>Alignment by Simultaneous Harmonization of Layer/Adjacency Registration</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+ 
+    <expand macro="requirements"/>
+    @VERSION_CMD@
+
+    <command detect_errors="exit_code"><![CDATA[
+
+        #def clean(file,type)
+          #set name_clean = str($file.element_identifier).replace('.ome.tiff','').replace('.tiff','').replace('.tiff.','')
+
+          #if $type == "raw"
+            #set file_clean = $name_clean + ".ome.tiff"
+          #elif $type == "ffp"
+            #set file_clean = $name_clean + "_ffp.ome.tiff"
+          #elif $type == "dfp"
+            #set file_clean = $name_clean + "_dfp.ome.tiff"
+          #end if
+
+          #return $file_clean
+        #end def
+
+        ## Link the illumination files to appropriate file extension
+        #for $dfp in $ldfp:
+            ln -s "$dfp" "$clean($dfp,"dfp")" &&
+        #end for
+        #for $ffp in $lffp:
+            ln -s "$ffp" "$clean($ffp,"ffp")" &&
+        #end for
+
+        @CMD_BEGIN@
+
+        ## Supply the raw images
+        #for $raw in $lraw:
+            "$raw"
+        #end for
+
+        ## Additional arguments
+        -m $max_shift
+
+        #if $flip_x
+        --flip-x
+        #end if
+
+        #if $flip_y
+        --flip-y
+        #end if
+
+        -c $adv.align_channel
+
+        #if $adv.filter_sigma
+        --filter-sigma $adv.filter_sigma
+        #end if
+
+        #if $adv.tile_size
+        --tile-size $adv.tile_size
+        #end if
+
+        --ffp
+        #for $ffp in $lffp:
+            "$clean($ffp,"ffp")"
+        #end for
+
+        --dfp
+        #for $dfp in $ldfp:
+            "$clean($dfp,"dfp")"
+        #end for
+
+        #if $adv.pyramid
+        --pyramid
+        #end if
+
+        #if $adv.flip_mosaic_x
+        --flip-mosaic-x
+        #end if
+
+        #if $adv.flip_mosaic_y
+        --flip-mosaic-y
+        #end if
+
+        -f registered.ome.tif;
+
+        #if $upgrade.decide == "do_upgrade"
+        python3 ${__tool_directory__}/pyramid_upgrade.py
+        registered.ome.tif
+
+        #if $upgrade.markers_file
+        -n `echo \$(cat $upgrade.markers_file | tail -n +2 | awk -F, '{print \$3}')`;
+        #end if
+        #end if
+    ]]></command>
+
+    <inputs>
+        <param name="lraw" type="data_collection" format="ome.tiff,tiff" collection_type="list" label="Raw Images"/>
+        <param name="ldfp" type="data_collection" format="ome.tiff,tiff" collection_type="list" label="Deep Field Profile Images"/>
+        <param name="lffp" type="data_collection" format="ome.tiff,tiff" collection_type="list" label="Flat Field Profile Images"/>
+
+        <param name="flip_x" type="boolean" value="false" label="Flip X-axis"/>
+        <param name="flip_y" type="boolean" value="false" label="Flip Y-axis"/>
+
+        <param name="max_shift" type="integer" value="30" label="Maximum allowed per-tile corrective shift" help="In micros"/>
+
+        <conditional name="upgrade">
+            <param name="decide" type="select" label="Upgrade to BF6-Compliant OME-TIFF Pyramid">
+                <option value="do_upgrade">Upgrade Pyramid</option>
+                <option value="dont_upgrade">Leave Legacy Pyramid</option>
+            </param>
+            <when value="do_upgrade">
+                <param name="markers_file" type="data" format="csv,tabular" optional="true" label="Markers File (optional)"/>
+            </when>
+            <when value="dont_upgrade">
+            </when>
+        </conditional>
+        <section name="adv" title="Advanced Options" expanded="false">
+            <param name="align_channel" type="integer" value="0" label="Align Channel Number"/>
+            <param name="filter_sigma" type="float" optional="true" label="Sigma"/>
+            <param name="tile_size" type="integer"  optional="true" label="Cyto Mask Channel"/>
+            <param name="flip_mosaic_x" type="boolean" value="false" label="Flip output image horizontally"/>
+            <param name="flip_mosaic_y" type="boolean" value="false" label="Flip output image vertically"/>
+            <param name="pyramid" type="boolean" value="true" label="Write output as a single pyramidal TIFF"/>
+        </section>
+    </inputs>
+
+    <outputs>
+        <data format="ome.tiff" name="output" from_work_dir="registered.ome.tif" label="${tool.name} on ${on_string}"/>
+    </outputs>
+    
+    <help><![CDATA[
+Ashlar python package for microscopy registration, developed by HMS (repo: https://github.com/labsyspharm/ashlar)
+        ashlar [-h] [-o DIR] [-c [CHANNEL]]
+       [--output-channels [CHANNEL [CHANNEL ...]]] [-m SHIFT]
+       [--filter-sigma SIGMA] [-f FORMAT] [--pyramid]
+       [--tile-size PIXELS] [--ffp [FILE [FILE ...]]]
+       [--dfp [FILE [FILE ...]]] [--plates] [-q] [--version]
+       [FILE [FILE ...]]
+
+Stitch and align one or more multi-series images
+
+positional arguments:
+  FILE                  an image file to be processed (one file per cycle)
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -o DIR, --output DIR  write output image files to DIR; default is the
+                        current directory
+  -c [CHANNEL], --align-channel [CHANNEL]
+                        align images using channel number CHANNEL; numbering
+                        starts at 0
+  --output-channels [CHANNEL [CHANNEL ...]]
+                        output only channels listed in CHANNELS; numbering
+                        starts at 0
+  -m SHIFT, --maximum-shift SHIFT
+                        maximum allowed per-tile corrective shift in microns
+  --filter-sigma SIGMA  width in pixels of Gaussian filter to apply to images
+                        before alignment; default is 0 which disables
+                        filtering
+  -f FORMAT, --filename-format FORMAT
+                        use FORMAT to generate output filenames, with {cycle}
+                        and {channel} as required placeholders for the cycle
+                        and channel numbers; default is
+                        cycle_{cycle}_channel_{channel}.tif
+  --pyramid             write output as a single pyramidal TIFF
+  --tile-size PIXELS    set tile width and height to PIXELS (pyramid output
+                        only); default is 1024
+  --ffp [FILE [FILE ...]]
+                        read flat field profile image from FILES; if specified
+                        must be one common file for all cycles or one file for
+                        each cycle
+  --dfp [FILE [FILE ...]]
+                        read dark field profile image from FILES; if specified
+                        must be one common file for all cycles or one file for
+                        each cycle
+  --plates              enable plate mode for HTS data
+  -q, --quiet           suppress progress display
+  --version             print version
+
+OHSU Wrapper Repo: https://github.com/ohsu-comp-bio/ashlar
+Conda Package Available From: https://anaconda.org/ohsu-comp-bio/ashlar
+    ]]></help>
+    <expand macro="citations" />
+</tool>
