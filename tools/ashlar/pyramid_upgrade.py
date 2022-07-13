@@ -1,34 +1,33 @@
-import sys
-import os
 import argparse
-import struct
-import re
+import dataclasses
 import fractions
 import io
-import xml.etree.ElementTree
-import collections
+import os
+import re
 import reprlib
-import dataclasses
-from typing import List, Any
+import struct
+import sys
+import xml.etree.ElementTree
+from typing import Any, List
 
 
 datatype_formats = {
-    1: "B", # BYTE
-    2: "s", # ASCII
-    3: "H", # SHORT
-    4: "I", # LONG
-    5: "I", # RATIONAL (pairs)
-    6: "b", # SBYTE
-    7: "B", # UNDEFINED
-    8: "h", # SSHORT
-    9: "i", # SLONG
-    10: "i", # SRATIONAL (pairs)
-    11: "f", # FLOAT
-    12: "d", # DOUBLE
-    13: "I", # IFD
-    16: "Q", # LONG8
-    17: "q", # SLONG8
-    18: "Q", # IFD8
+    1: "B",  # BYTE
+    2: "s",  # ASCII
+    3: "H",  # SHORT
+    4: "I",  # LONG
+    5: "I",  # RATIONAL (pairs)
+    6: "b",  # SBYTE
+    7: "B",  # UNDEFINED
+    8: "h",  # SSHORT
+    9: "i",  # SLONG
+    10: "i",  # SRATIONAL (pairs)
+    11: "f",  # FLOAT
+    12: "d",  # DOUBLE
+    13: "I",  # IFD
+    16: "Q",  # LONG8
+    17: "q",  # SLONG8
+    18: "Q",  # IFD8
 }
 rational_datatypes = {5, 10}
 
@@ -253,6 +252,7 @@ class Tag:
             + ")"
         )
 
+
 @dataclasses.dataclass(frozen=True)
 class TagSet:
     """Container for Tag objects as stored in a TIFF IFD.
@@ -293,7 +293,7 @@ class TagSet:
             i = self.codes.index(code)
         except ValueError:
             raise KeyError(code) from None
-        self.tags[:] = self.tags[:i] + self.tags[i+1:]
+        self.tags[:] = self.tags[:i] + self.tags[i + 1:]
 
     def __contains__(self, code):
         return code in self.codes
@@ -328,7 +328,7 @@ class TagSet:
         else:
             i = len(self.tags)
         n = len(self.tags)
-        self.tags[i:n+1] = [tag] + self.tags[i:n]
+        self.tags[i:n + 1] = [tag] + self.tags[i:n]
 
 
 @dataclasses.dataclass(frozen=True)
@@ -372,7 +372,7 @@ def fix_attrib_namespace(elt):
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Convert an OME-TIFF legacy pyramid to the BioFormats 6"
-            " OME-TIFF pyramid format in-place.",
+                    " OME-TIFF pyramid format in-place.",
     )
     parser.add_argument("image", help="OME-TIFF file to convert")
     parser.add_argument(
@@ -382,8 +382,8 @@ def parse_args():
         default=[],
         metavar="NAME",
         help="Channel names to be inserted into OME metadata. Number of names"
-            " must match number of channels in image. Be sure to put quotes"
-            " around names containing spaces or other special shell characters."
+             " must match number of channels in image. Be sure to put quotes"
+             " around names containing spaces or other special shell characters."
     )
     args = parser.parse_args()
     return args
@@ -451,7 +451,7 @@ def main():
         print(f"TIFF does not begin with SizeC={size_c} full-size pages.")
         sys.exit(1)
     for level in range(1, num_levels):
-        level_dims = page_dims[level * size_c : (level + 1) * size_c]
+        level_dims = page_dims[level * size_c: (level + 1) * size_c]
         if len(set(level_dims)) != 1:
             print(
                 f"Pyramid level {level + 1} out of {num_levels} has inconsistent"
@@ -513,7 +513,7 @@ def main():
     print("Writing new TIFF headers...")
     stale_ranges = [ifd.offset_range for ifd in tiff.ifds]
     main_ifds = tiff.ifds[:size_c]
-    channel_sub_ifds = [tiff.ifds[c + size_c : : size_c] for c in range(size_c)]
+    channel_sub_ifds = [tiff.ifds[c + size_c::size_c] for c in range(size_c)]
     for i, (main_ifd, sub_ifds) in enumerate(zip(main_ifds, channel_sub_ifds)):
         for ifd in sub_ifds:
             if 305 in ifd.tags:
