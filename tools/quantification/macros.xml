@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<macros>
+    <xml name="requirements">
+        <requirements>
+            <container type="docker">labsyspharm/quantification:@VERSION@</container>
+            <requirement type="package" version="3.9">python</requirement>
+            <requirement type="package" version="0.18.0">scikit-image</requirement>
+            <requirement type="package">h5py</requirement>
+            <requirement type="package">pandas</requirement>
+            <requirement type="package">numpy</requirement>
+            <requirement type="package">pathlib</requirement>
+        </requirements>
+    </xml>
+
+    <xml name="version_cmd">
+        <version_command>echo @VERSION@</version_command>
+    </xml>
+    <xml name="citations">
+        <citations>
+        </citations>
+    </xml>
+
+    <token name="@VERSION@">1.5.1</token>
+    <token name="@CMD_BEGIN@"><![CDATA[
+    QUANT_PATH="";
+    if [ -f "/app/CommandSingleCellExtraction.py" ]; then
+        export QUANT_PATH="/app/CommandSingleCellExtraction.py";
+    else
+        export QUANT_PATH="${__tool_directory__}/CommandSingleCellExtraction.py";
+    fi;
+    ]]></token>
+</macros>

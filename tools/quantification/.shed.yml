@@ -1,0 +1,13 @@
+owner: creason
+remote_repository_url: https://github.com/ohsu-comp-bio/quantification
+categories: 
+  - "Imaging"
+repositories:
+  quantification:
+    description: "Module for single-cell data extraction given a segmentation mask and multi-channel image"
+    include: 
+      - quantification.xml
+      - macros.xml
+      - CommandSingleCellExtraction.py
+      - ParseInput.py
+      - SingleCellDataExtraction.py
