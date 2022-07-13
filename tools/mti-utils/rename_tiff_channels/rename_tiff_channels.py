@@ -1,9 +1,9 @@
-import sys
-import pandas
-import click
-import tifffile
 import bioformats
+import click
 import javabridge
+import pandas
+import tifffile
+
 
 @click.command()
 @click.argument('input_tiff', type=str)
@@ -38,7 +38,7 @@ def rename_tiff_channels(input_tiff, channels_csv, output_name):
     removed_ome = '<'.join(xml_str.split('<ome:'))
     removed_ome = '/'.join(removed_ome.split('/ome:'))
     with open(output_name, "w") as out_tiff:
-        out_tiff.write(header+removed_ome)
+        out_tiff.write(header + removed_ome)
 
     # Slay the evil JavaBridge
     javabridge.kill_vm()
