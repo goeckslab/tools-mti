@@ -1,4 +1,4 @@
-<tool id="scimap_spatial" name="Spatial Analysis Tools" version="@VERSION@" profile="20.01">
+<tool id="scimap_spatial" name="Spatial Analysis Tools" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
     <description>from Scimap</description>
     <macros>
         <import>main_macros.xml</import>

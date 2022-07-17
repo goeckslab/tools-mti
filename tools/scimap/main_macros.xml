@@ -1,6 +1,6 @@
 <macros>
-    <token name="@VERSION@">0.0.1</token>
-
+    <token name="@TOOL_VERSION@">0.0.1</token>
+    <token name="@VERSION_SUFFIX@">0</token>
     <token name="@PROFILE@">20.01</token>
 
     <xml name="scimap_requirements">
