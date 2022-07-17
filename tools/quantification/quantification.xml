@@ -1,17 +1,17 @@
-<tool id="quantification" name="Quantification" version="@VERSION@.7" profile="17.09">
+<tool id="quantification" name="Quantification" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="19.01">
     <description>Single cell quantification, a module for single-cell data extraction given a segmentation mask and multi-channel image.</description>
     <macros>
         <import>macros.xml</import>
     </macros>
  
     <expand macro="requirements"/>
-    @VERSION_CMD@
+    <expand macro="version_cmd"/>
 
     <command detect_errors="exit_code"><![CDATA[
-    ln -s $image input.ome.tiff;
-    ln -s $primary_mask primary_mask.tiff;
+    ln -s '$image' 'input.ome.tiff';
+    ln -s '$primary_mask' 'primary_mask.tiff';
     #if $supp_masks
-    ln -s $supp_masks supp_mask.tiff;
+    ln -s '$supp_masks' 'supp_mask.tiff';
     #end if
 
     mkdir ./tool_out;
