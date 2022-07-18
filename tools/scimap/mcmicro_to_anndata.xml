@@ -1,4 +1,4 @@
-<tool id="scimap_mcmicro_to_anndata" name="Convert McMicro Output to Anndata" version="@VERSION@" profile="20.01">
+<tool id="scimap_mcmicro_to_anndata" name="Convert McMicro Output to Anndata" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
     <description>to be used in scimap/scanpy</description>
     <macros>
         <import>main_macros.xml</import>
