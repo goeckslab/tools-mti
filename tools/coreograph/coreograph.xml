@@ -1,15 +1,15 @@
-<tool id="unet_coreograph" name="UNetCoreograph" version="@VERSION@.3" profile="17.09">
+<tool id="unet_coreograph" name="UNetCoreograph" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="19.01">
     <description>Coreograph uses UNet, a deep learning model, to identify complete/incomplete tissue cores on a tissue microarray. It has been trained on 9 TMA slides of different sizes and tissue types.</description>
     <macros>
         <import>macros.xml</import>
     </macros>
  
     <expand macro="requirements"/>
-    @VERSION_CMD@
+    <expand macro="version_cmd"/>
 
     <command detect_errors="exit_code"><![CDATA[
         #set $type_corrected = str($source_image)[:-3]+'ome.tif'
-        ln -s $source_image `basename $type_corrected`;
+        ln -s '$source_image' `basename $type_corrected`;
 
         @CMD_BEGIN@
 
@@ -19,19 +19,8 @@
         --channel $channel
         --buffer $buffer
         --sensitivity $sensitivity
-
-        ##if $usegrid
-        ##--useGrid
-        ##end if
-
-        #if $cluster
-        --cluster
-        #end if
-
-        #if $tissue
-        --tissue
-        #end if
-
+        $cluster
+        $tissue
         --outputPath .;
         
     ]]></command>
@@ -43,9 +32,8 @@
         <param name="channel" type="integer" value="0" label="Channel"/>
         <param name="buffer" type="float" value="2.0" label="Buffer"/>
         <param name="sensitivity" type="float" value="0.3" label="Sensitivity"/>
-        <!--<param name="usegrid" type="boolean" label="Use Grid"/>-->
-        <param name="cluster" type="boolean" checked="false" label="Cluster"/>
-        <param name="tissue" type="boolean" checked="false" label="Tissue"/>
+        <param name="cluster" type="boolean" truevalue="--cluster" falsevalue="" checked="false" label="Cluster"/>
+        <param name="tissue" type="boolean" truevalue="--tissue" falsevalue="" checked="false" label="Tissue"/>
     </inputs>
 
     <outputs>
