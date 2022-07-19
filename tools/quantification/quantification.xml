@@ -14,19 +14,19 @@
     ln -s '$supp_masks' 'supp_mask.tiff';
     #end if
 
-    mkdir ./tool_out;
+    mkdir './tool_out';
 
     @CMD_BEGIN@
 
     python \$QUANT_PATH
     --masks
-    primary_mask.tiff
+    'primary_mask.tiff'
     #if $supp_masks
-    supp_mask.tiff
+    'supp_mask.tiff'
     #end if
 
-    --image input.ome.tiff
-    --output ./tool_out
+    --image 'input.ome.tiff'
+    --output './tool_out'
 
     #if $mask_props
     --mask_props $mask_props
