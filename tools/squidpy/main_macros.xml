@@ -1,7 +1,7 @@
 <macros>
-    <token name="@VERSION@">0.0.1</token>
-
+    <token name="@TOOL_VERSION@">1.1.2</token>
     <token name="@PROFILE@">20.01</token>
+    <token name="@VERSION_SUFFIX@">0</token> 
 
     <xml name="macro_stdio">
         <stdio>
@@ -11,7 +11,7 @@
 
     <xml name="squidpy_requirements">
         <requirements>
-            <container type="docker">quay.io/goeckslab/squidpy:1.1.2</container>
+            <container type="docker">quay.io/goeckslab/squidpy:@TOOL_VERSION@</container>
         </requirements>
     </xml>
 

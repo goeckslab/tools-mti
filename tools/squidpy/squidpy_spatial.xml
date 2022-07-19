@@ -1,11 +1,11 @@
-<tool id="squidpy_spatial" name="Squidpy Graph and Plotting" version="@VERSION@" profile="20.01">
+<tool id="squidpy_spatial" name="Squidpy Graph and Plotting" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
     <description>for spatial analysis </description>
     <macros>
         <import>main_macros.xml</import>
     </macros>
     <expand macro="squidpy_requirements"/>
     <expand macro="macro_stdio" />
-    <version_command>echo "@VERSION@"</version_command>
+    <version_command>echo "@TOOL_VERSION@"</version_command>
     <command>
         <![CDATA[
         python '$__tool_directory__/squidpy_spatial.py'
