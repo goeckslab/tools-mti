@@ -1,12 +1,6 @@
-owner: perssond
-remote_repository_url: https://github.com/ohsu-comp-bio/basic-illumination
+owner: goeckslab
+name: basic_illumination
+description: "Perform lighting correction for microscopy images"
+remote_repository_url: https://github.com/labsyspharm/basic-illumination 
 categories: 
-  - "CompBio Galaxy Wrappers"
-repositories:
-  basic_illumination:
-    description: "Perform lighting correction for microscopy images"
-    include: 
-      - basic_illumination.xml
-      - macros.xml
-      - imagej_basic_ashlar.py
-      - imagej_basic_ashlar_filepattern.py
+  - "Imaging"

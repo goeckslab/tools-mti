@@ -1,16 +1,16 @@
-<tool id="basic_illumination" name="BaSiC Illumination" version="@VERSION@.3" profile="17.09">
+<tool id="basic_illumination" name="BaSiC Illumination" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
     <description>ImageJ BaSiC shading correction for use with Ashlar</description>
     <macros>
         <import>macros.xml</import>
     </macros>
  
     <expand macro="requirements"/>
-    @VERSION_CMD@
+    <expand macro="version_cmd"/>
 
     <command detect_errors="exit_code"><![CDATA[
-    ln -s $in_files "${in_files.name}" &&
+    ln -s $in_files '${in_files.name}' &&
 
-    #set $outname = str($in_files.name).replace('.ome.tiff','')
+    #set $outname = str('$in_files.name').replace('.ome.tiff','')
 
     ## if ImageJ isn't already present, this is the docker-dependency version
     ## as such, ImageJ needs to be registered as a global executable on $PATH
