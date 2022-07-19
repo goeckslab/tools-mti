@@ -1,49 +1,49 @@
-<tool id="s3segmenter" name="s3segmenter" version="@VERSION@.0" profile="17.09">
+<tool id="s3segmenter" name="s3segmenter" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
     <description>S3segmenter is a Python-based set of functions that generates single cell (nuclei and cytoplasm) label masks.</description>
     <macros>
         <import>macros.xml</import>
     </macros>
  
     <expand macro="requirements"/>
-    @VERSION_CMD@
+    <expand macro="version_cmd"/>
 
     <command detect_errors="exit_code"><![CDATA[
 
-        ln -s '${imagePath}' ./image.tif;
+        ln -s '${imagePath}' './image.tif';
 
         #if $contoursClassProbPath
-        ln -s ${contoursClassProbPath} ./ContoursPM.tif;
+        ln -s '${contoursClassProbPath}' './ContoursPM.tif';
         #end if
 
         #if $nucleiClassProbPath
-        ln -s ${nucleiClassProbPath} ./NucleiPM.tif;
+        ln -s '${nucleiClassProbPath}' './NucleiPM.tif';
         #end if
 
         #if $stackProbPath
-        ln -s ${stackProbPath} ./Probabilities.tif;
+        ln -s '${stackProbPath}' './Probabilities.tif';
         #end if
 
 
         @CMD_BEGIN@ 
-        --imagePath ./image.tif
+        --imagePath './image.tif'
 
         #if $contoursClassProbPath
-        --contoursClassProbPath ./ContoursPM.tif
+        --contoursClassProbPath './ContoursPM.tif'
         #end if
 
         #if $nucleiClassProbPath
-        --nucleiClassProbPath ./NucleiPM.tif
+        --nucleiClassProbPath './NucleiPM.tif'
         #end if
 
         #if $stackProbPath
-        --stackProbPath ./Probabilities.tif
+        --stackProbPath './Probabilities.tif'
         #end if
 
         --probMapChan $probMapChan
         --crop $crop_select.crop
         
         #if $crop_select.crop == "dearray"
-          --maskPath $crop_select.maskPath
+          --maskPath '$crop_select.maskPath'
         #end if
 
         --cytoMethod $cytoMethod
@@ -63,16 +63,9 @@
         --detectPuncta $adv.detectPuncta
         --punctaSigma $adv.punctaSigma
         --punctaSD $adv.punctaSD
-
-        #if not $saveMask
-        --saveMask
-        #end if
-
-        #if not $saveFig
-        --saveFig
-        #end if
-
-        --outputPath .
+        $saveMask
+        $saveFig
+        --outputPath '.'
     ]]></command>
 
 
@@ -131,7 +124,7 @@
             <option selected="true" value="ignoreCytoplasm">ignoreCytoplasm</option>
         </param>
         <param name="saveMask" type="boolean" checked="true" label="Save Mask"/>
-        <param name="saveFig" type="boolean" checked="true" label="Save Figure"/>
+        <param name="saveFig" type="boolean" checked="true" truevalue="--saveFig" falsevalue="" label="Save Figure"/>
 
         <section name="adv" title="Advanced Options" expanded="false">
             <param name="cytoDilation" type="integer" value="5" label="Cyto Dilation"/>
