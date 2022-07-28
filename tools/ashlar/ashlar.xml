@@ -128,8 +128,10 @@
                     <element name="rR2" value="ashlar_test_c1.tiff" />
                 </collection>
             </param>
-            <output name="output" ftype="ome.tiff"> 
-                <has_size value="4M" delta="400k" />
+            <output name="output" ftype="ome.tiff">
+                <assert_contents>
+                    <has_size value="4M" delta="400k" />
+                </assert_contents>
             </output>
         </test>
     </tests>
