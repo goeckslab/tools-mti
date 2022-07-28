@@ -24,12 +24,17 @@
         #end def
 
         ## Link the illumination files to appropriate file extension
+        #if $ldfp
         #for $dfp in $ldfp:
             ln -s '$dfp' '$clean($dfp,"dfp")' &&
         #end for
+        #end if
+
+        #if $lffp
         #for $ffp in $lffp:
             ln -s '$ffp' '$clean($ffp,"ffp")' &&
         #end for
+        #end if
 
         @CMD_BEGIN@
 
@@ -54,15 +59,19 @@
         --tile-size $adv.tile_size
         #end if
 
+        #if $lffp
         --ffp
         #for $ffp in $lffp:
             '$clean($ffp,"ffp")'
         #end for
+        #end if
 
+        #if $ldfp
         --dfp
         #for $dfp in $ldfp:
             '$clean($dfp,"dfp")'
         #end for
+        #end if
 
         $adv.pyramid
         $adv.flip_mosaic_x
@@ -82,8 +91,8 @@
 
     <inputs>
         <param name="lraw" type="data_collection" format="ome.tiff,tiff" collection_type="list" label="Raw Images"/>
-        <param name="ldfp" type="data_collection" format="ome.tiff,tiff" collection_type="list" label="Deep Field Profile Images"/>
-        <param name="lffp" type="data_collection" format="ome.tiff,tiff" collection_type="list" label="Flat Field Profile Images"/>
+        <param name="ldfp" type="data_collection" format="ome.tiff,tiff" collection_type="list" optional="true" label="Deep Field Profile Images"/>
+        <param name="lffp" type="data_collection" format="ome.tiff,tiff" collection_type="list" optional="true" label="Flat Field Profile Images"/>
         <param name="flip_x" type="boolean" truevalue="--flip-x" falsevalue="" label="Flip X-axis"/>
         <param name="flip_y" type="boolean" truevalue="--flip-y" falsevalue="" label="Flip Y-axis"/>
         <param name="max_shift" type="integer" value="30" label="Maximum allowed per-tile corrective shift" help="In micros"/>
@@ -111,7 +120,19 @@
     <outputs>
         <data format="ome.tiff" name="output" from_work_dir="registered.ome.tif" label="${tool.name} on ${on_string}"/>
     </outputs>
-    
+    <tests>
+        <test>
+            <param name="lraw">
+                <collection type="list">
+                    <element name="rR1" value="ashlar_test_c0.tiff" />
+                    <element name="rR2" value="ashlar_test_c1.tiff" />
+                </collection>
+            </param>
+            <output name="output" ftype="ome.tiff"> 
+                <has_size value="4M" delta="400k" />
+            </output>
+        </test>
+    </tests>
     <help><![CDATA[
 Ashlar python package for microscopy registration, developed by HMS (repo: https://github.com/labsyspharm/ashlar)
         ashlar [-h] [-o DIR] [-c [CHANNEL]]
