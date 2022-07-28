@@ -130,7 +130,7 @@
             </param>
             <output name="output" ftype="ome.tiff">
                 <assert_contents>
-                    <has_size value="4M" delta="400k" />
+                    <has_size value="4M" delta="400" />
                 </assert_contents>
             </output>
         </test>
