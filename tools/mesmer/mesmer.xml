@@ -43,6 +43,7 @@
                 <param name="membrane_image" type="data" format="tiff, ome.tiff" label="The path to an image containing the membrane marker(s)"/>
                 <param name="membrane_channel" type="integer" value="0"  label="The numerical index of the channel(s) from membrane-image"/>
             </when>
+            <when value="False" />
         </conditional>
     </inputs>
     <outputs>
