@@ -55,6 +55,18 @@
           <discover_datasets pattern="__designation_and_ext__" format="csv" directory="tool_out/" visible="false"/>
         </collection>
      </outputs>
+     <tests>
+        <test>
+            <param name="image" value="test.tiff" />
+            <param name="primary_mask" value="mask.tiff" />
+            <param name="channel_names" value="channels.csv" />
+            <output name="cellmask" ftype="csv">
+                <assert_contents>
+                    <has_n_columns n="11" sep="," delta="1" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
     <help><![CDATA[
 # Single cell quantification
 Module for single-cell data extraction given a segmentation mask and multi-channel image. The CSV structure is aligned with histoCAT output.
