@@ -30,6 +30,18 @@
             </change_format>
         </data>
     </outputs>
+    <tests>
+        <test>
+            <param name="image" value="test.tiff" />
+            <param name="input_type" value="tiff" />
+            <param name="channel_csv" value="channels.csv" />
+            <output name="renamed_image" ftype="tiff">
+                <assert_contents>
+                    <has_size value="177000" delta="10000" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
     
     <help><![CDATA[
     ]]></help>
