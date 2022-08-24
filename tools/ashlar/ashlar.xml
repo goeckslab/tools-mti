@@ -25,15 +25,15 @@
 
         ## Link the illumination files to appropriate file extension
         #if $ldfp
-        #for $dfp in $ldfp:
-            ln -s '$dfp' '$clean($dfp,"dfp")' &&
-        #end for
+            #for $dfp in $ldfp:
+                ln -s '$dfp' '$clean($dfp,"dfp")' &&
+            #end for
         #end if
 
         #if $lffp
-        #for $ffp in $lffp:
-            ln -s '$ffp' '$clean($ffp,"ffp")' &&
-        #end for
+            #for $ffp in $lffp:
+                ln -s '$ffp' '$clean($ffp,"ffp")' &&
+            #end for
         #end if
 
         @CMD_BEGIN@
@@ -61,16 +61,16 @@
 
         #if $lffp
         --ffp
-        #for $ffp in $lffp:
-            '$clean($ffp,"ffp")'
-        #end for
+            #for $ffp in $lffp:
+                '$clean($ffp,"ffp")'
+            #end for
         #end if
 
         #if $ldfp
         --dfp
-        #for $dfp in $ldfp:
-            '$clean($dfp,"dfp")'
-        #end for
+            #for $dfp in $ldfp:
+                '$clean($dfp,"dfp")'
+            #end for
         #end if
 
         $adv.pyramid
@@ -80,12 +80,12 @@
         -f registered.ome.tif;
 
         #if $upgrade.decide == "do_upgrade"
-        python3 '${__tool_directory__}/pyramid_upgrade.py'
-        registered.ome.tif
+            python3 '${__tool_directory__}/pyramid_upgrade.py'
+            registered.ome.tif
 
-        #if $upgrade.markers_file
-        -n `echo \$(cat $upgrade.markers_file | tail -n +2 | awk -F, '{print \$3}')`;
-        #end if
+            #if $upgrade.markers_file
+                -n `echo \$(cat $upgrade.markers_file | tail -n +2 | awk -F, '{print \$3}')`;
+            #end if
         #end if
     ]]></command>
 
@@ -136,56 +136,23 @@
         </test>
     </tests>
     <help><![CDATA[
-Ashlar python package for microscopy registration, developed by HMS (repo: https://github.com/labsyspharm/ashlar)
-        ashlar [-h] [-o DIR] [-c [CHANNEL]]
-       [--output-channels [CHANNEL [CHANNEL ...]]] [-m SHIFT]
-       [--filter-sigma SIGMA] [-f FORMAT] [--pyramid]
-       [--tile-size PIXELS] [--ffp [FILE [FILE ...]]]
-       [--dfp [FILE [FILE ...]]] [--plates] [-q] [--version]
-       [FILE [FILE ...]]
+--------------------------------------------------------------------------------
+ASHLAR: Alignment by Simultaneous Harmonization of Layer/Adjacency Registration
+--------------------------------------------------------------------------------
 
-Stitch and align one or more multi-series images
+**Whole-slide microscopy image stitching and registration in Python**
 
-positional arguments:
-  FILE                  an image file to be processed (one file per cycle)
+**Ashlar** performs fast, high-quality stitching of microscopy images. It also
+co-registers multiple rounds of cyclic imaging for methods such as CyCIF and
+CODEX. Ashlar can read image data directly from BioFormats-supported microscope
+vendor file formats as well as a directory of plain TIFF files. Output is saved
+as pyramidal, tiled OME-TIFF.
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -o DIR, --output DIR  write output image files to DIR; default is the
-                        current directory
-  -c [CHANNEL], --align-channel [CHANNEL]
-                        align images using channel number CHANNEL; numbering
-                        starts at 0
-  --output-channels [CHANNEL [CHANNEL ...]]
-                        output only channels listed in CHANNELS; numbering
-                        starts at 0
-  -m SHIFT, --maximum-shift SHIFT
-                        maximum allowed per-tile corrective shift in microns
-  --filter-sigma SIGMA  width in pixels of Gaussian filter to apply to images
-                        before alignment; default is 0 which disables
-                        filtering
-  -f FORMAT, --filename-format FORMAT
-                        use FORMAT to generate output filenames, with {cycle}
-                        and {channel} as required placeholders for the cycle
-                        and channel numbers; default is
-                        cycle_{cycle}_channel_{channel}.tif
-  --pyramid             write output as a single pyramidal TIFF
-  --tile-size PIXELS    set tile width and height to PIXELS (pyramid output
-                        only); default is 1024
-  --ffp [FILE [FILE ...]]
-                        read flat field profile image from FILES; if specified
-                        must be one common file for all cycles or one file for
-                        each cycle
-  --dfp [FILE [FILE ...]]
-                        read dark field profile image from FILES; if specified
-                        must be one common file for all cycles or one file for
-                        each cycle
-  --plates              enable plate mode for HTS data
-  -q, --quiet           suppress progress display
-  --version             print version
+Note that Ashlar requires unstitched individual "tile" images as input, so it is
+not suitable for microscopes or slide scanners that only provide pre-stitched
+images.
 
-OHSU Wrapper Repo: https://github.com/ohsu-comp-bio/ashlar
-Conda Package Available From: https://anaconda.org/ohsu-comp-bio/ashlar
+*Visit https://labsyspharm.github.io/ashlar/ for the most up-to-date information on ASHLAR.*
     ]]></help>
     <expand macro="citations" />
 </tool>
