@@ -12,13 +12,6 @@
 
     #set $outname = str('$in_files.name').replace('.ome.tiff','')
 
-    ## if ImageJ isn't already present, this is the docker-dependency version
-    ## as such, ImageJ needs to be registered as a global executable on $PATH
-    if ! [ -x "\$(which ImageJ)" ]; then
-	    ln -sf "\$(which ImageJ-linux64)" "ImageJ";
-        export PATH="\$PATH:\$(pwd)/";
-    fi;
-
     @CMD_BEGIN@
 
     "filename='${in_files.name}',output_dir='.',experiment_name='output'";
