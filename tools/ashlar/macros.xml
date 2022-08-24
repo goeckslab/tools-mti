@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<macros>
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="@TOOL_VERSION@">ashlar</requirement>
+            <container type="docker">labsyspharm/ashlar:@TOOL_VERSION@</container>
+        </requirements>
+    </xml>
+
+    <xml name="version_cmd">
+        <version_command>echo @TOOL_VERSION@</version_command>
+    </xml>
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1101/2021.04.20.440625</citation>
+        </citations>
+    </xml>
+
+    <token name="@TOOL_VERSION@">1.14.0</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+    <token name="@CMD_BEGIN@">ashlar</token>
+</macros>
