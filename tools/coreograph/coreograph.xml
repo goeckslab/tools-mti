@@ -49,24 +49,28 @@
         <test>
             <param name="source_image" value="coreograph_test.tiff" />
             <output_collection name="tma_sections" type="list">
-                <element name="1" ftype="tiff" />
+                <element name="1" ftype="tiff">
                     <assert_contents>
                         <has_size value="18000" delta="1000" />
                     </assert_contents>
-                <element name="2" ftype="tiff" />
+                </element>
+                <element name="2" ftype="tiff">
                     <assert_contents>
                         <has_size value="18000" delta="1000" />
                     </assert_contents>
+                </element>
             </output_collection>
             <output_collection name="masks" type="list">
-                <element name="1" ftype="tiff" />
+                <element name="1" ftype="tiff">
                     <assert_contents>
                         <has_size value="345" delta="100" />
                     </assert_contents>
-                <element name="2" ftype="tiff" />
+                </element>
+                <element name="2" ftype="tiff">
                     <assert_contents>
                         <has_size value="345" delta="100" />
                     </assert_contents>
+                </element>
             </output_collection>
             <output name="TMA_MAP" ftype="tiff">
                 <assert_contents>
