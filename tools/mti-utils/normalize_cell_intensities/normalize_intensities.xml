@@ -1,0 +1,89 @@
+<tool id="norm_intensity" name="Cell feature table intensity normalization" version="">
+    <description>Options to correct for expsure time and autofluorescence. Also option to z-score intensities</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+        
+        ln -s "$quant_table" ./quant.csv &&
+
+        ln -s "$markers" ./markers.csv &&
+
+        python "$script"
+
+    ]]></command>
+    <configfiles>
+        <configfile name = "script">
+import os
+import numpy as np
+import pandas as pd
+
+cwd = os.getcwd()
+quant = pd.read_csv(os.path.join(cwd, 'quant.csv'))
+marker_df = pd.read_csv(os.path.join(cwd, 'markers.csv'))
+
+markers_to_normalize = marker_df['marker_name'].to_list()
+
+#if $exp:
+
+exp_column = str(${exp_col})
+
+for marker in markers_to_normalize:
+
+    exp_time = marker_df.loc[marker_df['marker_name'] == marker, exp_column].values[0]
+
+    quant[marker] = quant[marker] / exp_time
+
+#end if
+
+#if $autofluor:
+
+af_column = str(${AF_col})
+
+for marker in markers_to_normalize:
+
+    current_AF_channel = marker_df.loc[marker_df['marker_name'] == marker, af_column].values[0]
+
+    current_AF_mean = np.mean(current_AF_channel)
+
+    quant[marker] = quant[marker] / current_AF_mean
+
+#end if
+
+#if $zscore
+
+
+
+#end if
+
+quant.to_csv(os.path.join(cwd, 'normalized_quant.csv'))
+
+
+        </configfile>
+    </configfiles>
+    <inputs>
+        <param name="quant_table" type="data" format="csv" label="Select the input quantification table (csv)" />
+        <param name="markers" type="data" format="csv" label="Select the markers metadata file (csv)" />
+        <conditional name="exp">
+            <param name="correct_exposure" type="boolean" checked="false" label="Correct for exposure time"/>
+            <when value="true">
+                <param name="exp_col" type="text" value="exposure_time" label="Name of column in markers file containing exposure times" />
+            </when>
+        </conditional>
+        <conditional name="autofluor">
+            <param name="signal_ratio" type="boolean" checked="false" label="Calculate signal to noise ratio from autofluorescence channels"/>
+            <when value="true">
+                <param name="AF_col" type="text" value="AF_channel" label="Name of column in markers file containing respective AF channel for each marker" />
+            </when>
+        </conditional>
+        <param name="zscore" type="boolean" checked="false" label="z-score each marker"/>
+    </inputs>
+    <outputs>
+        <data name="normalized_quant" from_work_dir="normalized_quant.csv" format="csv"/>
+    </outputs>
+    <help><![CDATA[
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>
