@@ -80,6 +80,21 @@
         </test>
     </tests>
     <help><![CDATA[
+-------------------        
+UNet Coreograph
+-------------------
+**Coreograph** uses UNet, a deep learning model, to identify complete/incomplete tissue cores on a tissue microarray. It has been trained on 9 TMA slides of different sizes and tissue types
+
+Training sets were acquired at 0.2micron/pixel resolution and downsampled 1/32 times to speed up performance. Once the center of each core has been identifed, active contours is used to generate a tissue mask of each core that can aid downstream single cell segmentation. A GPU is not required but will reduce computation time.
+
+**Inputs**
+A tif or ome.tiff image multiple tissues, such as a tissue microarray.
+
+**Outputs**
+Coreograph exports these files:
+1. individual cores as tiff stacks with user-selectable channel ranges
+2. binary tissue masks (saved in the 'mask' subfolder)
+3. a TMA map showing the labels and outlines of each core for quality control purposes
     ]]></help>
     <expand macro="citations" />
 </tool>

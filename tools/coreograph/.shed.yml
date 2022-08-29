@@ -1,4 +1,4 @@
-owner: goeckslab
+owner: perssond
 name: coreograph
 description: "Coreograph uses UNet, a deep learning model, to identify complete/incomplete tissue cores on a tissue microarray."
 remote_repository_url: https://github.com/ohsu-comp-bio/UNetCoreograph
