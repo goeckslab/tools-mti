@@ -45,6 +45,9 @@ def main(inputs, anndata, output):
 
     tool_func(adata, **options)
 
+    if tool == 'spatial_lda':
+        adata.uns.pop('spatial_lda_model')
+
     adata.write(output)
 
 
