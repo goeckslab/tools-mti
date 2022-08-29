@@ -15,6 +15,12 @@
         </requirements>
     </xml>
 
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1038/s41592-021-01358-2</citation>
+        </citations>
+    </xml>
+
     <xml name="squidpy_spatial_options">
         <section name="options" title="Advanced Graph Options" expanded="false">
             <yield/>
