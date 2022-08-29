@@ -159,12 +159,12 @@
             <param name="imagePath" value="test.ome.tiff" />
             <param name="stackProbPath" value="stack_probabilities.tiff" />
             <param name="punctaSD" value="4" />
-            <output name="cell_mask" ftype="ome.tiff">
+            <output name="cell_mask" ftype="tiff">
                 <assert_contents>
                     <has_size value="6600000" delta="1000000" />
                 </assert_contents>
             </output>
-            <output name="nuclei_mask" ftype="ome.tiff">
+            <output name="nuclei_mask" ftype="tiff">
                 <assert_contents>
                     <has_size value="6600000" delta="1000000" />
                 </assert_contents>
