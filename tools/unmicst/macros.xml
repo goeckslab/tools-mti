@@ -3,6 +3,7 @@
     <xml name="requirements">
         <requirements>
             <container type="docker">labsyspharm/unmicst:@VERSION@</container>
+            <!--
             <requirement type="package" version="3.7">python</requirement>
             <requirement type="package" version="1.15.0">tensorflow</requirement>
             <requirement type="package" version="1.15.1">tensorflow-estimator</requirement>
@@ -13,17 +14,28 @@
             <requirement type="package" version="2020.7.24">tifffile</requirement>
             <requirement type="package" version="2019.7.2">czifile</requirement>
             <requirement type="package" version="3.2.3">nd2reader</requirement>
+            -->
         </requirements>
     </xml>
 
     <xml name="version_cmd">
-        <version_command>echo @VERSION@</version_command>
+        <version_command>echo @TOOL_VERSION@</version_command> 
     </xml>
     <xml name="citations">
         <citations>
+            <citation type="doi">10.1101/2021.04.02.438285</citation>
         </citations>
     </xml>
 
-    <token name="@VERSION@">2.7.1</token>
-    <token name="@CMD_BEGIN@">python ${__tool_directory__}/unmicstWrapper.py</token>
+    <token name="@TOOL_VERSION@">2.7.1</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+    <token name="@CMD_BEGIN@"><![CDATA[
+    UNMICST_PATH='';
+    if [ -f '/app/unmicstWrapper.py' ]; then
+        export UNMICST_PATH='python /app/unmicstWrapper.py';
+    else
+        export UNMICST_PATH='unmicstWrapper.py';
+    fi;
+    \$UNMICST_PATH
+    ]]></token>
 </macros>

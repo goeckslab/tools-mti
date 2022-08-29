@@ -1,0 +1,6 @@
+owner: perssond
+name: unmicst
+description: "Image segmentation - probability map generation"
+remote_repository_url: https://github.com/HMS-IDAC/UnMicst
+categories: 
+  - "Imaging"
