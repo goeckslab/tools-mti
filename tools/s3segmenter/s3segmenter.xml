@@ -165,6 +165,11 @@
         </test>
     </tests>
     <help><![CDATA[
+-------------------        
+S3segmenter
+-------------------        
+**S3segmenter** is a Python-based set of functions that generates single cell (nuclei and cytoplasm) label masks.
+
 Inputs are:
 
 1. an .ome.tif (preferably flat field corrected)
@@ -175,7 +180,6 @@ The centers of each nuclei are obtained by finding local maxima from the nuclei 
 To segment cytoplasm, the nuclei are in turn used for a marker-controlled watershed segmentation constrained by a cytoplasmic marker such as B-catenin. The channel number of this marker must be specified. A 3-pixel annulus around each nucleus will also be used to segment cytoplasm.
 
 The source repository can be found here: https://github.com/HMS-IDAC/S3segmenter
-OHSU Wrapper Repo: https://github.com/ohsu-comp-bio/S3segmenter
     ]]></help>
     <expand macro="citations" />
 </tool>

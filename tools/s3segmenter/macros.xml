@@ -23,5 +23,15 @@
     <token name="@TOOL_VERSION@">1.3.12</token>
     <token name="@VERSION_SUFFIX@">0</token>
     <token name="@PROFILE@">19.01</token>
-    <token name="@CMD_BEGIN@">python3 $__tool_directory__/S3segmenter.py</token>
+    <token name="@CMD_BEGIN@"><![CDATA[
+        S3SEG_CMD="";
+        if [ -f "/app/S3segmenter.py" ]; then
+            export S3SEG_CMD="python /app/S3segmenter.py";
+            export PYTHONPATH="/app"
+        else
+            export S3SEG_CMD="S3segmenter.py";
+        fi;
+
+        \$S3SEG_CMD
+    ]]></token>
 </macros>
