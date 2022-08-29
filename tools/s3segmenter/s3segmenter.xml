@@ -158,14 +158,10 @@
         <test>
             <param name="imagePath" value="test.tiff" />
             <assert_command>
-                <has_text text="--imagePath ./image.tif" />
                 <has_text text="--probMapChan -1" />
                 <has_text text="--crop noCrop" />
                 <has_text text="--cytoMethod distanceTransform" />
             </assert_command>
-            <assert_stdout>
-                <has_text text="NO PROBABILITY MAP PROVIDED" />
-            </assert_stdout>
         </test>
     </tests>
     <help><![CDATA[
