@@ -82,7 +82,7 @@
     </outputs>
     <tests>
         <test>
-            <param name="image" value="105.tif" ftype="tiff" />
+            <param name="image" value="105.tiff" ftype="tiff" />
             <param name="model" value="nucleiDAPI" />
             <output name="probabilities" file="105_NucleiPM_1.tif" compare="sim_size" delta="10" />
             <output name="contours" file="105_ContoursPM_1.tif" compare="sim_size" delta="10" />
