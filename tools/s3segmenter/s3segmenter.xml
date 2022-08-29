@@ -155,8 +155,9 @@
         </data>
     </outputs>
     <tests>
-        <test>
+        <test expect_failure="true">
             <param name="imagePath" value="test.tiff" />
+            <param name="punctaSD" value="4" />
             <assert_command>
                 <has_text text="--probMapChan -1" />
                 <has_text text="--crop noCrop" />
