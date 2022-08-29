@@ -2,12 +2,14 @@
 <macros>
     <xml name="requirements">
         <requirements>
+            <!--
             <requirement type="package" version="3.7">python</requirement>
             <requirement type="package">scikit-learn</requirement>
             <requirement version="0.14.2" type="package">scikit-image</requirement>
             <requirement type="package">matplotlib</requirement>
             <requirement version="2021.6.6" type="package">tifffile</requirement>
             <requirement type="package">opencv</requirement>
+            -->  
             <container type="docker">labsyspharm/s3segmenter:@TOOL_VERSION@</container>
         </requirements>
     </xml>
@@ -27,7 +29,7 @@
         S3SEG_CMD="";
         if [ -f "/app/S3segmenter.py" ]; then
             export S3SEG_CMD="python /app/S3segmenter.py";
-            export PYTHONPATH="/app"
+            export PYTHONPATH="/app";
         else
             export S3SEG_CMD="S3segmenter.py";
         fi;
