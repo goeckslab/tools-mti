@@ -1,7 +1,7 @@
 <macros>
     <xml name="requirements">
         <requirements>
-            <container type="docker">quay.io/goeckslab/rename_tiff_channels:0.0.1</container>
+            <container type="docker">labsyspharm/roadie:2022-06-06</container>
         </requirements>
     </xml>
     <xml name="citations">
