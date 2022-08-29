@@ -1,5 +1,5 @@
-<tool id="quantification" name="Quantification" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="19.01">
-    <description>Single cell quantification, a module for single-cell data extraction given a segmentation mask and multi-channel image.</description>
+<tool id="quantification" name="MCQUANT" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="19.01">
+    <description>a module for single-cell data extraction.</description>
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -18,7 +18,6 @@
 
     @CMD_BEGIN@
 
-    python \$QUANT_PATH
     --masks
     'primary_mask.tiff'
     #if $supp_masks
@@ -68,27 +67,22 @@
         </test>
     </tests>
     <help><![CDATA[
-# Single cell quantification
-Module for single-cell data extraction given a segmentation mask and multi-channel image. The CSV structure is aligned with histoCAT output.
+--------
+MCQUANT
+--------
+**MCQUANT** module for single cell quantification given a segmentation mask and multi-channel image. The CSV structure is aligned with histoCAT output.
 
-**CommandSingleCellExtraction.py**:
+**Inputs**
+1. A fully stitched and registered image in .ome.tif format. Nextflow will use images in the registration/ and dearray/ subfolders as appropriate.
+2. One or more segmentation masks in .tif format. Nextflow will use files in the segmentation/ subfolder within the project.
+3. A .csv file containing a marker_name column specifying names of individual channels. Nextflow will look for this file in the project directory.
 
-* `--masks` Paths to where masks are stored (Ex: ./segmentation/cellMask.tif) -> If multiple masks are selected the first mask will be used for spatial feature extraction but all will be quantified
-
-* `--image` Path to image(s) for quantification.  (Ex: ./registration/*.h5) -> works with .h(df)5 or .tif(f)
-
-* `--output` Path to output directory. (Ex: ./feature_extraction)
-
-* `--channel_names` csv file containing the channel names for the z-stack (Ex: ./my_channels.csv)
-
-# Run script
-`python CommandSingleCellExtraction.py --masks ./segmentation/cellMask.tif ./segmentation/membraneMask.tif --image ./registration/Exemplar_001.h5  --output ./feature_extraction --channel_names ./my_channels.csv`
+**Outputs**
+A cell-by-feature table mapping Cell IDs to marker expression and morphological features (including x,y coordinates).
 
 # Main developer
 Denis Schapiro (https://github.com/DenisSch)
-
 Joshua Hess (https://github.com/JoshuaHess12)
-
 Jeremy Muhlich (https://github.com/jmuhlich)
     ]]></help>
     <expand macro="citations" />
