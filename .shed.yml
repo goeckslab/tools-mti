@@ -1,0 +1,14 @@
+owner: creason
+remote_repository_url: https://github.com/ohsu-comp-bio/unmicst
+categories: 
+  - "Imaging"
+repositories:
+  unmicst:
+    description: "Images can be preprocessed by inferring nuclei contours via a pretrained UNet model."
+    include: 
+      - unmicst.xml
+      - macros.xml
+      - "*.py"
+      - models/**
+      - toolbox/**
+      - test-data/**
