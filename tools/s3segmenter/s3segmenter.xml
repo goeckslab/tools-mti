@@ -114,8 +114,8 @@
                 <option value="pixellevel">pixellevel</option>
             </param>
             <when value="pixellevel">
-                <param name="pixelThreshold" type="float" value="-1.0" Label="Pixel Threshold"/>
-                <param name="pixelMaskChan" type="text" value="2" Label="Pixel Mask Channel"/>
+                <param name="pixelThreshold" type="float" value="-1.0" label="Pixel Threshold"/>
+                <param name="pixelMaskChan" type="text" value="2" label="Pixel Mask Channel"/>
             </when>
         </conditional>
 
@@ -154,6 +154,20 @@
             <filter>saveFig is True</filter>
         </data>
     </outputs>
+    <tests>
+        <test>
+            <param name="imagePath" value="test.tiff" />
+            <assert_command>
+                <has_text text="--imagePath ./image.tif" />
+                <has_text text="--probMapChan -1" />
+                <has_text text="--crop noCrop" />
+                <has_text text="--cytoMethod distanceTransform" />
+            </assert_command>
+            <assert_stdout>
+                <has_text text="NO PROBABILITY MAP PROVIDED" />
+            </assert_stdout>
+        </test>
+    </tests>
     <help><![CDATA[
 Inputs are:
 
