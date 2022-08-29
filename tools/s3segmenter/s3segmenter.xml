@@ -123,7 +123,7 @@
             <option value="segmentCytoplasm">segmentCytoplasm</option>
             <option selected="true" value="ignoreCytoplasm">ignoreCytoplasm</option>
         </param>
-        <param name="saveMask" type="boolean" checked="true" label="Save Mask"/>
+        <param name="saveMask" type="boolean" checked="true" truevalue="--saveMask" falsevalue="" label="Save Mask"/>
         <param name="saveFig" type="boolean" checked="true" truevalue="--saveFig" falsevalue="" label="Save Figure"/>
 
         <section name="adv" title="Advanced Options" expanded="false">
@@ -165,16 +165,6 @@
                 </assert_contents>
             </output>
             <output name="nuclei_mask" ftype="ome.tiff">
-                <assert_contents>
-                    <has_size value="6600000" delta="1000000" />
-                </assert_contents>
-            </output>
-            <output name="cell_outlines" ftype="ome.tiff">
-                <assert_contents>
-                    <has_size value="6600000" delta="1000000" />
-                </assert_contents>
-            </output>
-            <output name="nuclei_outlines" ftype="ome.tiff">
                 <assert_contents>
                     <has_size value="6600000" delta="1000000" />
                 </assert_contents>
