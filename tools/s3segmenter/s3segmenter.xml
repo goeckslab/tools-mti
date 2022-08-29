@@ -155,14 +155,30 @@
         </data>
     </outputs>
     <tests>
-        <test expect_failure="true">
-            <param name="imagePath" value="test.tiff" />
+        <test>
+            <param name="imagePath" value="test.ome.tiff" />
+            <param name="stackProbPath" value="stack_probabilities.tiff" />
             <param name="punctaSD" value="4" />
-            <assert_command>
-                <has_text text="--probMapChan -1" />
-                <has_text text="--crop noCrop" />
-                <has_text text="--cytoMethod distanceTransform" />
-            </assert_command>
+            <output name="cell_mask" ftype="ome.tiff">
+                <assert_contents>
+                    <has_size value="6600000" delta="1000000" />
+                </assert_contents>
+            </output>
+            <output name="nuclei_mask" ftype="ome.tiff">
+                <assert_contents>
+                    <has_size value="6600000" delta="1000000" />
+                </assert_contents>
+            </output>
+            <output name="cell_outlines" ftype="ome.tiff">
+                <assert_contents>
+                    <has_size value="6600000" delta="1000000" />
+                </assert_contents>
+            </output>
+            <output name="nuclei_outlines" ftype="ome.tiff">
+                <assert_contents>
+                    <has_size value="6600000" delta="1000000" />
+                </assert_contents>
+            </output>
         </test>
     </tests>
     <help><![CDATA[
