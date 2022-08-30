@@ -1,42 +1,40 @@
 <tool id="quantification" name="MCQUANT" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="19.01">
-    <description>a module for single-cell data extraction.</description>
+    <description>a module for single-cell data extraction</description>
     <macros>
         <import>macros.xml</import>
     </macros>
- 
     <expand macro="requirements"/>
     <expand macro="version_cmd"/>
 
     <command detect_errors="exit_code"><![CDATA[
-    ln -s '$image' 'input.ome.tiff';
-    ln -s '$primary_mask' 'primary_mask.tiff';
+    ln -s '$image' 'input.ome.tiff' &&
+    ln -s '$primary_mask' primary_mask.tiff &&
     #if $supp_masks
-    ln -s '$supp_masks' 'supp_mask.tiff';
+        ln -s '$supp_masks' supp_mask.tiff &&
     #end if
 
-    mkdir './tool_out';
+    mkdir ./tool_out &&
 
     @CMD_BEGIN@
 
-    --masks
-    'primary_mask.tiff'
+    --masks primary_mask.tiff
     #if $supp_masks
-    'supp_mask.tiff'
+        supp_mask.tiff
     #end if
 
-    --image 'input.ome.tiff'
-    --output './tool_out'
+    --image input.ome.tiff
+    --output ./tool_out
 
-    #if $mask_props
-    --mask_props $mask_props
+    #if strip($mask_props)
+        --mask_props '$mask_props'
     #end if
-    #if $intensity_props
-    --intensity_props $intensity_props
+    #if strip($intensity_props)
+        --intensity_props '$intensity_props'
     #end if
 
-    --channel_names '$channel_names';
+    --channel_names '$channel_names' &&
 
-    cp tool_out/*primary_mask.csv primary_mask.csv
+    mv tool_out/*primary_mask.csv primary_mask.csv
     ]]></command>
 
     <inputs>
@@ -67,6 +65,7 @@
         </test>
     </tests>
     <help><![CDATA[
+    
 --------
 MCQUANT
 --------
@@ -84,6 +83,7 @@ A cell-by-feature table mapping Cell IDs to marker expression and morphological 
 Denis Schapiro (https://github.com/DenisSch)
 Joshua Hess (https://github.com/JoshuaHess12)
 Jeremy Muhlich (https://github.com/jmuhlich)
+
     ]]></help>
     <expand macro="citations" />
 </tool>
