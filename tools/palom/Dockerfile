@@ -13,4 +13,4 @@ RUN /opt/openslide-$VERSION/configure  && \
     make && \
     make install
 
-RUN pip install zarr==2.10.3 pandas palom
+RUN pip install zarr==2.10.3 pandas palom==2022.8.2
