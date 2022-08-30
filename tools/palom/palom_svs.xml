@@ -96,6 +96,7 @@ run_palom(
                 </collection>
             </param>
             <param name="channels" value="test_channels.csv"/>
+            <param name="level" value="1"/>
             <output_collection name="qc_plots" type="list">
                 <element name="01-test_moving.svs" ftype="png">
                     <assert_contents>
