@@ -1,4 +1,4 @@
-<tool id="palom" name="palom" version="2021.12.0.1">
+<tool id="palom" name="palom" version="2022.8.2.0">
     <description>Piecewise alignment for layers of mosaics. A tool for registering whole-slide images with different IHC stainings</description>
     <macros>
         <import>macros.xml</import>
@@ -6,15 +6,15 @@
     <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
         
-        ln -s "$reference_image" ./ref.svs &&
+        ln -s '$reference_image' ./ref.svs &&
 
-        ln -s "$channels" ./channels.csv &&
+        ln -s '$channels' ./channels.csv &&
 
         #for $i in $moving_images:
-            ln -s "$i" "${i.name}" &&
+            ln -s '$i' '${i.name}' &&
         #end for
 
-        python "$script"
+        python '$script'
 
     ]]></command>
     <configfiles>
@@ -22,23 +22,26 @@
 import os
 import pathlib
 import pandas as pd
+import matplotlib.pyplot as plt 
 import palom
 from palom.cli.svs import run_palom
 
+plt.switch_backend('agg')
+
 cwd = os.getcwd()
 
-ref_img = pathlib.Path(os.path.join(cwd,"ref.svs"))
+ref_img = pathlib.Path(os.path.join(cwd,'ref.svs'))
 
 images = [ref_img]
-channels = ["hematoxylin"]
-modes = ["hematoxylin"]
+channels = ['hematoxylin']
+modes = ['hematoxylin']
 
 #for $i in $moving_images:
-img = pathlib.Path("${i.name}")
+img = pathlib.Path('${i.name}')
 images.append(img)
 #end for
 
-channel_df = pd.read_csv(os.path.join(cwd, "channels.csv"))
+channel_df = pd.read_csv(os.path.join(cwd, 'channels.csv'))
 channel_df = channel_df.astype({'channel':'string'})
 channels += list(channel_df['channel'])
 modes += list(channel_df['mode'])
@@ -49,13 +52,10 @@ pixel_size = None
 pixel_size = float($pixel_size)
 #end if
 
-level = 0
-
-#if $level:
 level = int($level)
-#end if
+downscale_factor = int($downscale_factor)
 
-output_path = pathlib.Path(os.path.join(cwd, "registered.ome.tiff"))
+output_path = pathlib.Path(os.path.join(cwd, 'registered.ome.tiff'))
 
 qc_path = output_path.parent / 'qc'
 
@@ -68,16 +68,18 @@ run_palom(
     channel_names = channels,
     output_path = output_path,
     qc_path = qc_path,
-    level = level
+    level = level,
+    downscale_factor = downscale_factor
 )
         </configfile>
     </configfiles>
     <inputs>
-        <param name="reference_image" type="data" format="tiff" label="Hematoxylin reference image" help="An H+E image in .svs format"/>
-        <param name="moving_images" type="data_collection" label="Moving Images (data collection)" help="A collection of svs-format images to align to the reference image"/>
-        <param name="channels" type="data" label="Channel and mode dataframe" help="A CSV file with 'channel' and 'mode' columns, with a row corresponding to each moving image"/>
-        <param name="pixel_size" type="float" optional="true" label="Pixel Size" help="defaults to px size of reference image"/>
-        <param name="level" type="integer" optional="true" label="Level" help="pyramid level, defaults to 0 (lowest level)"/>
+        <param name="reference_image" type="data" format="tiff" label="Hematoxylin reference image" help=".svs format image to align to"/>
+        <param name="moving_images" type="data_collection" label="Moving Images (data collection)" help="A collection of .svs format images to align to the reference image"/>
+        <param name="channels" type="data" label="Channel and mode dataframe" help="A CSV file with 'channel' and 'mode' columns, with a row for each moving image"/>
+        <param name="pixel_size" type="float" optional="true" label="Pixel size (optional)" help="defaults to px size of reference image"/>
+        <param name="level" type="integer" value="0" label="Pyramid level" help="pyramid level, defaults to 0 (lowest level)"/>
+        <param name="downscale_factor" type="integer" value="2" label="Pyramid downscale factor" help="Default of 2 makes pyramid downscaling compatible with Avivator and Vitessce"/>
     </inputs>
     <outputs>
         <collection name="qc_plots" type="list" label="${tool.name}: qc_plots">
@@ -85,6 +87,29 @@ run_palom(
         </collection>
         <data name="registered" from_work_dir="registered.ome.tiff" format="ome.tiff"/>
     </outputs>
+    <tests>
+        <test>
+            <param name="reference_image" value="test_ref.svs"/>
+            <param name="moving_images">
+                <collection type="list">
+                    <element name="m1" value="test_moving.svs"/>
+                </collection>
+            </param>
+            <param name="channels" value="test_channels.csv"/>
+            <output_collection name="qc_plots" type="list">
+                <element name="01-test_moving.svs" ftype="png">
+                    <assert_contents>
+                        <has_size value="277000" delta="100000" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+            <output name="registered" ftype="ome.tiff">
+                <assert_contents>
+                    <has_size value="59000000" delta="1000000" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
     <help><![CDATA[
 # PALOM
 registration of whole-slide images with different IHC stainings
