@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<macros>
+    <xml name="requirements">
+        <requirements>
+            <!--
+            <requirement type="package" version="3.6">python</requirement>
+            <requirement type="package" version="1.15.1">tensorflow-estimator</requirement>
+            <requirement type="package" version="1.15">tensorflow</requirement>
+            <requirement type="package">cython</requirement>
+            <requirement type="package" version="0.14.2">scikit-image</requirement>
+            <requirement type="package">matplotlib</requirement>
+            <requirement type="package" version="2020.2.16">tifffile</requirement>
+            <requirement type="package" version="1.1.0">scipy</requirement>
+            <requirement type="package">opencv</requirement>
+            <requirement type="package" version="0.8.1">pytiff</requirement>
+            -->
+            <container type="docker">labsyspharm/unetcoreograph:@TOOL_VERSION@</container>
+        </requirements>
+    </xml>
+
+    <xml name="version_cmd">
+        <version_command>echo @TOOL_VERSION@</version_command>
+    </xml>
+    <xml name="citations">
+        <citations>
+        </citations>
+    </xml>
+
+    <token name="@TOOL_VERSION@">2.2.8</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+    <token name="@CMD_BEGIN@"><![CDATA[
+    UNET_PATH="" &&
+    if [ -f "/app/UNetCoreograph.py" ]; then
+        export UNET_PATH="/app/UNetCoreograph.py";
+    else
+        export UNET_PATH="${__tool_directory__}/UNetCoreograph.py";
+    fi &&
+    ]]></token>
+</macros>
