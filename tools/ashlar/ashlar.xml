@@ -1,0 +1,158 @@
+<tool id="ashlar" name="ASHLAR" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="19.01">
+    <description>Alignment by Simultaneous Harmonization of Layer/Adjacency Registration</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+ 
+    <expand macro="requirements"/>
+    <expand macro="version_cmd"/>
+
+    <command detect_errors="exit_code"><![CDATA[
+
+        #def clean(file,type)
+          #set name_clean = str($file.element_identifier).replace('.ome.tiff','').replace('.tiff','').replace('.tiff.','')
+
+          #if $type == "raw"
+            #set file_clean = $name_clean + '.ome.tiff'
+          #elif $type == "ffp"
+            #set file_clean = $name_clean + '_ffp.ome.tiff'
+          #elif $type == "dfp"
+            #set file_clean = $name_clean + '_dfp.ome.tiff'
+          #end if
+
+          #return $file_clean
+        #end def
+
+        ## Link the illumination files to appropriate file extension
+        #if $ldfp
+            #for $dfp in $ldfp:
+                ln -s '$dfp' '$clean($dfp,"dfp")' &&
+            #end for
+        #end if
+
+        #if $lffp
+            #for $ffp in $lffp:
+                ln -s '$ffp' '$clean($ffp,"ffp")' &&
+            #end for
+        #end if
+
+        @CMD_BEGIN@
+
+        ## Supply the raw images
+        #for $raw in $lraw:
+            '$raw'
+        #end for
+
+        ## Additional arguments
+        -m $max_shift
+
+        $flip_x
+        $flip_y
+
+        -c $adv.align_channel
+
+        #if $adv.filter_sigma
+        --filter-sigma $adv.filter_sigma
+        #end if
+
+        #if $adv.tile_size
+        --tile-size $adv.tile_size
+        #end if
+
+        #if $lffp
+        --ffp
+            #for $ffp in $lffp:
+                '$clean($ffp,"ffp")'
+            #end for
+        #end if
+
+        #if $ldfp
+        --dfp
+            #for $dfp in $ldfp:
+                '$clean($dfp,"dfp")'
+            #end for
+        #end if
+
+        $adv.pyramid
+        $adv.flip_mosaic_x
+        $adv.flip_mosaic_y
+
+        -f registered.ome.tif;
+
+        #if $upgrade.decide == "do_upgrade"
+            python3 '${__tool_directory__}/pyramid_upgrade.py'
+            registered.ome.tif
+
+            #if $upgrade.markers_file
+                -n `echo \$(cat $upgrade.markers_file | tail -n +2 | awk -F, '{print \$3}')`;
+            #end if
+        #end if
+    ]]></command>
+
+    <inputs>
+        <param name="lraw" type="data_collection" format="ome.tiff,tiff" collection_type="list" label="Raw Images"/>
+        <param name="ldfp" type="data_collection" format="ome.tiff,tiff" collection_type="list" optional="true" label="Deep Field Profile Images"/>
+        <param name="lffp" type="data_collection" format="ome.tiff,tiff" collection_type="list" optional="true" label="Flat Field Profile Images"/>
+        <param name="flip_x" type="boolean" truevalue="--flip-x" falsevalue="" label="Flip X-axis"/>
+        <param name="flip_y" type="boolean" truevalue="--flip-y" falsevalue="" label="Flip Y-axis"/>
+        <param name="max_shift" type="integer" value="30" label="Maximum allowed per-tile corrective shift" help="In micros"/>
+        <conditional name="upgrade">
+            <param name="decide" type="select" label="Upgrade to BF6-Compliant OME-TIFF Pyramid">
+                <option value="do_upgrade">Upgrade Pyramid</option>
+                <option value="dont_upgrade">Leave Legacy Pyramid</option>
+            </param>
+            <when value="do_upgrade">
+                <param name="markers_file" type="data" format="csv,tabular" optional="true" label="Markers File (optional)"/>
+            </when>
+            <when value="dont_upgrade">
+            </when>
+        </conditional>
+        <section name="adv" title="Advanced Options" expanded="false">
+            <param name="align_channel" type="integer" value="0" label="Align Channel Number"/>
+            <param name="filter_sigma" type="float" optional="true" label="Sigma"/>
+            <param name="tile_size" type="integer"  optional="true" label="Cyto Mask Channel"/>
+            <param name="flip_mosaic_x" type="boolean" truevalue="--flip-mosaic-x" falsevalue="" label="Flip output image horizontally"/>
+            <param name="flip_mosaic_y" type="boolean" truevalue="--flip-mosaic-y" falsevalue="" label="Flip output image vertically"/>
+            <param name="pyramid" type="boolean" checked="true" truevalue="--pyramid" falsevalue="" label="Write output as a single pyramidal TIFF"/>
+        </section>
+    </inputs>
+
+    <outputs>
+        <data format="ome.tiff" name="output" from_work_dir="registered.ome.tif" label="${tool.name} on ${on_string}"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="lraw">
+                <collection type="list">
+                    <element name="rR1" value="ashlar_test_c0.tiff" />
+                    <element name="rR2" value="ashlar_test_c1.tiff" />
+                </collection>
+            </param>
+            <output name="output" ftype="ome.tiff">
+                <assert_contents>
+                    <has_size value="4000000" delta="1000000" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+--------------------------------------------------------------------------------
+ASHLAR: Alignment by Simultaneous Harmonization of Layer/Adjacency Registration
+--------------------------------------------------------------------------------
+
+**Whole-slide microscopy image stitching and registration in Python**
+
+**Ashlar** performs fast, high-quality stitching of microscopy images. It also
+co-registers multiple rounds of cyclic imaging for methods such as CyCIF and
+CODEX. Ashlar can read image data directly from BioFormats-supported microscope
+vendor file formats as well as a directory of plain TIFF files. Output is saved
+as pyramidal, tiled OME-TIFF.
+
+Note that Ashlar requires unstitched individual "tile" images as input, so it is
+not suitable for microscopes or slide scanners that only provide pre-stitched
+images.
+
+*Visit https://labsyspharm.github.io/ashlar/ for the most up-to-date information on ASHLAR.*
+    ]]></help>
+    <expand macro="citations" />
+</tool>

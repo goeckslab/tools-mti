@@ -1,11 +1,11 @@
 <macros>
-    <token name="@VERSION@">0.0.1</token>
-
+    <token name="@TOOL_VERSION@">0.17.7</token>
+    <token name="@VERSION_SUFFIX@">0</token>
     <token name="@PROFILE@">20.01</token>
 
     <xml name="scimap_requirements">
         <requirements>
-            <container type="docker">quay.io/goeckslab/scimap:0.17.7</container>
+            <container type="docker">quay.io/goeckslab/scimap:@TOOL_VERSION@</container>
             <yield />
         </requirements>
     </xml>
@@ -15,7 +15,11 @@
             <exit_code range="1:" level="fatal" description="Error occurred. Please check Tool Standard Error" />
         </stdio>
     </xml>
-
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1158/2159-8290.CD-21-1357</citation>
+        </citations>
+    </xml>
     <xml name="scimap_spatial_options" token_label="spatial_aggregate">
         <section name="options" title="Advanced Options" expanded="false">
             <param argument="x_coordinate" type="text" value="X_centroid" optional="false" label="Column name containing the x-coordinates values" />

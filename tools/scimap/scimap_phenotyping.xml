@@ -1,4 +1,4 @@
-<tool id="scimap_phenotyping" name="Single Cell Phenotyping" version="@VERSION@" profile="20.01">
+<tool id="scimap_phenotyping" name="Single Cell Phenotyping" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
     <description>using scimap</description>
     <macros>
         <import>main_macros.xml</import>
