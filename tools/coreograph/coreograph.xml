@@ -1,5 +1,5 @@
 <tool id="unet_coreograph" name="UNetCoreograph" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="19.01">
-    <description>Coreograph uses UNet, a deep learning model, to identify complete/incomplete tissue cores on a tissue microarray. It has been trained on 9 TMA slides of different sizes and tissue types.</description>
+    <description>TMA core detection and dearraying</description>
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -8,26 +8,26 @@
     <expand macro="version_cmd"/>
 
     <command detect_errors="exit_code"><![CDATA[
-        #set $type_corrected = str($source_image)[:-3]+'ome.tif'
-        ln -s '$source_image' `basename $type_corrected`;
-
+        #set $type_corrected = 'image.' + str($source_image.file_ext)
+        ln -s '$source_image' '$type_corrected' &&
+        
         @CMD_BEGIN@
 
         python \$UNET_PATH
-        --imagePath `basename $type_corrected`
+        --imagePath '$type_corrected'
         --downsampleFactor $downsamplefactor
         --channel $channel
         --buffer $buffer
         --sensitivity $sensitivity
         $cluster
         $tissue
-        --outputPath .;
+        --outputPath '.'
         
     ]]></command>
 
 
     <inputs>
-        <param name="source_image" type="data" format="tiff" label="Registered TIFF"/>
+        <param name="source_image" type="data" format="tiff,ome.tiff" label="Registered TIFF"/>
         <param name="downsamplefactor" type="integer" value="5" label="Down Sample Factor"/>
         <param name="channel" type="integer" value="0" label="Channel"/>
         <param name="buffer" type="float" value="2.0" label="Buffer"/>
