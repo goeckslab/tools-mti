@@ -23,16 +23,16 @@
         ## as such, ImageJ needs to be registered as a global executable on $PATH
 
         if ! [ -x "\$(which ImageJ)" ]; then
-	        ln -sf "\$(which ImageJ-linux64)" "ImageJ";
+	    ln -sf "\$(which ImageJ-linux64)" "ImageJ";
             export PATH="\$PATH:\$(pwd)/";
-        fi;
+        fi &&
 
-        BASIC_SCRIPT="";
+        BASIC_SCRIPT="" &&
         if [ -f "/opt/fiji/imagej_basic_ashlar.py" ]; then
             export BASIC_SCRIPT="/opt/fiji/imagej_basic_ashlar.py";
         else
             export BASIC_SCRIPT="${__tool_directory__}/imagej_basic_ashlar.py";
-        fi;
+        fi &&
 
         ImageJ --ij2 --headless --run \$BASIC_SCRIPT
     ]]></token>
