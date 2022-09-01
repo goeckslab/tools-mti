@@ -9,8 +9,8 @@
     <command detect_errors="exit_code"><![CDATA[
     ln -s '$image' 'input.ome.tiff' &&
     ln -s '$primary_mask' primary_mask.tiff &&
-    #if $supp_masks
-        ln -s '$supp_masks' supp_mask.tiff &&
+    #if $supp_mask
+        ln -s '$supp_mask' supp_mask.tiff &&
     #end if
 
     mkdir ./tool_out &&
@@ -18,7 +18,7 @@
     @CMD_BEGIN@
 
     --masks primary_mask.tiff
-    #if $supp_masks
+    #if $supp_mask
         supp_mask.tiff
     #end if
 
@@ -34,30 +34,40 @@
 
     --channel_names '$channel_names' &&
 
+    #if $supp_mask
+    mv tool_out/*supp_mask.csv supp_mask.csv &&
+    #end if
+
     mv tool_out/*primary_mask.csv primary_mask.csv
     ]]></command>
 
     <inputs>
         <param name="image" type="data" format="tiff" label="Registered TIFF"/>
-        <param name="primary_mask" type="data" format="tiff" label="Primary Cell Mask"/>
-        <param name="supp_masks" type="data" optional="true" format="tiff" label="Additional Cell Masks"/>
+        <param name="primary_mask" type="data" format="tiff" label="Primary Mask"/>
+        <param name="supp_mask" type="data" optional="true" format="tiff" label="Additional Mask"/>
         <param name="channel_names" type="data" format="csv" label="Marker Channels"/>
         <param name="mask_props" type="text" label="Mask Metrics" help="Space separated list of additional metrics to be calculated for every mask."/>
         <param name="intensity_props" type="text" label="Intensity Metrics" help="Space separated list of additional metrics to be calculated for every marker separately."/>
     </inputs>
 
     <outputs>
-        <data format="csv" name="cellmask" from_work_dir="primary_mask.csv" label="CellMaskQuant"/>
-        <collection type="list" name="quantification" label="${tool.name} on ${on_string}">
-          <discover_datasets pattern="__designation_and_ext__" format="csv" directory="tool_out/" visible="false"/>
-        </collection>
+        <data format="csv" name="cellmask" from_work_dir="primary_mask.csv" label="Primary Mask Quantification"/>
+        <data format="csv" name="suppmask" from_work_dir="supp_mask.csv" label="Supplemental Mask Quantification">
+            <filter>supp_mask</filter>
+        </data>
      </outputs>
      <tests>
         <test>
             <param name="image" value="test.tiff" />
             <param name="primary_mask" value="mask.tiff" />
+            <param name="supp_mask" value="supp_mask.tiff" />
             <param name="channel_names" value="channels.csv" />
             <output name="cellmask" ftype="csv">
+                <assert_contents>
+                    <has_n_columns n="11" sep="," delta="1" />
+                </assert_contents>
+            </output>
+            <output name="suppmask" ftype="csv">
                 <assert_contents>
                     <has_n_columns n="11" sep="," delta="1" />
                 </assert_contents>
