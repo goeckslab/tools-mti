@@ -1,14 +1,17 @@
-<tool id="palom" name="palom" version="2022.8.2.0">
-    <description>Piecewise alignment for layers of mosaics. A tool for registering whole-slide images with different IHC stainings</description>
+<tool id="palom" name="palom" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>Piecewise alignment for layers of image mosaics.</description>
+    
     <macros>
         <import>macros.xml</import>
     </macros>
+    
     <expand macro="requirements" />
+    
     <command detect_errors="exit_code"><![CDATA[
         
-        ln -s '$reference_image' ./ref.svs &&
+        ln -s '$reference_image' './ref.svs' &&
 
-        ln -s '$channels' ./channels.csv &&
+        ln -s '$channels' './channels.csv' &&
 
         #for $i in $moving_images:
             ln -s '$i' '${i.name}' &&
@@ -112,14 +115,21 @@ run_palom(
         </test>
     </tests>
     <help><![CDATA[
-# PALOM
-registration of whole-slide images with different IHC stainings
+------
+PALOM
+------
+**PALOM** performs registration of whole-slide images with different IHC stainings.
+**Inputs**
+1.) Reference image for aligning image mosiacs to
+2.) A collection of images to be aligned
+3.) File describing the channels/targets
 
-Tool github: https://github.com/Yu-AnChen/palom
+**Outputs**
+1.) Registered image as ome.tiff
+2.) Colleciton of QC plots
 
-# Main developer 
+More details on Github: https://github.com/Yu-AnChen/palom
 
-Yu-An Chen (https://github.com/Yu-AnChen)
     ]]></help>
     <expand macro="citations" />
 </tool>
