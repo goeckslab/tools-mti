@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<macros>
+    <xml name="requirements">
+        <requirements>
+            <container type="docker">labsyspharm/basic-illumination:@TOOL_VERSION@</container>
+        </requirements>
+    </xml>
+
+    <xml name="version_cmd">
+        <version_command>echo @TOOL_VERSION@</version_command>
+    </xml>
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1038/ncomms14836</citation>
+        </citations>
+    </xml>
+
+    <token name="@TOOL_VERSION@">1.0.3</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+    <token name="@PROFILE@">19.01</token>
+    <token name="@CMD_BEGIN@"><![CDATA[
+        ## if ImageJ isn't already present, this is the docker-dependency version
+        ## as such, ImageJ needs to be registered as a global executable on $PATH
+
+        if ! [ -x "\$(which ImageJ)" ]; then
+	    ln -sf "\$(which ImageJ-linux64)" "ImageJ";
+            export PATH="\$PATH:\$(pwd)/";
+        fi &&
+
+        BASIC_SCRIPT="" &&
+        if [ -f "/opt/fiji/imagej_basic_ashlar.py" ]; then
+            export BASIC_SCRIPT="/opt/fiji/imagej_basic_ashlar.py";
+        else
+            export BASIC_SCRIPT="${__tool_directory__}/imagej_basic_ashlar.py";
+        fi &&
+
+        ImageJ --ij2 --headless --run \$BASIC_SCRIPT
+    ]]></token>
+</macros>

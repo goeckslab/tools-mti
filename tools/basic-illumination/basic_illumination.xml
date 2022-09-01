@@ -1,0 +1,55 @@
+<tool id="basic_illumination" name="BaSiC Illumination" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>ImageJ BaSiC shading correction for use with Ashlar</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+ 
+    <expand macro="requirements"/>
+    <expand macro="version_cmd"/>
+
+    <command detect_errors="exit_code"><![CDATA[
+    ln -s '$in_files' '${in_files.name}' &&
+
+    #set $outname = str('$in_files.name').replace('.ome.tiff','')
+
+    @CMD_BEGIN@
+
+    "filename='${in_files.name}',output_dir='.',experiment_name='output'";
+
+    ]]></command>
+
+    <inputs>
+        <param type="data" name="in_files" format="tiff" label="Raw Cycle Images"/>
+   </inputs>
+
+   <outputs>
+       <data format="tiff" name="output_dfp" label="${tool.name} on ${on_string}: DFP" from_work_dir="output-dfp.tif"/>
+       <data format="tiff" name="output_ffp" label="${tool.name} on ${on_string}: FFP" from_work_dir="output-ffp.tif"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_files" value="test.tiff" />
+            <output name="output_dfp" ftype="tiff">
+                <assert_contents>
+                    <has_size value="350000" delta="50000" />
+                </assert_contents>
+            </output>
+            <output name="output_ffp" ftype="tiff">
+                <assert_contents>
+                    <has_size value="350000" delta="50000" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+-------------------        
+basic-illumination
+-------------------
+
+**ImageJ BaSiC shading correction for use with Ashlar**
+**basic-illumination** can read image data directly from BioFormats-supported microscope
+vendor file formats as well as a directory of plain TIFF files. Output includes a flat field and
+dark field image per input file.
+    ]]></help>
+    <expand macro="citations" />
+</tool>

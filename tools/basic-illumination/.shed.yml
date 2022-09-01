@@ -1,0 +1,6 @@
+owner: perssond
+name: basic_illumination
+description: "Perform lighting correction for microscopy images"
+remote_repository_url: https://github.com/labsyspharm/basic-illumination 
+categories: 
+  - "Imaging"
