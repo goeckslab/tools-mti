@@ -1,0 +1,12 @@
+<macros>
+    <xml name="requirements">
+        <requirements>
+            <container type="docker">labsyspharm/roadie:2022-06-06</container>
+        </requirements>
+    </xml>
+    <xml name="citations">
+        <citations>
+            <yield />
+        </citations>
+    </xml>
+</macros>
