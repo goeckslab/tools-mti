@@ -9,8 +9,8 @@
     <command detect_errors="exit_code"><![CDATA[
     ln -s '$image' 'input.ome.tiff' &&
     ln -s '$primary_mask' 'primary_mask.tiff' &&
-    #if $supp_masks
-        ln -s '$supp_masks' 'supp_mask.tiff' &&
+    #if $supp_mask
+        ln -s '$supp_mask' 'supp_mask.tiff' &&
     #end if
 
     mkdir './tool_out' &&
@@ -18,7 +18,7 @@
     @CMD_BEGIN@
 
     --masks 'primary_mask.tiff'
-    #if $supp_masks
+    #if $supp_mask
         'supp_mask.tiff'
     #end if
 
