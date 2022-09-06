@@ -1,28 +1,28 @@
-<tool id="mesmer" name="Mesmer" version="@VERSION@.0" profile="19.01">
+<tool id="mesmer" name="Mesmer" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="19.01">
     <description>Mesmer for whole-cell segmentation of multiplexed tissue imaging data</description>
+
     <macros>
         <import>macros.xml</import>
     </macros>
+
     <expand macro="requirements"/>
     <expand macro="version_cmd"/>
+
     <command detect_errors="exit_code"><![CDATA[
-    ln -s '$nuclear_image' input.tif && 
+    ln -s '$nuclear_image' 'input.tif' && 
     @CMD_BEGIN@ 
     --output-directory ./
-    --output-name mask.tif
-    --nuclear-image input.tif
+    --output-name 'mask.tif'
+    --nuclear-image 'input.tif'
     --nuclear-channel $nuclear_channel
     --compartment $compartment
     --image-mpp $image_mpp
+    $squeeze
 
-    #if $membrane_select.membrane_segment == 'True'
+    #if $membrane_select.membrane_segment
         --membrane-image '$membrane_select.membrane_image'
         --membrane-channel '$membrane_select.membrane_channel'
     #end if
-    #if $squeeze
-        --squeeze
-    #end if
-
     ]]></command>
 
     <inputs>
@@ -33,7 +33,7 @@
             <option value="nuclear">Nuclear</option>
         </param>
         <param name="image_mpp" type="float" value="0.5" label="Resolution of the image in microns-per-pixel"/>
-        <param name="squeeze" type="boolean" checked="False" label="Whether to np.squeeze the outputs before saving"/>
+        <param name="squeeze" type="boolean" truevalue="--squeeze" falsevalue="" checked="false" label="Whether to np.squeeze the outputs before saving"/>
         <conditional name="membrane_select">
             <param name="membrane_segment" type="select" label="Segment with Cell Membrane">
                 <option selected="True" value="False">No</option>
@@ -54,7 +54,7 @@
             <param name="nuclear_image" value="test.tiff" />
             <param name="compartment" value="nuclear" />
             <param name="image_mmp" value="0.65" />
-            <param name="squeeze" value="True" />
+            <param name="squeeze" value="--squeeze" />
             <output name="mask" ftype="tiff">
                 <assert_contents>
                     <has_size value="350000" delta="10000" />
@@ -63,7 +63,17 @@
         </test>
     </tests>
     <help><![CDATA[
-        Mesmer
+------
+Mesmer
+------
+
+**Mesmer** is a DeepCell application that uses a pre-trained model for predicting nuclear and whole cell segmentation from multiplex tissue data.
+
+**Inputs**
+1. a multiple tissue image that includes a nuclear marker and optionally cytoplasm/membrane markers
+        
+**Outputs**
+1. the nuclear or whole cell segmentation mask 
     ]]></help>
     <expand macro="citations" />
 </tool>

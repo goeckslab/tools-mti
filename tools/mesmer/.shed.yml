@@ -1,10 +1,5 @@
-owner: creason
+owner: goeckslab
+description: "Mesmer for whole-cell segmentation of multiplexed tissue imaging data."
 remote_repository_url: https://github.com/goeckslab/tools-mti/tree/main/tools/mesmer
 categories:
   - "Imaging"
-repositories:
-  mesmer:
-    description: "Mesmer for whole-cell segmentation of multiplexed tissue imaging data."
-    include:
-      - macros.xml
-      - mesmer.xml
