@@ -9,35 +9,37 @@
     <expand macro="version_cmd"/>
 
     <command detect_errors="exit_code"><![CDATA[
-    #import re
-    #set $cleaned = re.sub('[^\w\-]', '_', str($image.name))
-    #set $typeCorrected = re.match('^(.*?)(_ome)?_tiff?$', $cleaned)[1] + '.' + str($image.file_ext)
+    #set $ext = str($image.file_ext)
+    #if $ext == 'tiff'
+        #set $ext = 'tif'
+    #end if
+    #set $input = 'image.' + str($ext) 
 
-    ln -s $image '$typeCorrected';
-
-    @CMD_BEGIN@ '$typeCorrected'
+    ln -s '$image' '$input' &&
+    
+    @CMD_BEGIN@ '$input'
 
     --tool $tool
     
     #if $stackoutput
-    --stackOutput
+        --stackOutput
     #end if
 
-    --outputPath `pwd`
+    --outputPath '.'
     --channel $channel
     --model $model
     --mean $mean
     --std $stdev
     --scalingFactor $scalingfactor
-    --outlier $outlier;
+    --outlier $outlier &&
 
     ## Move files to different files for from_work_dir differentiation
     #if $stackoutput
-    mv *Probabilities*.tif Probabilities.tif;
-    mv qc/*Preview*.tif Preview.tif
+        mv *Probabilities*.tif Probabilities.tif &&
+        mv qc/*Preview*.tif Preview.tif
     #else
-    mv *ContoursPM*.tif ContoursPM.tif;
-    mv *NucleiPM*.tif NucleiPM.tif
+        mv *ContoursPM*.tif ContoursPM.tif &&
+        mv *NucleiPM*.tif NucleiPM.tif 
     #end if
     ]]></command>
 
@@ -82,9 +84,11 @@
     </outputs>
     <tests>
         <test>
-            <param name="image" value="105.tiff" ftype="tiff" />
+            <param name="image" value="105.tif" ftype="tiff" />
             <param name="model" value="nucleiDAPI" />
-            <output name="probabilities" file="105_NucleiPM_1.tif" compare="sim_size" delta="10" />
+            <param name="tool" value="unmicst-legacy"/>
+            <param name="channel" value="1"/>
+            <output name="nuclei" file="105_NucleiPM_1.tif" compare="sim_size" delta="10" />
             <output name="contours" file="105_ContoursPM_1.tif" compare="sim_size" delta="10" />
         </test>
     </tests>

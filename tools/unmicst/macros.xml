@@ -2,7 +2,7 @@
 <macros>
     <xml name="requirements">
         <requirements>
-            <container type="docker">labsyspharm/unmicst:@VERSION@</container>
+            <container type="docker">labsyspharm/unmicst:@TOOL_VERSION@</container>
             <!--
             <requirement type="package" version="3.7">python</requirement>
             <requirement type="package" version="1.15.0">tensorflow</requirement>
@@ -30,12 +30,12 @@
     <token name="@TOOL_VERSION@">2.7.1</token>
     <token name="@VERSION_SUFFIX@">0</token>
     <token name="@CMD_BEGIN@"><![CDATA[
-    UNMICST_PATH='';
+    UNMICST_PATH='' &&
     if [ -f '/app/unmicstWrapper.py' ]; then
         export UNMICST_PATH='python /app/unmicstWrapper.py';
     else
         export UNMICST_PATH='unmicstWrapper.py';
-    fi;
+    fi &&
     \$UNMICST_PATH
     ]]></token>
 </macros>
