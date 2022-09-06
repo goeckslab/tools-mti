@@ -1,0 +1,6 @@
+owner: perssond
+name:  quantification
+description: "Module for single-cell data extraction given a segmentation mask and multi-channel image"
+remote_repository_url: https://github.com/goeckslab/tools-mti
+categories: 
+  - "Imaging"

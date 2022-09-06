@@ -1,0 +1,94 @@
+<tool id="quantification" name="MCQUANT" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="19.01">
+    <description>a module for single-cell data extraction</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <expand macro="version_cmd"/>
+
+    <command detect_errors="exit_code"><![CDATA[
+    ln -s '$image' 'input.ome.tiff' &&
+    ln -s '$primary_mask' 'primary_mask.tiff' &&
+    #if $supp_mask
+        ln -s '$supp_mask' 'supp_mask.tiff' &&
+    #end if
+
+    mkdir './tool_out' &&
+
+    @CMD_BEGIN@
+
+    --masks 'primary_mask.tiff'
+    #if $supp_mask
+        'supp_mask.tiff'
+    #end if
+
+    --image 'input.ome.tiff'
+    --output './tool_out'
+
+    #if str($mask_props).strip()
+        --mask_props '$mask_props'
+    #end if
+    #if str($intensity_props).strip()
+        --intensity_props '$intensity_props'
+    #end if
+
+    --channel_names '$channel_names' &&
+
+    #if $supp_mask
+    mv tool_out/*supp_mask.csv supp_mask.csv &&
+    #end if
+
+    mv tool_out/*primary_mask.csv primary_mask.csv
+    ]]></command>
+
+    <inputs>
+        <param name="image" type="data" format="tiff" label="Registered TIFF"/>
+        <param name="primary_mask" type="data" format="tiff" label="Primary Mask"/>
+        <param name="supp_mask" type="data" optional="true" format="tiff" label="Additional Mask"/>
+        <param name="channel_names" type="data" format="csv" label="Marker Channels"/>
+        <param name="mask_props" type="text" label="Mask Metrics" help="Space separated list of additional metrics to be calculated for every mask."/>
+        <param name="intensity_props" type="text" label="Intensity Metrics" help="Space separated list of additional metrics to be calculated for every marker separately."/>
+    </inputs>
+
+    <outputs>
+        <data format="csv" name="cellmask" from_work_dir="primary_mask.csv" label="Primary Mask Quantification"/>
+        <data format="csv" name="suppmask" from_work_dir="supp_mask.csv" label="Supplemental Mask Quantification">
+            <filter>supp_mask</filter>
+        </data>
+     </outputs>
+     <tests>
+        <test>
+            <param name="image" value="test.tiff" />
+            <param name="primary_mask" value="mask.tiff" />
+            <param name="supp_mask" value="supp_mask.tiff" />
+            <param name="channel_names" value="channels.csv" />
+            <output name="cellmask" ftype="csv">
+                <assert_contents>
+                    <has_n_columns n="11" sep="," delta="1" />
+                </assert_contents>
+            </output>
+            <output name="suppmask" ftype="csv">
+                <assert_contents>
+                    <has_n_columns n="11" sep="," delta="1" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+--------
+MCQUANT
+--------
+**MCQUANT** module for single cell quantification given a segmentation mask and multi-channel image. The CSV structure is aligned with histoCAT output.
+
+**Inputs**
+1. A fully stitched and registered image in .ome.tif format. Nextflow will use images in the registration/ and dearray/ subfolders as appropriate.
+2. One or more segmentation masks in .tif format. Nextflow will use files in the segmentation/ subfolder within the project.
+3. A .csv file containing a marker_name column specifying names of individual channels. Nextflow will look for this file in the project directory.
+
+**Outputs**
+A cell-by-feature table mapping Cell IDs to marker expression and morphological features (including x,y coordinates).
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>
