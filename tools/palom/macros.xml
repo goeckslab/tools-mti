@@ -1,7 +1,7 @@
 <macros>
     <xml name="requirements">
         <requirements>
-            <container type="docker">quay.io/goeckslab/palom:2021.12.0</container>
+            <container type="docker">quay.io/goeckslab/palom:@TOOL_VERSION@</container>
         </requirements>
     </xml>
     <xml name="citations">
@@ -9,4 +9,7 @@
             <yield />
         </citations>
     </xml>
+    <token name="@TOOL_VERSION@">2022.8.2</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+    <token name="@PROFILE@">20.01</token>
 </macros>
