@@ -25,10 +25,10 @@
     --image 'input.ome.tiff'
     --output './tool_out'
 
-    #if strip($mask_props)
+    #if str($mask_props).strip()
         --mask_props '$mask_props'
     #end if
-    #if strip($intensity_props)
+    #if str($intensity_props).strip()
         --intensity_props '$intensity_props'
     #end if
 
