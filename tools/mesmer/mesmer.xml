@@ -58,7 +58,7 @@
             <param name="squeeze" value="--squeeze" />
             <output name="mask" ftype="tiff">
                 <assert_contents>
-                    <has_size value="350000" delta="20000" />
+                    <has_size value="360000" delta="1000" />
                 </assert_contents>
             </output>
         </test>
