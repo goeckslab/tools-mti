@@ -83,7 +83,7 @@
         </data>
     </outputs>
     <tests>
-        <test>
+        <test expect_num_outputs="2">
             <param name="image" value="105.tif" ftype="tiff" />
             <param name="model" value="nucleiDAPI" />
             <param name="tool" value="unmicst-legacy"/>
