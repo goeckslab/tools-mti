@@ -19,7 +19,7 @@
     --image-mpp $image_mpp
     $squeeze
 
-    #if $membrane_select.membrane_segment
+    #if $membrane_select.membrane_segment == "True":
         --membrane-image '$membrane_select.membrane_image'
         --membrane-channel '$membrane_select.membrane_channel'
     #end if
@@ -53,11 +53,12 @@
         <test>
             <param name="nuclear_image" value="test.tiff" />
             <param name="compartment" value="nuclear" />
+            <param name="membrane_select.membrane_segment" value="False" />
             <param name="image_mmp" value="0.65" />
             <param name="squeeze" value="--squeeze" />
             <output name="mask" ftype="tiff">
                 <assert_contents>
-                    <has_size value="350000" delta="10000" />
+                    <has_size value="350000" delta="20000" />
                 </assert_contents>
             </output>
         </test>
