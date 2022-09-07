@@ -1,5 +1,0 @@
-owner: perssond
-description: "Pretrained UNet model for inferring nuclei/cell contours."
-remote_repository_url: https://github.com/ohsu-comp-bio/unmicst
-categories: 
-  - "Imaging"
