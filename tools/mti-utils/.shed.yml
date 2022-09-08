@@ -9,9 +9,9 @@ auto_tool_repositories:
   description_template: "Wrapper for MTI Utility: {{ tool_name }}"
 suite:
   name: suite_mti-utils
-    description: "A suite of tool wrappers for Multiplex Tissue Imaging (MTI) utilities"
-    long_description: |
-      A suite of tool wrapper for Multiplex Tissue Imaging (MTI) utilities.
-      These include simple custom scripts for renaming channels in OME-TIFF metadata, 
-      and singal-processing for tabular intensity data. More utilities may be added in
-      the future. 
+  description: "A suite of tool wrappers for Multiplex Tissue Imaging (MTI) utilities"
+  long_description: |
+    A suite of tool wrapper for Multiplex Tissue Imaging (MTI) utilities.
+    These include simple custom scripts for renaming channels in OME-TIFF metadata, 
+    and singal-processing for tabular intensity data. More utilities may be added in
+    the future. 
