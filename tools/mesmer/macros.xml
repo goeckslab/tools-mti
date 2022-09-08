@@ -2,18 +2,20 @@
 <macros>
     <xml name="requirements">
         <requirements>
-            <container type="docker">vanvalenlab/deepcell-applications:@VERSION@</container>
+            <container type="docker">quay.io/goeckslab/mesmer:@TOOL_VERSION@</container>
         </requirements>
     </xml>
 
     <xml name="version_cmd">
-        <version_command>echo @VERSION@</version_command>
+        <version_command>@CMD_BEGIN@ --help</version_command>
     </xml>
     <xml name="citations">
         <citations>
+            <citation type="doi">10.1038/s41587-021-01094-0</citation>
         </citations>
     </xml>
 
-    <token name="@VERSION@">0.3.1</token>
+    <token name="@TOOL_VERSION@">0.3.1</token>
+    <token name="@VERSION_SUFFIX@">0</token>
     <token name="@CMD_BEGIN@">python /usr/src/app/run_app.py mesmer</token>
 </macros>
