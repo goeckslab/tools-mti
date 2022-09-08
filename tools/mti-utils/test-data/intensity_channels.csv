@@ -1,0 +1,13 @@
+channel_number,marker_name,exposure_time,AF_channel
+0,DNA_1,100,None
+1,AF488,100,None
+2,AF555,100,None
+3,AF647,100,None
+4,DNA_2,100,None
+5,A488_background,100,AF488
+6,A555_background,100,AF555
+7,A647_background,100,AF647
+8,DNA_3,100,None
+9,FDX1,100,AF488
+10,CD357,100,AF555
+11,CD1D,100,AF647
