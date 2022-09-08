@@ -1,0 +1,79 @@
+<tool id="rename_tiff_channels" name="Rename OME-TIFF Channels" version="@VERSION@.2" profile="19.01">
+    <description>Change the channel names in the XML metadata of OME-TIFF images</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+ 
+    <expand macro="requirements"/>
+    <expand macro="version_cmd"/>
+
+    <command detect_errors="exit_code"><![CDATA[
+
+        cp '$image' ./renamed_image.ome.tiff && 
+
+        ln -s '$channel_csv' ./channels.csv &&
+
+        python '$script'
+
+    ]]></command>
+    <configfiles>
+        <configfile name = "script">
+import os
+import sys 
+import argparse
+import pandas as pd
+import ome_types
+from ome_types.model import channel
+from tifffile import tiffcomment
+
+cwd = os.getcwd()
+
+channels_df = pd.read_csv(os.path.join(cwd, 'channels.csv'))
+
+original_ome_xml = tiffcomment(os.path.join(cwd, 'renamed_image.ome.tiff'))
+working_ome = ome_types.from_xml(original_ome_xml, parser = 'lxml')
+
+for l_idx, level in enumerate(working_ome.images):
+
+    for c_idx, channel in enumerate(level.pixels.channels):
+
+        new_name = channels_df.loc[c_idx, 'marker_name']
+        channel.name = new_name
+
+        if l_idx == 0:
+
+            print(f"Channel {c_idx} renamed to {new_name}")
+
+updated_ome_xml = working_ome.to_xml()
+tiffcomment(os.path.join(cwd, 'renamed_image.ome.tiff'), updated_ome_xml)
+
+print("Updated OME-TIFF metadata:")
+print(tiffcomment(os.path.join(cwd, 'renamed_image.ome.tiff')))
+        </configfile>
+    </configfiles>
+    <inputs>
+        <param name="image" type="data" format="ome.tiff" label="Input image in OME-tiff format"/>
+        <param name="channel_csv" type="data" format="csv" label="Channel Metadata CSV"/>
+    </inputs>
+    <outputs>
+        <data name="renamed_image" format="ome.tiff" from_work_dir="renamed_image.ome.tiff" label="${tool.name} on ${on_string}"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="image" value="rename_test.tiff" />
+            <param name="channel_csv" value="rename_channels.csv" />
+            <output name="renamed_image" ftype="ome.tiff">
+                <assert_contents>
+                    <has_size value="44000" delta="1000" />
+                </assert_contents>
+            </output>
+            <assert_stdout>
+                <has_text text="Channel 0 renamed to DNA_6" />
+                <has_text text="Updated OME-TIFF metadata" />
+            </assert_stdout>
+        </test>
+    </tests>
+    <help><![CDATA[
+    ]]></help>
+    <expand macro="citations" />
+</tool>
