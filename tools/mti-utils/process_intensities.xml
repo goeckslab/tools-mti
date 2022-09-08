@@ -1,4 +1,4 @@
-<tool id="cell_intensity_processing" name="Process single-cell intensities" version="">
+<tool id="cell_intensity_processing" name="Process single-cell intensities" version="0.0.1">
     <description>Options to correct for expsure time and autofluorescence. Also option to z-score intensities</description>
     <macros>
         <import>macros.xml</import>
@@ -8,7 +8,7 @@
         
         ln -s '$quant_table' ./quant.csv &&
 
-        ln -s '$channels_csv' ./channels.csv &&
+        ln -s '$channel_csv' ./channels.csv &&
 
         python '$script'
 
@@ -21,46 +21,30 @@ import pandas as pd
 import scipy.stats as stats
 
 cwd = os.getcwd()
-quant = pd.read_csv(os.path.join(cwd, 'quant.csv'))
+quant = pd.read_csv(os.path.join(cwd, 'quant.csv'), index_col = 0)
 marker_df = pd.read_csv(os.path.join(cwd, 'channels.csv'))
 
 markers_to_normalize = marker_df['marker_name'].to_list()
 
-#if $exp:
-
-exp_column = str(${exp_col})
-
 for marker in markers_to_normalize:
 
-    exp_time = marker_df.loc[marker_df['marker_name'] == marker, exp_column].values[0]
-
+#if $exp.correct_exposure:
+    exp_time = marker_df.loc[marker_df['marker_name'] == marker, '${exp.exp_col}'].values[0]
     quant[marker] = quant[marker] / exp_time
-
 #end if
 
-#if $autofluor:
-
-af_column = str(${AF_col})
-
-for marker in markers_to_normalize:
-
-    current_AF_channel = marker_df.loc[marker_df['marker_name'] == marker, af_column].values[0]
-
+#if $autofluor.signal_ratio:
+    current_AF_channel = marker_df.loc[marker_df['marker_name'] == marker, '${autofluor.AF_col}'].values[0]
     if current_AF_channel in markers_to_normalize:
-
         current_AF_mean = np.mean(quant[current_AF_channel])
-
         quant[marker] = quant[marker] / current_AF_mean
-
 #end if
 
 #if $zscore
-
-for marker in markers_to_normalize:
-
     quant[marker] = stats.zscore(quant[marker])
-
 #end if
+
+    print(marker)
 
 quant.to_csv(os.path.join(cwd, 'processed_quant.csv'))
         </configfile>
@@ -97,7 +81,10 @@ quant.to_csv(os.path.join(cwd, 'processed_quant.csv'))
             </conditional>
             <param name="zscore" value="true" />
             <output name="processed_quant" ftype="csv">
-
+                <assert_contents>
+                    <has_n_columns n="15" sep="," />
+                    <has_n_lines n="15" />
+                </assert_contents>
             </output>
         </test>
     </tests>
