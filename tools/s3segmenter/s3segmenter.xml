@@ -9,18 +9,18 @@
 
     <command detect_errors="exit_code"><![CDATA[
 
-        ln -s '${imagePath}' './image.tif';
+        ln -s '${imagePath}' './image.tif' &&
 
         #if $contoursClassProbPath
-        ln -s '${contoursClassProbPath}' './ContoursPM.tif';
+        ln -s '${contoursClassProbPath}' './ContoursPM.tif' &&
         #end if
 
         #if $nucleiClassProbPath
-        ln -s '${nucleiClassProbPath}' './NucleiPM.tif';
+        ln -s '${nucleiClassProbPath}' './NucleiPM.tif' &&
         #end if
 
         #if $stackProbPath
-        ln -s '${stackProbPath}' './Probabilities.tif';
+        ln -s '${stackProbPath}' './Probabilities.tif' &&
         #end if
 
 
