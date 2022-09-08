@@ -1,15 +1,19 @@
-<tool id="vitessce_spatial" name="Vitessce Visualization" version="@VERSION@" profile="20.01">
-    <description>displays various view components for single cell analysis</description>
+<tool id="vitessce_spatial" name="Vitessce Visualization" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>integrative visualization of multi-modal, spatial single-cell data</description>
+
     <macros>
         <import>main_macros.xml</import>
     </macros>
+
     <expand macro="vitessce_requirements"/>
     <expand macro="macro_stdio" />
-    <version_command>echo "@VERSION@"</version_command>
+    <version_command> "@VERSION@"</version_command>
     <expand macro="vitessce_cmd" />
+
     <configfiles>
         <inputs name="inputs" />
     </configfiles>
+
     <inputs>
         <param name="image" type="data" format="ome.tiff" label="Select the OME Tiff image" />
         <param name="masks" type="data" format="tiff,ome.tiff" optional="true" label="Select masks for the OME Tiff image (Optional)" />
@@ -133,5 +137,6 @@ An HTML file with Vitessce component.
         ]]>
     </help>
     <citations>
+        <citation type="doi">10.31219/osf.io/y8thv</citation>
     </citations>
 </tool>

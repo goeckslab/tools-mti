@@ -1,4 +1,4 @@
-<tool id="gate_finder" name="Gate Finder" version="@VERSION@" profile="20.01">
+<tool id="gate_finder" name="Gate Finder" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
     <description>displays a series of gating outcomes using Vitessce</description>
     <macros>
         <import>main_macros.xml</import>
@@ -58,5 +58,6 @@ An HTML file with Vitessce component.
         ]]>
     </help>
     <citations>
+        <citation type="doi">10.31219/osf.io/y8thv</citation>
     </citations>
 </tool>
