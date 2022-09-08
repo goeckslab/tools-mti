@@ -50,7 +50,10 @@
                         fi;
                     fi;
                 fi;
-                convert_cmd="bfconvert -pyramid-resolutions \$n_resolutions -pyramid-scale \$pyramid_scale -noflat '$masks' '${output.files_path}/A/0/masks01.ome.tiff'";
+                tile_info=\$(showinf -nopix -nometa -noflat '${output.files_path}/A/0/image01.ome.tiff' | grep '^\s*Tile\ssize\s*=' -m1);
+                tile_x=\$(echo "\$tile_info" | cut -d' ' -f4);
+                tile_y=\$(echo "\$tile_info" | cut -d' ' -f6);
+                convert_cmd="bfconvert -pyramid-resolutions \$n_resolutions -pyramid-scale \$pyramid_scale -noflat -tilex \$tile_x -tiley \$tile_y '$masks' '${output.files_path}/A/0/masks01.ome.tiff'";
                 echo "\n>\$convert_cmd";
                 eval \$convert_cmd;
                 masks_info_new=\$(showinf -nopix -nometa -noflat '${output.files_path}/A/0/masks01.ome.tiff');
