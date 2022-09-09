@@ -1,5 +1,5 @@
 <tool id="cell_intensity_processing" name="Process single-cell intensities" version="0.0.1">
-    <description>Options to correct for expsure time and autofluorescence. Also option to z-score intensities</description>
+    <description>Options to correct for expsure time, autofluorescence subtraction, or compute signal-to-background ratio.</description>
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -18,7 +18,6 @@
 import os
 import numpy as np
 import pandas as pd
-import scipy.stats as stats
 
 cwd = os.getcwd()
 quant = pd.read_csv(os.path.join(cwd, 'quant.csv'), index_col = 0)
@@ -33,18 +32,16 @@ for marker in markers_to_normalize:
     quant[marker] = quant[marker] / exp_time
 #end if
 
-#if $autofluor.signal_ratio:
-    current_AF_channel = marker_df.loc[marker_df['marker_name'] == marker, '${autofluor.AF_col}'].values[0]
+#if $AF_method.select_method == 'subtract':
+    current_AF_channel = marker_df.loc[marker_df['marker_name'] == marker, '${AF_method.AF_col}'].values[0]
     if current_AF_channel in markers_to_normalize:
-        current_AF_mean = np.mean(quant[current_AF_channel])
-        quant[marker] = quant[marker] / current_AF_mean
+        quant[marker] = quant[marker] - quant[current_AF_channel]
+        quant[marker] = np.where(quant[marker] &lt; 0, 0, quant[marker])
+#elif $AF_method.select_method == 'SBR':
+    current_AF_channel = marker_df.loc[marker_df['marker_name'] == marker, '${AF_method.AF_col}'].values[0]
+    if current_AF_channel in markers_to_normalize:
+        quant[marker] = quant[marker] / quant[current_AF_channel]
 #end if
-
-#if $zscore
-    quant[marker] = stats.zscore(quant[marker])
-#end if
-
-    print(marker)
 
 quant.to_csv(os.path.join(cwd, 'processed_quant.csv'))
         </configfile>
@@ -57,14 +54,21 @@ quant.to_csv(os.path.join(cwd, 'processed_quant.csv'))
             <when value="true">
                 <param name="exp_col" type="text" value="exposure_time" label="Name of column in markers file containing exposure times" />
             </when>
+            <when value="false">
+            </when>
         </conditional>
-        <conditional name="autofluor">
-            <param name="signal_ratio" type="boolean" checked="false" label="Calculate signal to noise ratio from autofluorescence channels"/>
-            <when value="true">
+        <conditional name="AF_method">
+            <param name="select_method" type="select" label="Select method of autofluorescence/background adjustment">
+                <option value="subtract">Autofluorescence subtraction</option>
+                <option value="SBR">Signal-to-background ratio</option>
+            </param>
+            <when value="subtract">
+                <param name="AF_col" type="text" value="AF_channel" label="Name of column in markers file containing respective AF channel for each marker" />
+            </when>
+            <when value="SBR">
                 <param name="AF_col" type="text" value="AF_channel" label="Name of column in markers file containing respective AF channel for each marker" />
             </when>
         </conditional>
-        <param name="zscore" type="boolean" checked="false" label="z-score each marker"/>
     </inputs>
     <outputs>
         <data name="processed_quant" from_work_dir="processed_quant.csv" format="csv"/>
@@ -76,10 +80,9 @@ quant.to_csv(os.path.join(cwd, 'processed_quant.csv'))
             <conditional name="exp">
                 <param name="correct_exposure" value="true" />
             </conditional>
-            <conditional name="autofluor">
-                <param name="signal_ratio" value="true" />
+            <conditional name="AF_method">
+                <param name="select_method" value="SBR" />
             </conditional>
-            <param name="zscore" value="true" />
             <output name="processed_quant" ftype="csv">
                 <assert_contents>
                     <has_n_columns n="15" sep="," />
