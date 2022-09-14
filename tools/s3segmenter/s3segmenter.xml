@@ -24,7 +24,7 @@
         #end if
 
 
-        @CMD_BEGIN@ 
+        @CMD_BEGIN@ \$S3SEG_CMD 
         --imagePath './image.tif'
 
         #if $contoursClassProbPath
@@ -87,6 +87,9 @@
             <when value="dearray">
                 <param name="maskPath" type="data" format="tiff" label="TMA Mask File"/>
             </when>
+            <when value="noCrop" />
+            <when value="autoCrop" />
+            <when value="plate" />
         </conditional>
 
         <param name="cytoMethod" type="select" label="Cyto Method">
@@ -117,14 +120,21 @@
                 <param name="pixelThreshold" type="float" value="-1.0" label="Pixel Threshold"/>
                 <param name="pixelMaskChan" type="text" value="2" label="Pixel Mask Channel"/>
             </when>
+             <when value="watershedContourDist"/>
+             <when value="watershedContourInt"/>
+             <when value="watershedBWDist"/>
+             <when value="dilation"/>
+             <when value="localThreshold"/>
+             <when value="localMax"/>
+             <when value="bypass"/>
         </conditional>
 
         <param name="segmentCytoplasm" type="select" label="Segment Cytoplasm">
             <option value="segmentCytoplasm">segmentCytoplasm</option>
             <option selected="true" value="ignoreCytoplasm">ignoreCytoplasm</option>
         </param>
-        <param name="saveMask" type="boolean" checked="true" truevalue="--saveMask" falsevalue="" label="Save Mask"/>
-        <param name="saveFig" type="boolean" checked="true" truevalue="--saveFig" falsevalue="" label="Save Figure"/>
+        <param argument="saveMask" type="boolean" checked="true" truevalue="--saveMask" falsevalue="" label="Save Mask"/>
+        <param argument="saveFig" type="boolean" checked="true" truevalue="--saveFig" falsevalue="" label="Save Figure"/>
 
         <section name="adv" title="Advanced Options" expanded="false">
             <param name="cytoDilation" type="integer" value="5" label="Cyto Dilation"/>
