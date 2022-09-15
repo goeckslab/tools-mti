@@ -6,7 +6,7 @@
     <expand macro="squidpy_requirements"/>
     <expand macro="macro_stdio" />
     <version_command>echo "@TOOL_VERSION@"</version_command>
-    <command>
+    <command detect_errors="aggressive">
         <![CDATA[
         python '$__tool_directory__/squidpy_spatial.py'
             --inputs '$inputs'

@@ -6,7 +6,7 @@
     <expand macro="requirements"/>
     <expand macro="version_cmd"/>
 
-    <command detect_errors="exit_code"><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
     ln -s '$image' 'input.ome.tiff' &&
     ln -s '$primary_mask' 'primary_mask.tiff' &&
     #if $supp_mask

@@ -7,7 +7,7 @@
     
     <expand macro="requirements" />
     
-    <command detect_errors="exit_code"><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
         
         ln -s '$reference_image' './ref.svs' &&
 

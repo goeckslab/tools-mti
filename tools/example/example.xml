@@ -16,7 +16,7 @@
     <requirements>
         <requirement type="package" version="5.0.018">bash</requirementexample>
     </requirements>
-    <command detect_errors="exit_code"><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
         echo '$in' > '$out'
     ]]></command>
     <inputs>

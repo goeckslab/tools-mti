@@ -16,7 +16,7 @@
     </xml>
 
     <xml name="vitessce_cmd" token_tool_id="vitessce_spatial">
-        <command>
+        <command detect_errors="aggressive">
         <![CDATA[
         export BF_MAX_MEM="\${GALAXY_MEMORY_MB}m" &&
         mkdir -p '${output.files_path}/A/0' &&
