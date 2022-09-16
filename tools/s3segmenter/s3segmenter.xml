@@ -1,5 +1,5 @@
 <tool id="s3segmenter" name="s3segmenter" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
-    <description>S3segmenter is a Python-based set of functions that generates single cell (nuclei and cytoplasm) label masks.</description>
+    <description>single cell (nuclei and cytoplasm) label masks.</description>
     <macros>
         <import>macros.xml</import>
     </macros>
