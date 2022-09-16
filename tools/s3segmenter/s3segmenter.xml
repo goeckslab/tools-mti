@@ -1,0 +1,202 @@
+<tool id="s3segmenter" name="s3segmenter" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>single cell (nuclei and cytoplasm) label masks.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+ 
+    <expand macro="requirements"/>
+    <expand macro="version_cmd"/>
+
+    <command detect_errors="exit_code"><![CDATA[
+
+        ln -s '${imagePath}' './image.tif' &&
+
+        #if $contoursClassProbPath
+        ln -s '${contoursClassProbPath}' './ContoursPM.tif' &&
+        #end if
+
+        #if $nucleiClassProbPath
+        ln -s '${nucleiClassProbPath}' './NucleiPM.tif' &&
+        #end if
+
+        #if $stackProbPath
+        ln -s '${stackProbPath}' './Probabilities.tif' &&
+        #end if
+
+
+        @CMD_BEGIN@ \$S3SEG_CMD 
+        --imagePath './image.tif'
+
+        #if $contoursClassProbPath
+        --contoursClassProbPath './ContoursPM.tif'
+        #end if
+
+        #if $nucleiClassProbPath
+        --nucleiClassProbPath './NucleiPM.tif'
+        #end if
+
+        #if $stackProbPath
+        --stackProbPath './Probabilities.tif'
+        #end if
+
+        --probMapChan $probMapChan
+        --crop $crop_select.crop
+        
+        #if $crop_select.crop == "dearray"
+          --maskPath '$crop_select.maskPath'
+        #end if
+
+        --cytoMethod $cytoMethod
+        --nucleiFilter $nucleiFilter
+        --nucleiRegion $nucleiRegion_select.nucleiRegion
+
+        #if $nucleiRegion_select.nucleiRegion == "pixellevel"
+          --pixelThreshold $nucleiRegion_select.pixelThreshold
+          --pixelMaskChan $nucleiRegion_select.pixelMaskChan
+        #end if
+
+        --segmentCytoplasm $segmentCytoplasm
+        --cytoDilation $adv.cytoDilation
+        --logSigma $adv.logSigma
+        --CytoMaskChan $adv.CytoMaskChan
+        ##--TissueMaskChan $adv.TissueMaskChan
+        --detectPuncta $adv.detectPuncta
+        --punctaSigma $adv.punctaSigma
+        --punctaSD $adv.punctaSD
+        $saveMask
+        $saveFig
+        --outputPath '.'
+    ]]></command>
+
+
+    <inputs>
+
+        <param name="imagePath" type="data" format="tiff" label="Image File"/>
+        <param name="contoursClassProbPath" type="data" format="tiff" optional="true" label="Contours Class Probabilities"/>
+        <param name="nucleiClassProbPath" type="data" format="tiff" optional="true" label="Nuclei Class Probabilities"/>
+        <param name="stackProbPath" type="data" format="tiff" optional="true" label="Stack Probabilities"/>
+        <param name="probMapChan" type="integer" value="-1" label="Probability Maps Channel"/>
+
+        <conditional name="crop_select">
+            <param name="crop" type="select" label="Crop Strategy">
+                <option selected="true" value="noCrop">No Crop</option>
+                <option value="autoCrop">Automatic Crop</option>
+                <option value="dearray">De-array</option>
+                <option value="plate">Plate</option>
+            </param>
+            <when value="dearray">
+                <param name="maskPath" type="data" format="tiff" label="TMA Mask File"/>
+            </when>
+            <when value="noCrop" />
+            <when value="autoCrop" />
+            <when value="plate" />
+        </conditional>
+
+        <param name="cytoMethod" type="select" label="Cyto Method">
+            <option value="hybrid">Hybrid</option>
+            <option selected="true" value="distanceTransform">Distance Transform</option>
+            <option value="bwdistanceTransform">BW Distance Transform</option>
+            <option value="ring">Ring</option>
+        </param>
+        <param name="nucleiFilter" type="select" label="Nuclei Filter">
+            <option selected="true" value="IntPM">IntPM</option>
+            <option value="LoG">LoG</option>
+            <option value="Int">Int</option>
+            <option value="none">none</option>
+        </param>
+
+        <conditional name="nucleiRegion_select">
+            <param name="nucleiRegion" type="select" label="Nuclei Region">
+                <option value="watershedContourDist">watershedContourDist</option>
+                <option selected="true" value="watershedContourInt">watershedContourInt</option>
+                <option value="watershedBWDist">watershedBWDist</option>
+                <option value="dilation">dilation</option>
+                <option value="localThreshold">localThreshold</option>
+                <option value="localMax">localMax</option>
+                <option value="bypass">bypass</option>
+                <option value="pixellevel">pixellevel</option>
+            </param>
+            <when value="pixellevel">
+                <param name="pixelThreshold" type="float" value="-1.0" label="Pixel Threshold"/>
+                <param name="pixelMaskChan" type="text" value="2" label="Pixel Mask Channel"/>
+            </when>
+             <when value="watershedContourDist"/>
+             <when value="watershedContourInt"/>
+             <when value="watershedBWDist"/>
+             <when value="dilation"/>
+             <when value="localThreshold"/>
+             <when value="localMax"/>
+             <when value="bypass"/>
+        </conditional>
+
+        <param name="segmentCytoplasm" type="select" label="Segment Cytoplasm">
+            <option value="segmentCytoplasm">segmentCytoplasm</option>
+            <option selected="true" value="ignoreCytoplasm">ignoreCytoplasm</option>
+        </param>
+        <param argument="saveMask" type="boolean" checked="true" truevalue="--saveMask" falsevalue="" label="Save Mask"/>
+        <param argument="saveFig" type="boolean" checked="true" truevalue="--saveFig" falsevalue="" label="Save Figure"/>
+
+        <section name="adv" title="Advanced Options" expanded="false">
+            <param name="cytoDilation" type="integer" value="5" label="Cyto Dilation"/>
+            <param name="logSigma" type="text" value="3 60" label="logSigma"/>
+            <param name="CytoMaskChan" type="text" value="2" label="Cyto Mask Channel"/>
+            <!-- Bug with S3Segmenter code, expects int not list
+            <param name="TissueMaskChan" type="text" value="-1" label="Tissue Mask Channel"/>
+            -->
+            <param name="detectPuncta" type="text" value="-1" label="Detect Puncta"/>
+            <param name="punctaSigma" type="text" value="1" label="Puncta Sigma"/>
+            <param name="punctaSD" type="text" value="4" label="Puncta SD"/>
+        </section>
+        
+
+    </inputs>
+    <outputs>
+        <data format="tiff" name="cell_mask" from_work_dir="image/cell.ome.tif" label="cellMasks">
+            <filter>saveMask is True</filter>
+        </data>
+        <data format="tiff" name="nuclei_mask" from_work_dir="image/nuclei.ome.tif" label="nucleiMasks">
+            <filter>saveMask is True</filter>
+        </data>
+	<data format="tiff" name="cell_outlines" from_work_dir="image/qc/cellOutlines.ome.tif" label="cellOutlines">
+            <filter>saveFig is True</filter>
+        </data>
+	<data format="tiff" name="nuclei_outlines" from_work_dir="image/qc/nucleiOutlines.ome.tif" label="nucleiOutlines">
+            <filter>saveFig is True</filter>
+        </data>
+    </outputs>
+    <tests>
+        <test>
+            <param name="imagePath" value="test.ome.tiff" />
+            <param name="stackProbPath" value="stack_probabilities.tiff" />
+            <param name="punctaSD" value="4" />
+            <output name="cell_mask" ftype="tiff">
+                <assert_contents>
+                    <has_size value="6600000" delta="1000000" />
+                </assert_contents>
+            </output>
+            <output name="nuclei_mask" ftype="tiff">
+                <assert_contents>
+                    <has_size value="6600000" delta="1000000" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+-------------------        
+S3segmenter
+-------------------        
+**S3segmenter** is a Python-based set of functions that generates single cell (nuclei and cytoplasm) label masks.
+
+Inputs are:
+
+1. an .ome.tif (preferably flat field corrected)
+2. a 3-class probability maps derived from a deep learning model such as UNet. Classes include background, nuclei contours, and nuclei foreground.
+
+The centers of each nuclei are obtained by finding local maxima from the nuclei foreground. These are used for marker-controlled watershed constrained by the nuclei contours.
+
+To segment cytoplasm, the nuclei are in turn used for a marker-controlled watershed segmentation constrained by a cytoplasmic marker such as B-catenin. The channel number of this marker must be specified. A 3-pixel annulus around each nucleus will also be used to segment cytoplasm.
+
+The source repository can be found here: https://github.com/HMS-IDAC/S3segmenter
+    ]]></help>
+    <expand macro="citations" />
+</tool>

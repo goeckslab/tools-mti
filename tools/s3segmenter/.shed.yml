@@ -1,0 +1,6 @@
+owner: perssond
+name: s3segmenter
+description: "S3segmenter generates single cell (nuclei and cytoplasm) label masks"
+remote_repository_url: https://github.com/goeckslab/tools-mti/tree/main/tools/s3segmenter
+categories: 
+  - "Imaging"
