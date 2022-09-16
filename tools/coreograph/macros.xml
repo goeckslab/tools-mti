@@ -27,7 +27,7 @@
     </xml>
 
     <token name="@TOOL_VERSION@">2.2.8</token>
-    <token name="@VERSION_SUFFIX@">0</token>
+    <token name="@VERSION_SUFFIX@">1</token>
     <token name="@CMD_BEGIN@"><![CDATA[
     UNET_PATH="" &&
     if [ -f "/app/UNetCoreograph.py" ]; then
