@@ -7,7 +7,14 @@
     <expand macro="requirements"/>
     <expand macro="version_cmd"/>
 
-    <command detect_errors="exit_code"><![CDATA[
+    <stdio>
+        <regex match=".*XMLSyntaxError.*"
+               source="stderr"
+               level="fatal"
+               description="XML metadata does not adhere to OME format. Considering converting image to OME-TIFF" />
+    </stdio>
+
+    <command detect_errors="aggressive"><![CDATA[
 
         cp '$image' ./renamed_image.ome.tiff && 
 
