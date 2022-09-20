@@ -7,7 +7,7 @@
     <expand macro="requirements"/>
     <expand macro="version_cmd"/>
 
-    <command detect_errors="exit_code"><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
         #set $type_corrected = 'image.' + str($source_image.file_ext)
         ln -s '$source_image' '$type_corrected' &&
         

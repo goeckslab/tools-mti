@@ -8,15 +8,15 @@
         <token name="@VERSION_SUFFIX@">0</token>
     </macros>
     <edam_topics>
-        <edam_topic>topic_TODO</edam_topic>
+        <edam_topic>topic_4019</edam_topic>
     </edam_topics>
     <edam_operations>
-        <edam_operation>operation_TODO</edam_operation>
+        <edam_operation>operation_3429</edam_operation>
     </edam_operations>
     <requirements>
-        <requirement type="package" version="5.0.018">bash</requirementexample>
+        <requirement type="package" version="5.0.018">bash</requirement>
     </requirements>
-    <command detect_errors="exit_code"><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
         echo '$in' > '$out'
     ]]></command>
     <inputs>
@@ -33,10 +33,10 @@
     </outputs>
     <tests>
         <test>
-            <param name="in" value="test">
+            <param name="in" value="test" />
             <output name="out">
                 <assert_contents>
-                    <has_text text="test"/>
+                    <has_text text="test" />
                 </assert_contents>
             </output>
         </test>

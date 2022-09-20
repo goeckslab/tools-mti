@@ -7,7 +7,7 @@
     <expand macro="requirements"/>
     <expand macro="version_cmd"/>
 
-    <command detect_errors="exit_code"><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
     ln -s '$in_files' '${in_files.name}' &&
 
     #set $outname = str('$in_files.name').replace('.ome.tiff','')

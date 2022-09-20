@@ -7,7 +7,7 @@
     <expand macro="requirements"/>
     <expand macro="version_cmd"/>
 
-    <command detect_errors="exit_code"><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
         cp '$image' '$renamed_image' && 
         @CMD_BEGIN@ '$image' '$channel_csv' out.xml &&
         tiffcomment -set out.xml '$renamed_image'

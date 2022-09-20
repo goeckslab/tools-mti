@@ -4,7 +4,7 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements" />
-    <command detect_errors="exit_code">
+    <command detect_errors="aggressive">
         <![CDATA[
         #if $reports.selected_report == "QC":
         python '$__tool_directory__/QC/cycle_concordance.py'
