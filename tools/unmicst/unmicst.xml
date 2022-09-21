@@ -1,0 +1,109 @@
+<tool id="unmicst" name="UnMicst" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="19.01">
+    <description>Image segmentation - probability map generation</description>
+
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+ 
+    <expand macro="requirements"/>
+    <expand macro="version_cmd"/>
+
+    <command detect_errors="aggressive"><![CDATA[
+    #set $ext = str($image.file_ext)
+    #if $ext == 'tiff'
+        #set $ext = 'tif'
+    #end if
+    #set $input = 'image.' + str($ext) 
+
+    ln -s '$image' '$input' &&
+    
+    @CMD_BEGIN@ '$input'
+
+    --tool $tool
+    
+    #if $stackoutput
+        --stackOutput
+    #end if
+
+    --outputPath '.'
+    --channel $channel
+    --model $model
+    --mean $mean
+    --std $stdev
+    --scalingFactor $scalingfactor
+    --outlier $outlier &&
+
+    ## Move files to different files for from_work_dir differentiation
+    #if $stackoutput
+        mv *Probabilities*.tif Probabilities.tif &&
+        mv qc/*Preview*.tif Preview.tif
+    #else
+        mv *ContoursPM*.tif ContoursPM.tif &&
+        mv *NucleiPM*.tif NucleiPM.tif 
+    #end if
+    ]]></command>
+
+    <inputs>
+        <param name="tool" type="select" label="UnMicst Tool">
+            <option selected="true" value="unmicst-solo">unmicst-solo</option>
+            <option value="unmicst-duo">unmicst-duo</option>
+            <option value="unmicst-legacy">unmicst-legacy</option>
+            <option value="UnMicstCyto2">UnMicstCyto2</option>
+        </param>
+        <param name="image" type="data" format="tiff" label="Registered TIFF"/>
+        <param name="model" type="select" label="Model">
+            <option value="nucleiDAPI">nucleiDAPI</option>
+            <option value="CytoplasmIncell">CytoplasmIncell</option>
+            <option value="CytoplasmIncell2">CytoplasmIncell2</option>
+            <option value="CytoplasmZeissNikon">CytoplasmZeissNikon</option>
+            <option value="mousenucleiDAPI">mousenucleiDAPI</option>
+            <option value="nucleiDAPI1-5">nucleiDAPI1-5</option>
+            <option value="nucleiDAPILAMIN">nucleiDAPILAMIN</option>
+        </param>
+        <param name="mean" type="float" value="-1" label="Mean (-1 for model default)"/>
+        <param name="stdev" type="float" value="-1" label="Standard Deviation (-1 for model default)"/>
+        <param name="channel" type="integer" value="0" label="Channel to perform inference on"/>
+        <param name="stackoutput" type="boolean"  label="Stack probability map outputs"/>
+        <param name="scalingfactor" type="float" value="1.0" label="Factor to scale by"/>
+        <param name="outlier" type="float" value="-1.0" label="Map percentile intensity to max when rescaling intensity values"/>
+    </inputs>
+
+    <outputs>
+        <data format="tiff" name="previews" from_work_dir="Preview.tif" label="${tool.name} on ${on_string}: Preview">
+            <filter>stackoutput</filter>
+        </data>
+        <data format="tiff" name="probabilities" from_work_dir="Probabilities.tif" label="${tool.name} on ${on_string}: Probabilities">
+            <filter>stackoutput</filter>
+        </data>
+        <data format="tiff" name="contours" from_work_dir="ContoursPM.tif" label="${tool.name} on ${on_string}: ContoursPM">
+            <filter>not stackoutput</filter>
+        </data>
+        <data format="tiff" name="nuclei" from_work_dir="NucleiPM.tif" label="${tool.name} on ${on_string}: NucleiPM">
+            <filter>not stackoutput</filter>
+        </data>
+    </outputs>
+    <tests>
+        <test expect_num_outputs="2">
+            <param name="image" value="105.tif" ftype="tiff" />
+            <param name="model" value="nucleiDAPI" />
+            <param name="tool" value="unmicst-legacy"/>
+            <param name="channel" value="1"/>
+            <output name="nuclei" file="105_NucleiPM_1.tif" compare="sim_size" delta="10" />
+            <output name="contours" file="105_ContoursPM_1.tif" compare="sim_size" delta="10" />
+        </test>
+    </tests>
+    <help><![CDATA[
+-------
+UNMICST
+-------
+
+**UnMICST** uses a convolutional neural network to annotate each pixel with the probability that it belongs to a given subcellular component (nucleus, cytoplasm, cell boundary). Check the UnMICST website for the most up-to-date documentation.
+**Input**
+An .ome.tif, preferably flat field corrected. The model is trained on images acquired at a pixelsize of 0.65 microns/px. If your settings differ, you can upsample/downsample to some extent.
+**Output**
+1. a .tif stack where the different probability maps for each class are concatenated in the Z-axis in the order: nuclei foreground, nuclei contours, and background.
+2. a QC image with the DNA image concatenated with the nuclei contour probability map with suffix Preview
+More infortion available at: https://labsyspharm.github.io/UnMICST-info/.
+    ]]></help>
+    <expand macro="citations" />
+</tool>

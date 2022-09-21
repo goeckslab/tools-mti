@@ -1,11 +1,11 @@
 <macros>
-    <token name="@VERSION@">0.0.1</token>
-
+    <token name="@TOOL_VERSION@">1.0.4</token>
+    <token name="@VERSION_SUFFIX@">1</token>
     <token name="@PROFILE@">20.01</token>
 
     <xml name="vitessce_requirements">
         <requirements>
-            <container type="docker">quay.io/goeckslab/vitessce:1.0.4</container>
+            <container type="docker">quay.io/goeckslab/vitessce:@TOOL_VERSION@</container>
         </requirements>
     </xml>
 
@@ -16,7 +16,7 @@
     </xml>
 
     <xml name="vitessce_cmd" token_tool_id="vitessce_spatial">
-        <command>
+        <command detect_errors="aggressive">
         <![CDATA[
         export BF_MAX_MEM="\${GALAXY_MEMORY_MB}m" &&
         mkdir -p '${output.files_path}/A/0' &&
@@ -50,7 +50,10 @@
                         fi;
                     fi;
                 fi;
-                convert_cmd="bfconvert -pyramid-resolutions \$n_resolutions -pyramid-scale \$pyramid_scale -noflat '$masks' '${output.files_path}/A/0/masks01.ome.tiff'";
+                tile_info=\$(showinf -nopix -nometa -noflat '${output.files_path}/A/0/image01.ome.tiff' | grep '^\s*Tile\ssize\s*=' -m1);
+                tile_x=\$(echo "\$tile_info" | cut -d' ' -f4);
+                tile_y=\$(echo "\$tile_info" | cut -d' ' -f6);
+                convert_cmd="bfconvert -pyramid-resolutions \$n_resolutions -pyramid-scale \$pyramid_scale -noflat -tilex \$tile_x -tiley \$tile_y '$masks' '${output.files_path}/A/0/masks01.ome.tiff'";
                 echo "\n>\$convert_cmd";
                 eval \$convert_cmd;
                 masks_info_new=\$(showinf -nopix -nometa -noflat '${output.files_path}/A/0/masks01.ome.tiff');

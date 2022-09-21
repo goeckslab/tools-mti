@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<macros>
+    <xml name="requirements">
+        <requirements>
+            <!--
+            <requirement type="package" version="3.7">python</requirement>
+            <requirement type="package">scikit-learn</requirement>
+            <requirement version="0.14.2" type="package">scikit-image</requirement>
+            <requirement type="package">matplotlib</requirement>
+            <requirement version="2021.6.6" type="package">tifffile</requirement>
+            <requirement type="package">opencv</requirement>
+            -->  
+            <container type="docker">labsyspharm/s3segmenter:@TOOL_VERSION@</container>
+        </requirements>
+    </xml>
+
+    <xml name="citations">
+        <citations>
+        </citations>
+    </xml>
+
+    <token name="@TOOL_VERSION@">1.3.12</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+    <token name="@PROFILE@">19.01</token>
+    <token name="@CMD_BEGIN@"><![CDATA[
+        S3SEG_CMD="" &&
+        if [ -f "/app/S3segmenter.py" ]; then
+            export S3SEG_CMD="python /app/S3segmenter.py";
+            export PYTHONPATH="/app";
+        else
+            export S3SEG_CMD="S3segmenter.py";
+        fi &&
+    ]]></token>
+    <xml name="version_cmd">
+        <version_command>@CMD_BEGIN@ $S3SEG_CMD --help</version_command>
+    </xml>
+</macros>

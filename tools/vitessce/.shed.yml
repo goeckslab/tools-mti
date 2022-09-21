@@ -1,7 +1,6 @@
-
 owner: goeckslab
 categories:
-  - Single Cell Analysis
+  - Imaging
   - Visualization
 exclude:
   - dependencies

@@ -7,7 +7,7 @@
     <expand macro="requirements"/>
     <expand macro="version_cmd"/>
 
-    <command detect_errors="exit_code"><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
 
         #def clean(file,type)
           #set name_clean = str($file.element_identifier).replace('.ome.tiff','').replace('.tiff','').replace('.tiff.','')
