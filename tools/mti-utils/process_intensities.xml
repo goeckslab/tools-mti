@@ -1,4 +1,4 @@
-<tool id="cell_intensity_processing" name="Process single-cell intensities" version="0.0.1">
+<tool id="cell_intensity_processing" name="Process single-cell intensities" version="0.0.1" profile="19.01">
     <description>Options to correct for expsure time, autofluorescence subtraction, or compute signal-to-background ratio.</description>
     <macros>
         <import>macros.xml</import>
