@@ -8,8 +8,6 @@
         
         ln -s '$quant_table' ./quant.csv &&
 
-        ln -s '$channel_csv' ./channels.csv &&
-
         python '$script'
 
     ]]></command>
@@ -21,18 +19,20 @@ import pandas as pd
 
 cwd = os.getcwd()
 quant = pd.read_csv(os.path.join(cwd, 'quant.csv'), index_col = 0)
-marker_df = pd.read_csv(os.path.join(cwd, 'channels.csv'))
+marker_df = pd.read_csv('$channel_csv')
 
 markers_to_normalize = marker_df['marker_name'].to_list()
 
 for marker in markers_to_normalize:
 
-#if $exp.correct_exposure:
+#if $exp.exposure == 'correct_exposure':
     exp_time = marker_df.loc[marker_df['marker_name'] == marker, '${exp.exp_col}'].values[0]
     quant[marker] = quant[marker] / exp_time
 #end if
 
-#if $AF_method.select_method == 'subtract':
+#if $AF_method.select_method == 'dont_adjust':
+    pass
+#elif $AF_method.select_method == 'subtract':
     current_AF_channel = marker_df.loc[marker_df['marker_name'] == marker, '${AF_method.AF_col}'].values[0]
     if current_AF_channel in markers_to_normalize:
         quant[marker] = quant[marker] - quant[current_AF_channel]
@@ -48,20 +48,24 @@ quant.to_csv(os.path.join(cwd, 'processed_quant.csv'))
     </configfiles>
     <inputs>
         <param name="quant_table" type="data" format="csv" label="Input quantification table (csv)" />
-        <param name="channel_csv" type="data" format="csv" label="Channel Metadata (csv)"/>
+        <param name="channel_csv" type="data" format="csv" label="Channel Metadata (csv)" />
         <conditional name="exp">
-            <param name="correct_exposure" type="boolean" checked="false" label="Correct for exposure time"/>
-            <when value="true">
+            <param name="exposure" type="select" label="Select whether to divide intensities by exposure times">
+                <option value="dont_correct_exposure">No exposure correction</option>
+                <option value="correct_exposure">Exposure correction</option>
+            </param>
+            <when value="dont_correct_exposure" />
+            <when value="correct_exposure">
                 <param name="exp_col" type="text" value="exposure_time" label="Name of column in markers file containing exposure times" />
-            </when>
-            <when value="false">
             </when>
         </conditional>
         <conditional name="AF_method">
             <param name="select_method" type="select" label="Select method of autofluorescence/background adjustment">
+                <option value="dont_adjust">No AF/background adjustment</option>
                 <option value="subtract">Autofluorescence subtraction</option>
                 <option value="SBR">Signal-to-background ratio</option>
             </param>
+            <when value="dont_adjust" />
             <when value="subtract">
                 <param name="AF_col" type="text" value="AF_channel" label="Name of column in markers file containing respective AF channel for each marker" />
             </when>
@@ -78,7 +82,7 @@ quant.to_csv(os.path.join(cwd, 'processed_quant.csv'))
             <param name="quant_table" value="intensities.csv" />
             <param name="channel_csv" value="intensity_channels.csv" />
             <conditional name="exp">
-                <param name="correct_exposure" value="true" />
+                <param name="exposure" value="correct_exposure" />
             </conditional>
             <conditional name="AF_method">
                 <param name="select_method" value="SBR" />
