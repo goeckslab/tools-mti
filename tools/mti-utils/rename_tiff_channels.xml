@@ -1,4 +1,4 @@
-<tool id="rename_tiff_channels" name="Rename OME-TIFF Channels" version="@VERSION@.2" profile="19.01">
+<tool id="rename_tiff_channels" name="Rename OME-TIFF Channels" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
     <description>Change the channel names in the XML metadata of OME-TIFF images</description>
     <macros>
         <import>macros.xml</import>

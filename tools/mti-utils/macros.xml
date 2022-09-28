@@ -15,4 +15,6 @@
     </xml>
 
     <token name="@VERSION@">0.0.1</token>
+    <token name="@VERSION_SUFFIX@">1</token>
+    <token name="@PROFILE@">19.01</token>
 </macros>
