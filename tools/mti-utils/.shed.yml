@@ -8,7 +8,7 @@ auto_tool_repositories:
   name_template: "{{ tool_id }}"
   description_template: "Wrapper for MTI Utility: {{ tool_name }}"
 suite:
-  name: suite_mti-utils
+  name: suite_mti_utils
   description: "A suite of tool wrappers for Multiplex Tissue Imaging (MTI) utilities"
   long_description: |
     A suite of tool wrapper for Multiplex Tissue Imaging (MTI) utilities.
