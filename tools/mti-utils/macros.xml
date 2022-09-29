@@ -2,7 +2,7 @@
 <macros>
     <xml name="requirements">
         <requirements>
-            <container type="docker">quay.io/goeckslab/rename_tiff_channels:0.0.1</container>
+            <container type="docker">quay.io/goeckslab/mti_utils:0.0.1</container>
         </requirements>
     </xml>
 
@@ -15,5 +15,6 @@
     </xml>
 
     <token name="@VERSION@">0.0.1</token>
-    <token name="@CMD_BEGIN@">python3 ${__tool_directory__}/rename_tiff_channels.py</token>
+    <token name="@VERSION_SUFFIX@">1</token>
+    <token name="@PROFILE@">19.01</token>
 </macros>
