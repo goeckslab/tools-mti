@@ -54,8 +54,8 @@
         <test>
             <param name="nuclear_image" value="test.tiff" />
             <param name="compartment" value="nuclear" />
-            <param name="membrane_select.membrane_segment" value="False" />
-            <param name="image_mmp" value="0.65" />
+            <param name="membrane_segment" value="False" />
+            <param name="image_mpp" value="0.65" />
             <param name="squeeze" value="--squeeze" />
             <output name="mask" ftype="tiff">
                 <assert_contents>
