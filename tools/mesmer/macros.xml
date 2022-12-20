@@ -2,7 +2,7 @@
 <macros>
     <xml name="requirements">
         <requirements>
-            <container type="docker">quay.io/goeckslab/mesmer:@TOOL_VERSION@</container>
+            <container type="docker">quay.io/goeckslab/deepcell:@TOOL_VERSION@</container>
         </requirements>
     </xml>
     <xml name="stdio">
@@ -25,16 +25,43 @@
                description="Out of Memory" />
         </stdio>
     </xml>
-    <xml name="version_cmd">
-        <version_command>@CMD_BEGIN@ --help</version_command>
+
+    <xml name="watershed_adv_options">
+        <param name="maxima_smooth" type="integer" value="0"  label="Maxima Smooth"/>
+        <param name="interior_threshold" type="float" value="0.2"  label="Interior Threshold"/>
+        <param name="interior_smooth" type="integer" value="2"  label="Interior Smooth"/>
+        <param name="small_objects_threshold" type="integer" value="15"  label="Small Objects Threshold"/>
+        <param name="fill_holes_threshold" type="integer" value="15"  label="Fill Holes Threshold"/>
+        <param name="radius" type="integer" value="1"  label="Radius"/>
     </xml>
+
+    <xml name="nuclear_options_macro">
+        <section name="nuclear_options" title="Nuclear Options" expanded="true">   
+            <param name="nuclear_channels" type="text" value="0" label="The numerical indices of the channel(s) for the nuclear markers" help="No quotes, separated by comma. e.g. 0, 1."/>
+            <param name="pixel_expansion" type="integer" optional="true"  label="Number of pixels to expand nucleus"/>
+            <param name="maxima_threshold" type="float" value="0.1"  label="Maxima Threshold"/>
+            <section name="adv_options" title="Advanced Nuclear Options" expanded="false">
+                <expand macro="watershed_adv_options"/>
+            </section>
+        </section>
+    </xml>
+
+    <xml name="wc_options_macro">
+        <section name="wc_options" title="Whole Cell Options" expanded="true"> 
+            <param name="wc_channels" type="text" value="1"  label="The numerical indices of the channel(s) for the membrane markers" help="No quotes, separated by comma. e.g. 0, 1."/>
+            <param name="maxima_threshold" type="float" value="0.075"  label="Maxima Threshold"/>
+            <section name="adv_options" title="Advanced Whole Cell Options" expanded="false">
+                <expand macro="watershed_adv_options"/>
+            </section>
+        </section>
+    </xml>
+
     <xml name="citations">
         <citations>
             <citation type="doi">10.1038/s41587-021-01094-0</citation>
         </citations>
     </xml>
 
-    <token name="@TOOL_VERSION@">0.3.1</token>
-    <token name="@VERSION_SUFFIX@">1</token>
-    <token name="@CMD_BEGIN@">python /usr/src/app/run_app.py mesmer</token>
+    <token name="@TOOL_VERSION@">0.12.3</token>
+    <token name="@VERSION_SUFFIX@">2</token>
 </macros>
