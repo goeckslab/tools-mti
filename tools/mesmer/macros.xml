@@ -37,7 +37,6 @@
 
     <xml name="nuclear_options_macro">
         <section name="nuclear_options" title="Nuclear Options" expanded="true">   
-            <param name="nuclear_channels" type="text" value="0" label="The numerical indices of the channel(s) for the nuclear markers" help="No quotes, separated by comma. e.g. 0, 1."/>
             <param name="pixel_expansion" type="integer" optional="true"  label="Number of pixels to expand nucleus"/>
             <param name="maxima_threshold" type="float" value="0.1"  label="Maxima Threshold"/>
             <section name="adv_options" title="Advanced Nuclear Options" expanded="false">

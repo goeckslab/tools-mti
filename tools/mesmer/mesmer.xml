@@ -52,7 +52,7 @@ with tifffile.TiffFile("$image", is_ome=is_ome) as tiff:
     'maxima_threshold': $compartment_select.nuclear_options.maxima_threshold
     }
     
-    nuclear_indices = [int(x) for x in $compartment_select.nuclear_options.nuclear_channels.split(',')]
+    nuclear_indices = [int(x) for x in $nuclear_channels.split(',')]
     nuclear_channels = level_array.oindex[nuclear_indices, :, :]
     nuclear_channels = np.sum(nuclear_channels, axis = 0)
     #end if
@@ -115,6 +115,7 @@ tifffile.imsave("mask.tif", mask)
     </configfiles>
     <inputs>
         <param name="image" type="data" format="tiff, ome.tiff" label="Image containing the all marker(s)"/>
+        <param name="nuclear_channels" type="text" value="0" label="The numerical indices of the channel(s) for the nuclear markers" help="No quotes, separated by comma. e.g. 0, 1."/>
         <param name="image_mpp" type="float" value="0.5" label="Resolution of the image in microns-per-pixel"/>
         <param name="squeeze" type="boolean" checked="true" label="Whether to np.squeeze the outputs before saving"/>
         <conditional name="compartment_select">
@@ -162,8 +163,8 @@ tifffile.imsave("mask.tif", mask)
          <test>
             <param name="image" value="deepcell_test.tiff" ftype="tiff"/>
             <param name="compartment" value="whole-cell" />
-            <param name="wc_options.wc_channels" value="0, 1" />
-            <param name="wc_options.maxima_threshold" value="0.075" />
+            <param name="wc_channels" value="0, 1" />
+            <param name="maxima_threshold" value="0.075" />
             <param name="image_mpp" value="0.65" />
             <param name="squeeze" value="True" />
             <output name="mask" ftype="tiff">
@@ -176,8 +177,8 @@ tifffile.imsave("mask.tif", mask)
             <param name="image" value="deepcell_test.tiff" ftype="tiff"/>
             <param name="compartment" value="both" />
             <param name="image_mpp" value="0.65" />
-            <param name="wc_options.wc_channels" value="1" />
-            <param name="nuclear_options.nuclear_channels" value="0" />
+            <param name="wc_channels" value="1" />
+            <param name="nuclear_channels" value="0" />
             <param name="squeeze" value="True" />
             <output name="wc_mask" ftype="tiff">
                 <assert_contents>
