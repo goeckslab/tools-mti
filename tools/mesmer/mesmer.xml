@@ -51,11 +51,11 @@ with tifffile.TiffFile("$image", is_ome=is_ome) as tiff:
         #end for
     'maxima_threshold': $compartment_select.nuclear_options.maxima_threshold
     }
-    
+    #end if
+
     nuclear_indices = [int(x) for x in $nuclear_channels.split(',')]
     nuclear_channels = level_array.oindex[nuclear_indices, :, :]
     nuclear_channels = np.sum(nuclear_channels, axis = 0)
-    #end if
 
     #if $compartment_select.compartment != 'nuclear':
     wc_kwargs = {
@@ -72,9 +72,7 @@ with tifffile.TiffFile("$image", is_ome=is_ome) as tiff:
 
     ## stack the nuclear and membrane composite channels with nuclear in channel 0 and mem in channel 1
     ## mesmer expects dimensions to be (X,Y,Channel) so axis = -1
-    #if $compartment_select.compartment == 'whole-cell':
-    nuclear_channels = np.zeros(membrane_channels.shape)
-    #elif $compartment_select.compartment == 'nuclear':
+    #if $compartment_select.compartment == 'nuclear':
     membrane_channels = np.zeros(nuclear_channels.shape)
     #end if
     formatted_image = np.stack((nuclear_channels,membrane_channels), axis=-1)
