@@ -64,12 +64,12 @@
             <param name="channel_names" value="channels.csv" />
             <output name="cellmask" ftype="csv">
                 <assert_contents>
-                    <has_n_columns n="11" sep="," delta="1" />
+                    <has_n_lines n="264" delta="1" />
                 </assert_contents>
             </output>
             <output name="suppmask" ftype="csv">
                 <assert_contents>
-                    <has_n_columns n="11" sep="," delta="1" />
+                    <has_n_lines n="264" delta="1" />
                 </assert_contents>
             </output>
         </test>
