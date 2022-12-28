@@ -1,5 +1,7 @@
-ARG VERSION=0.3.1
+ARG VERSION=0.12.3
 
-FROM vanvalenlab/deepcell-applications:${VERSION}
+FROM vanvalenlab/deepcell-tf:${VERSION}
+
+RUN pip install imagecodecs zarr
 
 ENTRYPOINT []
