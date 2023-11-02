@@ -1,4 +1,4 @@
-<tool id="squidpy_spatial" name="Visualize multi-omics data" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+<tool id="squidpy_spatial" name="Analyze and visualize spatial multi-omics data" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
     <description>with Squidpy</description>
     <macros>
         <import>main_macros.xml</import>
