@@ -1,9 +1,13 @@
-<tool id="vitessce_spatial" name="Vitessce Visualization" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
-    <description>integrative visualization of multi-modal, spatial single-cell data</description>
+<tool id="vitessce_spatial" name="Run multi-modal single-cell visualization" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>with Vitessce</description>
 
     <macros>
         <import>main_macros.xml</import>
     </macros>
+
+    <edam_operations>
+        <edam_operation>operation_3443</edam_operation>
+    </edam_operations>
 
     <expand macro="vitessce_requirements"/>
     <expand macro="macro_stdio" />

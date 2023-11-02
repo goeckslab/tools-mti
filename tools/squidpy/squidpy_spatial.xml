@@ -1,8 +1,11 @@
-<tool id="squidpy_spatial" name="Squidpy Graph and Plotting" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
-    <description>for spatial analysis </description>
+<tool id="squidpy_spatial" name="Visualize multi-omics data" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>with Squidpy</description>
     <macros>
         <import>main_macros.xml</import>
     </macros>
+    <edam_operations>
+        <edam_operation>operation_3443</edam_operation>
+    </edam_operations>
     <expand macro="squidpy_requirements"/>
     <expand macro="macro_stdio" />
     <version_command>echo "@TOOL_VERSION@"</version_command>

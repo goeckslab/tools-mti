@@ -1,8 +1,11 @@
-<tool id="gate_finder" name="Gate Finder" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
-    <description>displays a series of gating outcomes using Vitessce</description>
+<tool id="gate_finder" name="Perform gating" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>with Vitessce</description>
     <macros>
         <import>main_macros.xml</import>
     </macros>
+    <edam_operations>
+        <edam_operation>operation_3443</edam_operation>
+    </edam_operations>
     <expand macro="vitessce_requirements"/>
     <expand macro="macro_stdio" />
     <version_command>echo "@VERSION@"</version_command>

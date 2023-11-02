@@ -1,8 +1,12 @@
-<tool id="rename_tiff_channels" name="Rename OME-TIFF Channels" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
-    <description>Change the channel names in the XML metadata of OME-TIFF images</description>
+<tool id="rename_tiff_channels" name="Rename OME-TIFF channels" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>with ome-types</description>
     <macros>
         <import>macros.xml</import>
     </macros>
+
+    <edam_operations>
+        <edam_operation>operation_3443</edam_operation>
+    </edam_operations>
  
     <expand macro="requirements"/>
     <expand macro="version_cmd"/>

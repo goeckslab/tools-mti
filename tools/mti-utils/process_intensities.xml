@@ -1,8 +1,11 @@
 <tool id="cell_intensity_processing" name="Process single-cell intensities" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
-    <description>Options to correct for exposure time, autofluorescence subtraction, or compute signal-to-background ratio.</description>
+    <description></description>
     <macros>
         <import>macros.xml</import>
     </macros>
+    <edam_operations>
+        <edam_operation>operation_3443</edam_operation>
+    </edam_operations>
     <expand macro="requirements" />
     <command detect_errors="aggressive"><![CDATA[
         
