@@ -46,7 +46,7 @@ with tifffile.TiffFile("$image", is_ome=is_ome) as tiff:
         #if $compartment_select.nuclear_options.pixel_expansion != '':
     'pixel_expansion': $compartment_select.nuclear_options.pixel_expansion,
         #end if
-        #for $key, $value in $dict.items($compartment_select.nuclear_options.adv_options)
+        #for $key, $value in $compartment_select.nuclear_options.adv_options.items():
     '$key': $value,
         #end for
     'maxima_threshold': $compartment_select.nuclear_options.maxima_threshold
@@ -59,7 +59,7 @@ with tifffile.TiffFile("$image", is_ome=is_ome) as tiff:
 
     #if $compartment_select.compartment != 'nuclear':
     wc_kwargs = {
-        #for $key, $value in $dict.items($compartment_select.wc_options.adv_options)
+        #for $key, $value in $compartment_select.wc_options.adv_options.items():
     '$key': $value,
         #end for
     'maxima_threshold': $compartment_select.wc_options.maxima_threshold
