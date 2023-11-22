@@ -147,7 +147,7 @@ tifffile.imsave("mask.tif", mask)
         </data>
     </outputs>
     <tests>
-         <test>
+         <test expect_num_outputs="1">
             <param name="image" value="deepcell_test.tiff" ftype="tiff"/>
             <param name="compartment" value="nuclear" />
             <param name="image_mpp" value="0.65" />
@@ -158,7 +158,7 @@ tifffile.imsave("mask.tif", mask)
                 </assert_contents>
             </output>
         </test>
-         <test>
+         <test expect_num_outputs="1">
             <param name="image" value="deepcell_test.tiff" ftype="tiff"/>
             <param name="compartment" value="whole-cell" />
             <param name="wc_channels" value="0, 1" />
@@ -171,7 +171,7 @@ tifffile.imsave("mask.tif", mask)
                 </assert_contents>
             </output>
         </test>
-         <test>
+         <test expect_num_outputs="2">
             <param name="image" value="deepcell_test.tiff" ftype="tiff"/>
             <param name="compartment" value="both" />
             <param name="image_mpp" value="0.65" />
