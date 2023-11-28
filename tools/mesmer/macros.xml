@@ -62,5 +62,5 @@
     </xml>
 
     <token name="@TOOL_VERSION@">0.12.3</token>
-    <token name="@VERSION_SUFFIX@">2</token>
+    <token name="@VERSION_SUFFIX@">3</token>
 </macros>
