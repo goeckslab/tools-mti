@@ -3,3 +3,5 @@ description: "Mesmer for whole-cell segmentation of multiplexed tissue imaging d
 remote_repository_url: https://github.com/goeckslab/tools-mti/tree/main/tools/mesmer
 categories:
   - "Imaging"
+long_description: "A deep-learning-enabled segmentation algorithm that generalizes to the full diversity of tissue types and imaging platforms in TissueNet, and achieves human-level performance. Mesmer enables the automated extraction of key cellular features, such as subcellular localization of protein signal. Mesmer can also harness cell lineage information in highly multiplexed datasets to quantify cell morphology changes during human gestation."
+homepage_url: https://deepcell.readthedocs.io/en/master/
