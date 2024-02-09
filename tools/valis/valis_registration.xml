@@ -1,0 +1,58 @@
+<tool id="valis_registration" name="Virtual alignment and registration of whole slide images" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="23.1">
+    <description>with VALIS</description>
+
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <expand macro="requirements" />
+    <expand macro="stdio"/>
+
+    <command detect_errors="exit_code"><![CDATA[
+        python $script
+    ]]></command>
+
+    <configfiles>
+        <configfile name="script">
+from valis import registration
+
+slide_src_dir="."
+results_dst_dir="registered"
+
+registrar = registration.Valis(slide_src_dir, results_dst_dir, reference_img_f=$reference, align_to_reference=True)
+rigid_registrar, non_rigid_registrar, error_df = registrar.register()
+
+# Save all registered slides as ome.tiff
+registrar.warp_and_save_slides(results_dst_dir, crop="all")
+
+registration.kill_jvm()
+        </configfile>
+    </configfiles>
+
+    <inputs>
+        <param type="collection" name="image_collection" format="" />
+        <param type="data" name="reference" format="tiff, ome.tiff" />
+    </inputs>
+
+    <outputs>
+        <data name="registered_image" format="data" />
+    </outputs>
+
+    <tests>
+         <test expect_num_outputs="1">
+            <param name="image_collection" value="" ftype=""/>
+            <param name="reference" value="nuclear" />
+            <output name="mask" ftype="ome.tiff">
+                <assert_contents>
+                    <has_size value="" delta="" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+        TODO: Fill in help.
+    ]]></help>
+
+    <expand macro="citations" />
+</tool>

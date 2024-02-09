@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<macros>
+    
+    <xml name="requirements">
+        <requirements>
+            <yield/>
+        <container type="docker">cdgatenbee/valis-wsi:@TOOL_VERSION@</container>
+        </requirements>
+    </xml>
+
+    <xml name="stdio">
+        <stdio>
+            <regex match="MemoryError"
+               source="both"
+               level="fatal_oom"
+               description="Out of Memory" />
+            <regex match="std::bad_alloc"
+               source="both"
+               level="fatal_oom"
+               description="Out of Memory" />
+            <regex match="java.lang.OutOfMemoryError"
+               source="both"
+               level="fatal_oom"
+               description="Out of Memory" />
+            <regex match="Out of memory"
+               source="both"
+               level="fatal_oom"
+               description="Out of Memory" />
+        </stdio>
+    </xml>
+
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1038/s41467-023-40218-9</citation>
+            <yield />
+        </citations>
+    </xml>
+
+    <token name="@TOOL_VERSION@">1.0.4</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+</macros>
