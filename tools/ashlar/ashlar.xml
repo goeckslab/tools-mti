@@ -97,7 +97,6 @@
             <param name="tile_size" type="integer"  optional="true" label="Cyto Mask Channel"/>
             <param name="flip_mosaic_x" type="boolean" truevalue="--flip-mosaic-x" falsevalue="" label="Flip output image horizontally"/>
             <param name="flip_mosaic_y" type="boolean" truevalue="--flip-mosaic-y" falsevalue="" label="Flip output image vertically"/>
-            <param name="pyramid" type="boolean" checked="true" truevalue="--pyramid" falsevalue="" label="Write output as a single pyramidal TIFF"/>
         </section>
     </inputs>
 
