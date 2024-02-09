@@ -3,5 +3,8 @@ name: ashlar
 description: "Alignment by Simultaneous Harmonization of Layer/Adjacency Registration
 Usage"
 remote_repository_url: https://github.com/ohsu-comp-bio/ashlar
+homepage_url: https://github.com/labsyspharm/ashlar
+long_description: |
+  Ashlar performs fast, high-quality stitching of microscopy images. It also co-registers multiple rounds of cyclic imaging for methods such as CyCIF and CODEX. Ashlar can read image data directly from BioFormats-supported microscope vendor file formats as well as a directory of plain TIFF files. Output is saved as pyramidal, tiled OME-TIFF.
 categories: 
   - "Imaging"
