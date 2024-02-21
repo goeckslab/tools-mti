@@ -1,6 +1,8 @@
 owner: perssond
 name: basic_illumination
 description: "Perform lighting correction for microscopy images"
+long_description: "ImageJ BaSiC shading correction for use with Ashlar"
 remote_repository_url: https://github.com/labsyspharm/basic-illumination 
+homepage_url: https://github.com/labsyspharm/basic-illumination
 categories: 
   - "Imaging"
