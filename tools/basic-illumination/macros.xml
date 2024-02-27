@@ -15,8 +15,8 @@
         </citations>
     </xml>
 
-    <token name="@TOOL_VERSION@">1.0.3</token>
-    <token name="@VERSION_SUFFIX@">1</token>
+    <token name="@TOOL_VERSION@">1.1.1</token>
+    <token name="@VERSION_SUFFIX@">2</token>
     <token name="@PROFILE@">19.01</token>
     <token name="@CMD_BEGIN@"><![CDATA[
         ## if ImageJ isn't already present, this is the docker-dependency version

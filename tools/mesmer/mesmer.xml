@@ -50,7 +50,7 @@ with tifffile.TiffFile("$image", is_ome=is_ome) as tiff:
         #if $compartment_select.nuclear_options.pixel_expansion != '':
     'pixel_expansion': $compartment_select.nuclear_options.pixel_expansion,
         #end if
-        #for $key, $value in $dict.items($compartment_select.nuclear_options.adv_options)
+        #for $key, $value in $compartment_select.nuclear_options.adv_options.items():
     '$key': $value,
         #end for
     'maxima_threshold': $compartment_select.nuclear_options.maxima_threshold
@@ -63,7 +63,7 @@ with tifffile.TiffFile("$image", is_ome=is_ome) as tiff:
 
     #if $compartment_select.compartment != 'nuclear':
     wc_kwargs = {
-        #for $key, $value in $dict.items($compartment_select.wc_options.adv_options)
+        #for $key, $value in $compartment_select.wc_options.adv_options.items():
     '$key': $value,
         #end for
     'maxima_threshold': $compartment_select.wc_options.maxima_threshold
@@ -151,7 +151,7 @@ tifffile.imsave("mask.tif", mask)
         </data>
     </outputs>
     <tests>
-         <test>
+         <test expect_num_outputs="1">
             <param name="image" value="deepcell_test.tiff" ftype="tiff"/>
             <param name="compartment" value="nuclear" />
             <param name="image_mpp" value="0.65" />
@@ -162,7 +162,7 @@ tifffile.imsave("mask.tif", mask)
                 </assert_contents>
             </output>
         </test>
-         <test>
+         <test expect_num_outputs="1">
             <param name="image" value="deepcell_test.tiff" ftype="tiff"/>
             <param name="compartment" value="whole-cell" />
             <param name="wc_channels" value="0, 1" />
@@ -175,7 +175,7 @@ tifffile.imsave("mask.tif", mask)
                 </assert_contents>
             </output>
         </test>
-         <test>
+         <test expect_num_outputs="2">
             <param name="image" value="deepcell_test.tiff" ftype="tiff"/>
             <param name="compartment" value="both" />
             <param name="image_mpp" value="0.65" />
