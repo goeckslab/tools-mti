@@ -1,0 +1,16 @@
+owner: goeckslab
+categories:
+  - Imaging
+  - Proteomics
+exclude:
+  - dependencies
+remote_repository_url: https://github.com/goeckslab/tools-mti/tree/main/tools/celesta
+homepage_url: https://github.com/plevritis-lab/CELESTA
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "Wrapper for CELESTA tool: {{ tool_name }}"
+suite:
+  name: suite_celesta
+  description: A suite of tool wrappers for cell type assignment of multiplex tissue imaging data using the CELESTA R package.
+  long_description: |
+    CELESTA (CELl typE identification with SpaTiAl information) is an algorithm aiming to perform automate cell type identification for multiplexed in situ imaging data. CELESTA makes use of both protein expressions and cell spatial neighborhood information from segmented imaging data for the cell type identification.

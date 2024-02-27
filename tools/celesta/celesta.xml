@@ -1,0 +1,88 @@
+<tool id="celesta" name="CELESTA cell typing" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>Cell type identification with spatial information</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="celesta_requirements"/>
+    <expand macro="macro_stdio" />
+    <version_command>echo "@VERSION@"</version_command>
+    <command detect_errors="aggressive">
+        <![CDATA[
+        Rscript '$__tool_directory__/celesta_plot_expression.R'
+            --inputs '$inputs'
+            --anndata '$anndata'
+            --output '$output'
+
+        ]]>
+    </command>
+    <configfiles>
+        <inputs name="inputs" />
+    </configfiles>
+    <inputs>
+        <param name="anndata" type="data" format="h5ad" label="Input anndata" />
+        <conditional name="runmode">
+            <param name="selected_mode" type="select" label="Select which CELESTA mode to run">
+                <option value="plot_expression" selected="true">Plot the calculated expression probabilities for each marker in the cell type signature matrix</option>
+                <option value="assign_cells">Run the cell type assignment</option>
+                <option value="plot_cells">Plot assigned cell type labels</option>
+            </param>
+            <when value="plot_expression">
+                <expand macro="celesta_base_options" label="plot_expression">
+                </expand>
+            </when>
+            <when value="assign_cells">
+                <expand macro="celesta_base_options" label="plot_expression">
+                    <param name="cmatrix" type="data" format="csv" label="Cell type signature matrix" />
+                </expand>
+            </when>
+            <when value="plot_cells">
+                <expand macro="celesta_base_options" label="plot_expression">
+                    <param name="cmatrix" type="data" format="csv" label="Cell type signature matrix" />
+                </expand>
+            </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data name="plot_expression_output" format="png" label="CELESTA plot expression output">
+            <filter>"plot_expression" in selected_mode</filter>
+        </data>
+        <data name="assign_cells_output" format="h5ad" label="CELESTA assign cells output" >
+            <filter>"assign_cells" in selected_mode</filter>
+        </data>
+        <data name="plot_cells_output" format="png" label="CELESTA plot cells output">
+            <filter>"plot_cells" in selected_mode</filter>
+        </data>
+    </outputs>
+    <tests>
+        <test>
+            <param name="anndata" value="test.h5ad" />
+            <conditional name="runmode">
+                <param name="selected_mode" value="assign_cells" />
+            </conditional>
+            <output name="assign_cells_output">
+                <assert_contents>
+                    <has_h5_keys keys="obs/cell_type" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help>
+        <![CDATA[
+**What it does**
+
+Cell type assignment with CELESTA
+
+**Input**
+
+Inputs!
+
+**Output**
+
+Outputs!
+
+
+        ]]>
+    </help>
+    <citations>
+    </citations>
+</tool>

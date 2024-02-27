@@ -1,0 +1,32 @@
+<macros>
+    <token name="@TOOL_VERSION@">0.0.0.9</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+    <token name="@PROFILE@">20.01</token>
+
+    <xml name="celesta_requirements">
+        <requirements>
+            <container type="docker">quay.io/goeckslab/celesta:@TOOL_VERSION@</container>
+            <yield />
+        </requirements>
+    </xml>
+
+    <xml name="macro_stdio">
+        <stdio>
+            <exit_code range="1:" level="fatal" description="Error occurred. Please check Tool Standard Error" />
+        </stdio>
+    </xml>
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1038/s41592-022-01498-z</citation>
+        </citations>
+    </xml>
+    <xml name="celesta_base_options" token_label="token_label_changeme">
+        <section name="options" title="Advanced Options" expanded="false">
+            <param argument="project_title" type="text" value="project_title" optional="false" label="Title for CELESTA run" />
+            <param argument="prior_info" type="data" format="csv" />
+            <param argument="filter" optional="false" type="boolean" truevalue="booltrue" falsevalue="boolfalse" checked="false" label="Filter out cells outside marker expression thresholds" help="Filtering will be applied" />
+            <param argument="high_threshold" type="float" value="0.9" optional="true" label="Cells above high threshold will be filtered out" help="Set the high threshold for filtering cells" />
+            <param argument="low_threshold" type="float" value="0.4" optional="true" label="Cells below low threshold will be filtered out" help="Set the low threshold for filtering cells" />
+        </section>
+    </xml>
+</macros>
