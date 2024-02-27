@@ -344,6 +344,5 @@ This tool includes various of single cell spatial analysis utils provided by Squ
 
         ]]>
     </help>
-    <citations>
-    </citations>
+    <expand macro="citations" />
 </tool>
