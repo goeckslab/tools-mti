@@ -260,7 +260,7 @@
         </data>
     </outputs>
     <tests>
-        <test>
+        <test expect_num_outputs="1">
             <param name="anndata" value="imc.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="spatial_neighbors" />
             <output name="output">
@@ -269,7 +269,7 @@
                 </assert_contents>
             </output>
         </test>
-        <test>
+        <test expect_num_outputs="2">
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="nhood_enrichment" />
             <param name="cluster_key" value="cell type" />
@@ -280,7 +280,7 @@
             </output>
             <output name="output_plot" file="imc_nhood_enrichment.png" compare="sim_size" delta="2000" />
         </test>
-        <test>
+        <test expect_num_outputs="2">
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="co_occurrence" />
             <param name="cluster_key" value="cell type" />
@@ -291,7 +291,7 @@
             </output>
             <output name="output_plot" file="imc_co_occurrence.png" compare="sim_size" delta="2000" />
         </test>
-        <test>
+        <test expect_num_outputs="2">
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="centrality_scores" />
             <param name="cluster_key" value="cell type" />
@@ -302,7 +302,7 @@
             </output>
             <output name="output_plot" file="imc_centrality_scores.png" compare="sim_size" delta="2000" />
         </test>
-        <test>
+        <test expect_num_outputs="2">
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="interaction_matrix" />
             <param name="cluster_key" value="cell type" />
@@ -313,7 +313,7 @@
             </output>
             <output name="output_plot" file="imc_interaction_matrix.png" compare="sim_size" delta="2000" />
         </test>
-        <test>
+        <test expect_num_outputs="2">
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="ripley" />
             <param name="cluster_key" value="cell type" />
