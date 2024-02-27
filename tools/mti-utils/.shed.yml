@@ -1,5 +1,11 @@
 owner: goeckslab
 remote_repository_url: https://github.com/goeckslab/tools-mti/tree/main/tools/mti-utils
+homepage_url: https://github.com/goeckslab/tools-mti/tree/main/tools/mti-utils
+long_description: |
+    A suite of tool wrapper for Multiplex Tissue Imaging (MTI) utilities.
+    These include simple custom scripts for renaming channels in OME-TIFF metadata, 
+    and singal-processing for tabular intensity data. More utilities may be added in
+    the future. 
 categories:
   - Imaging
 exclude:

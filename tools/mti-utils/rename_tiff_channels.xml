@@ -86,6 +86,9 @@ print(tiffcomment(os.path.join(cwd, 'renamed_image.ome.tiff')))
         </test>
     </tests>
     <help><![CDATA[
+    Given an OME.TIFF image and channel metadata CSV file, rename the image channels in the 
+    OME XML metadata. CSV file must contain column 'marker_name' which will populate the XML
+    metadata with channel names in the order provided in the CSV file. 
     ]]></help>
     <expand macro="citations" />
 </tool>
