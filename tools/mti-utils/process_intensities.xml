@@ -112,8 +112,7 @@ tissue imaging data.
 3. Signal-to-background ratio - Divide single-cell mmean marker intensities by respective AF/bg channel mean intensity specified in channel metadata
 
 **Outputs**
-1. Feature observation matrix with processed intensities for all markers in channel metadata file. 
-   CellIDs, centroids, and morphological data remain unchanged.
+1. Feature observation matrix with processed intensities for all markers in channel metadata file. CellIDs, centroids, and morphological data remain unchanged.
     ]]></help>
     <expand macro="citations" />
 </tool>
