@@ -20,11 +20,11 @@
     </configfiles>
     <inputs>
         <param name="anndata" type="data" format="h5ad" label="Input anndata" />
+        <param name="prior_info" type="data" format="csv" label="Cell-type signature matrix" />
         <conditional name="runmode">
             <param name="selected_mode" type="select" label="Select which CELESTA mode to run">
-                <option value="plot_expression" selected="true">Plot the calculated expression probabilities for each marker in the cell type signature matrix</option>
+                <option value="plot_expression" selected="true">Calculate and plot expression probabilities for each marker in the cell type signature matrix</option>
                 <option value="assign_cells">Run the cell type assignment</option>
-                <option value="plot_cells">Plot assigned cell type labels</option>
             </param>
             <when value="plot_expression">
                 <expand macro="celesta_base_options" label="plot_expression">
@@ -32,13 +32,24 @@
             </when>
             <when value="assign_cells">
                 <expand macro="celesta_base_options" label="plot_expression">
-                    <param name="cmatrix" type="data" format="csv" label="Cell type signature matrix" />
                 </expand>
-            </when>
-            <when value="plot_cells">
-                <expand macro="celesta_base_options" label="plot_expression">
-                    <param name="cmatrix" type="data" format="csv" label="Cell type signature matrix" />
-                </expand>
+                <section name="options" title="Advanced Options" expanded="false">
+                    <param argument="max_iteration" type="integer" value="10" label="Define the maximum iterations allowed in the EM algorithm per round" />
+                    <param argument="cell_change_threshold" type="float" value="0.01" label="Define an ending condition for the EM algorithm" help="0.01 means that when fewer than 1% of the total number of cells do not change identity, the algorithm will stop" />
+                    <param name="thresholds_file" type="data" format="csv" optional="true" label="Provide a file mapping anchor and index cell assignment thresholds to cell types" />
+                </section>
+                <conditional name="plot_cells">
+                    <param name="plot_cells" type="select" label="Choose whether to plot resulting cell type assignments">
+                        <option value="no_plot" selected="true">Do not generate plots</option>
+                        <option value="plot">Plot the resulting cell type assingments</option>
+                    </param>
+                    <when value="no_plot">
+                    </when>
+                    <when value="plot">
+                        <param name="cell_types" type="text" label="Provide a comma-separated list of cell type names to plot together" />
+                        <param argument="test_size" type="integer" value="1" label="Specify the point size for plotting cells" />
+                    </when>
+                </conditional>
             </when>
         </conditional>
     </inputs>
@@ -49,9 +60,9 @@
         <data name="assign_cells_output" format="h5ad" label="CELESTA assign cells output" >
             <filter>"assign_cells" in selected_mode</filter>
         </data>
-        <data name="plot_cells_output" format="png" label="CELESTA plot cells output">
-            <filter>"plot_cells" in selected_mode</filter>
-        </data>
+        <!-- <data name="plot_cells_output" format="png" label="CELESTA plot cells output">
+            <filter>"assign_cells" in selected_mode AND plot cells param</filter> 
+        </data> -->
     </outputs>
     <tests>
         <test>
