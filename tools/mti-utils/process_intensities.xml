@@ -1,8 +1,11 @@
 <tool id="cell_intensity_processing" name="Process single-cell intensities" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
-    <description>Options to correct for exposure time, autofluorescence subtraction, or compute signal-to-background ratio.</description>
+    <description></description>
     <macros>
         <import>macros.xml</import>
     </macros>
+    <edam_operations>
+        <edam_operation>operation_3443</edam_operation>
+    </edam_operations>
     <expand macro="requirements" />
     <command detect_errors="aggressive"><![CDATA[
         
@@ -109,8 +112,7 @@ tissue imaging data.
 3. Signal-to-background ratio - Divide single-cell mmean marker intensities by respective AF/bg channel mean intensity specified in channel metadata
 
 **Outputs**
-1. Feature observation matrix with processed intensities for all markers in channel metadata file. 
-   CellIDs, centroids, and morphological data remain unchanged.
+1. Feature observation matrix with processed intensities for all markers in channel metadata file. CellIDs, centroids, and morphological data remain unchanged.
     ]]></help>
     <expand macro="citations" />
 </tool>

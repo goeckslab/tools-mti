@@ -1,8 +1,11 @@
-<tool id="squidpy_spatial" name="Squidpy Graph and Plotting" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
-    <description>for spatial analysis </description>
+<tool id="squidpy_spatial" name="Analyze and visualize spatial multi-omics data" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>with Squidpy</description>
     <macros>
         <import>main_macros.xml</import>
     </macros>
+    <edam_operations>
+        <edam_operation>operation_3443</edam_operation>
+    </edam_operations>
     <expand macro="squidpy_requirements"/>
     <expand macro="macro_stdio" />
     <version_command>echo "@TOOL_VERSION@"</version_command>
@@ -257,7 +260,7 @@
         </data>
     </outputs>
     <tests>
-        <test>
+        <test expect_num_outputs="1">
             <param name="anndata" value="imc.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="spatial_neighbors" />
             <output name="output">
@@ -266,7 +269,7 @@
                 </assert_contents>
             </output>
         </test>
-        <test>
+        <test expect_num_outputs="2">
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="nhood_enrichment" />
             <param name="cluster_key" value="cell type" />
@@ -277,7 +280,7 @@
             </output>
             <output name="output_plot" file="imc_nhood_enrichment.png" compare="sim_size" delta="2000" />
         </test>
-        <test>
+        <test expect_num_outputs="2">
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="co_occurrence" />
             <param name="cluster_key" value="cell type" />
@@ -288,7 +291,7 @@
             </output>
             <output name="output_plot" file="imc_co_occurrence.png" compare="sim_size" delta="2000" />
         </test>
-        <test>
+        <test expect_num_outputs="2">
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="centrality_scores" />
             <param name="cluster_key" value="cell type" />
@@ -299,7 +302,7 @@
             </output>
             <output name="output_plot" file="imc_centrality_scores.png" compare="sim_size" delta="2000" />
         </test>
-        <test>
+        <test expect_num_outputs="2">
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="interaction_matrix" />
             <param name="cluster_key" value="cell type" />
@@ -310,7 +313,7 @@
             </output>
             <output name="output_plot" file="imc_interaction_matrix.png" compare="sim_size" delta="2000" />
         </test>
-        <test>
+        <test expect_num_outputs="2">
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="ripley" />
             <param name="cluster_key" value="cell type" />
@@ -341,6 +344,5 @@ This tool includes various of single cell spatial analysis utils provided by Squ
 
         ]]>
     </help>
-    <citations>
-    </citations>
+    <expand macro="citations" />
 </tool>

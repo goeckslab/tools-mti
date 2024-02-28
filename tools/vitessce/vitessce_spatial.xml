@@ -1,9 +1,13 @@
-<tool id="vitessce_spatial" name="Vitessce Visualization" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
-    <description>integrative visualization of multi-modal, spatial single-cell data</description>
+<tool id="vitessce_spatial" name="Run multi-modal single-cell visualization" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>with Vitessce</description>
 
     <macros>
         <import>main_macros.xml</import>
     </macros>
+
+    <edam_operations>
+        <edam_operation>operation_3443</edam_operation>
+    </edam_operations>
 
     <expand macro="vitessce_requirements"/>
     <expand macro="macro_stdio" />
@@ -18,10 +22,14 @@
         <param name="image" type="data" format="ome.tiff" label="Select the OME Tiff image" />
         <param name="masks" type="data" format="tiff,ome.tiff" optional="true" label="Select masks for the OME Tiff image (Optional)" />
         <conditional name="do_phenotyping">
-            <param name="phenotyping_choice" type="boolean" checked="true" label="Whether to do phenotyping">
+            <param name="phenotyping_choice" type="select" label="Add annotations or visualizations from Anndata file">
+                <option value="no_h5ad" selected="true">Do not add elements from Anndata file</option>
+                <option value="add_h5ad">Add elements from Anndata file</option>
             </param>
-            <when value="true">
-                <param name="anndata" type="data" format="h5ad" label="Select the anndata contaning phenotyping info" />
+            <when value="no_h5ad">
+            </when>
+            <when value="add_h5ad">
+                <param name="anndata" type="data" format="h5ad" label="Select the anndata file" />
                 <conditional name="scatterplot_embeddings">
                     <param name="embedding" type="select" label="Select an embedding algorithm for scatterplot">
                         <option value="umap" selected="true">UMAP</option>
@@ -58,7 +66,7 @@
                     </when>
                 </conditional>
                 <conditional name="phenotype_factory">
-                    <param name="phenotype_mode" type="select" label="Input phenotyping keys">
+                    <param name="phenotype_mode" type="select" label="Input the anndata key to display">
                         <option value="choices" selected="true">Multiple choices</option>
                         <option value="type_in">Type in</option>
                     </param>
@@ -76,8 +84,6 @@
                     </when>
                 </conditional>
             </when>
-            <when value="false">
-            </when>
         </conditional>
     </inputs>
     <outputs>
@@ -87,7 +93,7 @@
         <test>
             <param name="image" value="cropped_reactive_core.ome.tiff" ftype="ome.tiff" />
             <conditional name="do_phenotyping">
-                <param name="phenotyping_choice" value="yes" />
+                <param name="phenotyping_choice" value="add_h5ad" />
                 <param name="anndata" value="cropped_tutorial_data_pheno.h5ad" ftype="h5ad" />
                 <conditional name="phenotype_factory">
                     <param name="phenotype_mode" value="type_in" />
@@ -99,7 +105,7 @@
         <test>
             <param name="image" value="cropped_reactive_core.ome.tiff" ftype="ome.tiff" />
             <conditional name="do_phenotyping">
-                <param name="phenotyping_choice" value="yes" />
+                <param name="phenotyping_choice" value="add_h5ad" />
                 <param name="anndata" value="cropped_tutorial_data_pheno.h5ad" ftype="h5ad" />
                 <conditional name="scatterplot_embeddings">
                     <param name="embedding" value="pca" />
@@ -114,7 +120,7 @@
         <test>
             <param name="image" value="cropped_reactive_core.ome.tiff" ftype="ome.tiff" />
             <conditional name="do_phenotyping">
-                <param name="phenotyping_choice" value="no" />
+                <param name="phenotyping_choice" value="no_h5ad" />
             </conditional>
             <output name="output" file="tutorial_vitessce.html" compare="sim_size" delta="20" />
         </test>
