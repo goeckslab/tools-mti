@@ -17,7 +17,7 @@
         <param name="image" type="data" format="ome.tiff" label="Select the image (OME-TIFF)" />
         <param name="masks" type="data" format="tiff,ome.tiff" optional="true" label="Select masks for the OME Tiff image (Optional)" />
         <section name="do_phenotyping" title=" ">
-            <param name="phenotyping_choice" type="hidden" value="true"/>
+            <param name="phenotyping_choice" type="hidden" value="add_h5ad"/>
         </section>
         <param name="phenotyping_choice" type="hidden" value="yes" />
         <param name="anndata" type="data" format="h5ad" label="Select the anndata containing marker intensities" />
