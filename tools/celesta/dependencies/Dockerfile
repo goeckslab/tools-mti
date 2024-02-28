@@ -2,7 +2,8 @@ FROM jupyter/base-notebook:latest
 
 COPY requirements.txt /tmp/
 
-RUN conda config --set channel_priority strict \
+RUN conda config --add channels bioconda \
+    # && conda config --set channel_priority strict \
     && mamba install -y --file /tmp/requirements.txt \
     && mamba clean -yaf
 
