@@ -1,6 +1,6 @@
 <macros>
     <token name="@TOOL_VERSION@">1.0.4</token>
-    <token name="@VERSION_SUFFIX@">2</token>
+    <token name="@VERSION_SUFFIX@">3</token>
     <token name="@PROFILE@">20.01</token>
 
     <xml name="vitessce_requirements">
@@ -70,7 +70,7 @@
             #if $masks
                 --masks '${output.files_path}/A/0/masks01.ome.tiff'
             #end if
-            #if $do_phenotyping.phenotyping_choice
+            #if $do_phenotyping.phenotyping_choice == 'add_h5ad'
             --anndata '$anndata'
             #end if
             &&

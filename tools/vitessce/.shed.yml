@@ -6,9 +6,15 @@ exclude:
   - dependencies
 remote_repository_url: https://github.com/goeckslab/tools-mti/tree/main/tools/vitessce
 homepage_url: https://github.com/vitessce/vitessce
+long_description: |
+    Vitessce enables visual analysis of multi-modal assay types which probe biological systems 
+    through techniques such as microscopy, genomics, and transcriptomics.
 auto_tool_repositories:
   name_template: "{{ tool_id }}"
   description_template: "Wrapper for vitessce tool: {{ tool_name }}"
 suite:
   name: suite_vitessce
   description: Vitessce is a visual integration tool for exploration of spatial single-cell experiments.
+  long_description: |
+      Vitessce enables visual analysis of multi-modal assay types which probe biological systems 
+      through techniques such as microscopy, genomics, and transcriptomics.
