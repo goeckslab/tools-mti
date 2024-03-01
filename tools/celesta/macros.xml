@@ -21,8 +21,9 @@
         </citations>
     </xml>
     <xml name="celesta_base_options" token_label="celesta_base_options">
-        <param name="x_coord" type="text" value="X_centroid" label="Name of anndata.obs key containing cell or nucleus centroid X position" />
-        <param name="y_coord" type="text" value="Y_centroid" label="Name of anndata.obs key containing cell or nucleus centroid Y position" />
+        <param name="rep" type="text" value="X" optional="false" label="Anndata rep or layer to use (For example: X, raw.X, or a key in adata.layers)" />
+        <param name="x_coord" type="text" value="X_centroid" optional="false" label="Name of anndata.obs key containing cell or nucleus centroid X position" />
+        <param name="y_coord" type="text" value="Y_centroid" optional="false" label="Name of anndata.obs key containing cell or nucleus centroid Y position" />
         <conditional name="filter_cells">
             <param name="filter" type="select" label="Choose whether to filter cells" help="FilterCells">
                 <option value="no_filter" selected="true">Do not filter cells</option>
