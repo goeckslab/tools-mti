@@ -1,9 +1,15 @@
-<repositories description="MCMICRO tool suite for Multiplex Tissue Imaging Analysis">
-  <repository changeset_revision="0:fd8dfd64f25e" name="basic_illumination" owner="perssond" toolshed="https://toolshed.g2.bx.psu.edu"/>
-  <repository changeset_revision="0:b3054f3d42b2" name="ashlar" owner="perssond" toolshed="https://toolshed.g2.bx.psu.edu"/>
-  <repository changeset_revision="0:6bec4fef6b2e" name="unmicst" owner="perssond" toolshed="https://toolshed.g2.bx.psu.edu"/>
-  <repository changeset_revision="0:99308601eaa6" name="coreograph" owner="perssond" toolshed="https://toolshed.g2.bx.psu.edu"/>
-  <repository changeset_revision="0:37acf42a824b" name="s3segmenter" owner="perssond" toolshed="https://toolshed.g2.bx.psu.edu"/>
-  <repository changeset_revision="0:928db0f952e3" name="quantification" owner="perssond" toolshed="https://toolshed.g2.bx.psu.edu"/>
-  <repository changeset_revision="1:a62b0c62270e" name="naivestates" owner="perssond" toolshed="https://toolshed.g2.bx.psu.edu"/>
+<repositories description="Galaxy-ME tool suite for Multiplex Tissue Imaging Analysis">
+  <repository changeset_revision="2:acc6f509968c" name="basic_illumination" owner="perssond" toolshed="https://toolshed.g2.bx.psu.edu"/>
+  <repository changeset_revision="2:33ab2058c6d9" name="ashlar" owner="perssond" toolshed="https://toolshed.g2.bx.psu.edu"/>
+  <repository changeset_revision="2:e30f622ef2c3" name="palom" owner="watsocam" toolshed="https://toolshed.g2.bx.psu.edu"/>
+  <repository changeset_revision="1:74fe58ff55a5" name="unmicst" owner="perssond" toolshed="https://toolshed.g2.bx.psu.edu"/>
+  <repository changeset_revision="3:ee92746d141a" name="coreograph" owner="perssond" toolshed="https://toolshed.g2.bx.psu.edu"/>
+  <repository changeset_revision="2:96d0d969ebc9" name="s3segmenter" owner="perssond" toolshed="https://toolshed.g2.bx.psu.edu"/>
+  <repository changeset_revision="2:187918c47051" name="mesmer" owner="goeckslab" toolshed="https://toolshed.g2.bx.psu.edu"/>
+  <repository changeset_revision="5:3a916c4e9f5f" name="quantification" owner="perssond" toolshed="https://toolshed.g2.bx.psu.edu"/>
+  <repository changeset_revision="1:8ca435ec19be" name="scimap_mcmicro_to_anndata" owner="goeckslab" toolshed="https://toolshed.g2.bx.psu.edu"/>
+  <repository changeset_revision="1:dcfcad35e847" name="scimap_phenotyping" owner="goeckslab" toolshed="https://toolshed.g2.bx.psu.edu"/>
+  <repository changeset_revision="1:fd38e533a54b" name="scimap_spatial" owner="goeckslab" toolshed="https://toolshed.g2.bx.psu.edu"/>
+  <repository changeset_revision="0:be0e7952e229" name="squidpy" owner="goeckslab" toolshed="https://toolshed.g2.bx.psu.edu"/>
+  <repository changeset_revision="0:9f60ef2d586e" name="vitessce_spatial" owner="goeckslab" toolshed="https://toolshed.g2.bx.psu.edu"/>
 </repositories>

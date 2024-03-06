@@ -1,8 +1,8 @@
 categories:
 - Imaging
-description: MCMICRO tool suite for Multiplex Tissue Imaging Analysis 
-homepage_url: https://github.com/ohsu-comp-bio/mti-tools
-name: mcmicro_suite
-owner: creason
-remote_repository_url: https://github.com/ohsu-comp-bio/mti-tools/tree/master/suites/mcmicro_suite
+description: Galaxy-ME tool suite for Multiplex Tissue Imaging Analysis 
+homepage_url: https://github.com/goeckslab/tools-mti
+name: galaxy_me_suite
+owner: goeckslab
+remote_repository_url: https://github.com/goeckslab/tools-mti/tree/master/suites/mcmicro_suite
 type: repository_suite_definition 
