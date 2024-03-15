@@ -9,6 +9,7 @@ library(zeallot)
 # probably should move main args collection to a separate script. 
 # same with filtering and object instantiation
 
+# REPLACE OPTS HERE WITH THE ONES IN ASSIGN CELLS
 
 # define command line args 
 option_list = list(
