@@ -1,6 +1,8 @@
+pandas
+anndata
 r-optparse
 r-janitor
-r-anndata
+bioconductor-rhdf5
 r-devtools
 r-rmixmod
 r-spdep

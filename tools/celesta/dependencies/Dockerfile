@@ -7,4 +7,5 @@ RUN conda config --add channels bioconda \
     && mamba install -y --file /tmp/requirements.txt \
     && mamba clean -yaf
 
-RUN R -e "devtools::install_github('plevritis/CELESTA')"
+RUN R -e "devtools::install_github('plevritis/CELESTA')" \
+    && R -e "devtools::install_github('scverse/anndataR')"
