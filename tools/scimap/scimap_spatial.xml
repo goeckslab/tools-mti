@@ -37,15 +37,12 @@
                     <option value="kmeans" selected="true">kmeans</option>
                     <option value="phenograph">phenograph</option>
                     <option value="leiden">leiden</option>
-                    <option value="parc">parc</option>
                 </param>
                 <section name="options" title="Advanced Options" expanded="false">
                     <param argument="subset_genes" type="text" value="" optional="true" label="Type in a list of genes  that should be included for the purpose of clustering" help="Optional. Comma delimited. By default the algorithm uses all genes in the dataset." />
                     <param argument="sub_cluster" type="boolean" checked="false" optional="true" label="Whether to do sub-clustering on existing clustering or phenotyping " />
                     <param argument="sub_cluster_column" type="text" value="phenotype" optional="true" label="Type in the name of a column to be sub-clustered" help="This is only required when sub_cluster is set to True." />
                     <param argument="sub_cluster_group" type="text" value="" optional="true" label="Type in a list of group names within the sub-cluster column" help="Optional. Comma delimited. By default the program will sub-cluster all groups within column passed through the argument sub_cluster_column." />
-                    <param argument="parc_small_pop" type="integer" value="50" optional="true" label="Smallest cluster population to be considered a community in PARC clustering" />
-                    <param argument="parc_too_big_factor" type="float" value="0.4" optional="true" label="If a cluster exceeds this share of the entire cell population, then the PARC will be run on the large cluster" />
                     <param argument="k" type="integer" value="10" optional="true" label="Number of clusters to return when using K-Means clustering" />
                     <param argument="n_pcs" type="integer" value="" optional="true" label="Number of PC's to be used in leiden clustering" help="By default it uses all PC's" />
                     <param argument="resolution" type="float" value="1" optional="true" label="A parameter value controlling the coarseness of the clustering" help="Higher values lead to more clusters." />
