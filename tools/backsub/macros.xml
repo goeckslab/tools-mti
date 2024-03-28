@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<macros>
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="@TOOL_VERSION@">background-subtraction</requirement>
+            <container type="docker">kbestak/background_sub:@TOOL_VERSION@</container>
+        </requirements>
+    </xml>
+
+    <xml name="version_cmd">
+        <version_command>echo @TOOL_VERSION@</version_command>
+    </xml>
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1038/s41592-021-01308-y</citation>
+        </citations>
+    </xml>
+
+    <token name="@TOOL_VERSION@">0.4.1</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+    <token name="@CMD_BEGIN@"><![CDATA[
+    <token name="@PROFILE@">23.2</token>
+    BACKSUB_PATH='' &&
+    if [ -f '/app/background_sub.py' ]; then
+        export BACKSUB_PATH='python /app/background_sub.py';
+    else
+        export BACKSUB_PATH='background_sub.py';
+    fi &&
+    \$BACKSUB_PATH
+    ]]></token>
+
+</macros>
