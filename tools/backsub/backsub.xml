@@ -1,9 +1,7 @@
-<tool id="backsub" name="BACKSUB" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE">
-    <description>
-        <Autofluorescence subtraction module for sequential immunofluorescene images.>
-    <long_description>
-        <Pixel-by-pixel channel subtraction scaled by exposure times, primarily developed for images produced by the COMET platform and to work within the MCMICRO pipeline. Main usecase is autuofluorescence subtraction for multichannel and multicycle images for visualization of images from tissues with high autofluroescence (FFPE), improved segmentation, and quantification (if the previous two usecases aren't necessary, downstream subtraction of autofluorescent signal is encouraged as the script is memory inefficent).>
-    <homepage_url><https://github.com/SchapiroLabor/Background_subtraction>
+<tool id="backsub" name="BACKSUB" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+
+    <description>Autofluorescence subtraction module for sequential immunofluorescene images.</description>
+
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -15,30 +13,60 @@
 
         @CMD_BEGIN@ 
 
-        --root $root
-        --markers $markers
-        --output $output
-        --markers $marker-output
+        ##Supply images
+        #for $i in $root:
+            -r '$i'
+        #end for
 
+        ##Supply markers
+        #for $i in $markers:
+            -m '$i'
+        #end for
+
+        ##Name output image file
+        #for $i in $output:
+            -o '$i'
+        #end for
+
+        ##Name output markers file
+        #for $i in $marker-output:
+            -mo '$i'
+        #end for
+
+        ##Additional arguments
+        #if $adv.pixel_size
+        --pixel-size $adv.pixel_size
+        #end if
+
+        #if $adv.tile_size
+        --tile-size $adv.tile_size
+        #end if
+
+        #if $adv.chunk_size
+        --chunk-size $adv.chunk_size
+        #end if
+        
     ]]></command>
 
     <inputs>
-        <param name="root" type="???" format="ome.tiff" optional="false" label="File path to root image file"/>
-        <param name="markers" type="???" format="csv" optional="false" label="File path to required markers.csv file"/>
-        <section name="adv" title="Advanced Options" expanded="false"/>
+        <param name="root" type="data_collection" format="ome.tiff" optional="false" label="File path to root image file"/>
+        <param name="markers" type="data_collection" format="csv" optional="false" label="File path to required markers.csv file"/>
+        <section name="adv" title="Advanced Options" expanded="false">
             <param name="pixel-size" type="float" optional="true" label="Pixel size in microns"/>
-            <param name="tile-size" type="int" optional="true" label="Tile size for pyramid generation (default 1024)"/>
-            <param name="chunk-size" type="int" optional="true" label="Chunk size for dask array (e.g for chunksize 1000, the image will be split into 1000x1000 chunks) (default 5000)"/>
+            <param name="tile-size" type="integer" optional="true" label="Tile size for pyramid generation (default 1024)"/>
+            <param name="chunk-size" type="integer" optional="true" label="Chunk size for dask array (e.g for chunksize 1000, the image will be split into 1000x1000 chunks) (default 5000)"/>
         </section>
     </inputs>
 
     <outputs>
-        <data format="ome.tiff" name="output" from_work_dir="???" label="${tool.name} on ${on_string}: OutputTiff"/>
-        <data format="csv" name="marker-output" from_work_dir="???" label="${tool.name} on ${on_string}: OutputMarkers"/>
+        <data format="ome.tiff" name="output" from_work_dir="out.ome.tiff" label="${tool.name} on ${on_string}: OutputTiff"/>
+        <data format="csv" name="marker-output" from_work_dir="out.csv" label="${tool.name} on ${on_string}: OutputMarkers"/>
     </outputs>
 
     <tests>
         <test>
+            <element name="m" value="stacked_AF488_FDX1_crop.csv" />
+            <element name="r" value="stacked_AF488_FDX1_crop.ome.tiff" />
         </test>
     </tests>
     <help><![CDATA[

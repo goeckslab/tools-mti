@@ -18,7 +18,7 @@
 
     <token name="@TOOL_VERSION@">0.4.1</token>
     <token name="@VERSION_SUFFIX@">0</token>
-    <token name="@CMD_BEGIN@"><![CDATA[
+    <token name="@CMD_BEGIN@">backsub</token>
     <token name="@PROFILE@">23.2</token>
     BACKSUB_PATH='' &&
     if [ -f '/app/background_sub.py' ]; then
