@@ -20,13 +20,13 @@
     <token name="@VERSION_SUFFIX@">0</token>
     <token name="@CMD_BEGIN@">backsub</token>
     <token name="@PROFILE@">23.2</token>
-    BACKSUB_PATH='' &&
+
+
     if [ -f '/app/background_sub.py' ]; then
         export BACKSUB_PATH='python /app/background_sub.py';
     else
         export BACKSUB_PATH='background_sub.py';
-    fi &&
-    \$BACKSUB_PATH
-    ]]></token>
+    fi
+    ></token>
 
 </macros>
