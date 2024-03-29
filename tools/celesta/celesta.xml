@@ -8,7 +8,22 @@
     <version_command>echo "@VERSION@"</version_command>
     <command detect_errors="aggressive">
         <![CDATA[
-        #if str($runmode.selected_mode) == "assign_cells":
+        #if str($runmode.selected_mode) == 'plot_expression':
+            Rscript '$__tool_directory__/celesta_plot_expression.R'
+                --imagingdata $anndata
+                --prior $prior_info
+                --xcol $x_coord
+                --ycol $y_coord
+                --size $test_size 
+                --height $height 
+                --width $width 
+        #if str($filter_cells.filter) == 'filter':
+                --filter
+                --lowfilter $low_threshold
+                --highfilter $high_threshold
+        #end if
+                &&
+        #else if str($runmode.selected_mode) == 'assign_cells':
             Rscript '$__tool_directory__/celesta_assign_cells.R'
                 --imagingdata $anndata
                 --prior $prior_info
@@ -16,7 +31,7 @@
                 --ycol $y_coord  
                 --maxiteration $max_iteration 
                 --changethresh $cell_change_threshold 
-        #if str($filter_cells.filter) == "filter":
+        #if str($filter_cells.filter) == 'filter':
                 --filter
                 --lowfilter $low_threshold
                 --highfilter $high_threshold
@@ -28,7 +43,6 @@
                 --highexpthresh $high_thresholds_file
         #end if  
                 &&
-
         #for $p in $plot_cells:
             Rscript '$__tool_directory__/celesta_plot_cells.R'
                 --prior $prior_info
@@ -54,16 +68,19 @@
         <param name="prior_info" type="data" format="csv" label="Cell-type signature matrix" />
         <conditional name="runmode">
             <param name="selected_mode" type="select" label="Select which CELESTA mode to run">
-                <option value="plot_expression" selected="true">Calculate and plot expression probabilities for each marker in the cell type signature matrix</option>
+                <option value="plot_expression" selected="true">Plot expression probabilities for markers in the cell type signature matrix</option>
                 <option value="assign_cells">Run the cell type assignment</option>
             </param>
             <when value="plot_expression">
-                <expand macro="celesta_base_options" label="plot_expression">
-                </expand>
+                <expand macro="celesta_base_options" />
+                <section name="figure_options" title="Figure Options" expanded="true">
+                    <param argument="test_size" type="float" value="1" min="0.1" max="10" label="Specify the point size for plotting cells" />
+                    <param argument="height" type="integer" value="4" min="4" max="20" label="Specify the height of the figure (inches)" />
+                    <param argument="width" type="integer" value="5" min="4" max="20" label="Specify the width of the figure (inches)" />
+                </section>
             </when>
             <when value="assign_cells">
-                <expand macro="celesta_base_options" label="plot_expression">
-                </expand>
+                <expand macro="celesta_base_options" />
                 <section name="options" title="Advanced Options" expanded="false">
                     <param argument="max_iteration" type="integer" value="10" label="Define the maximum iterations allowed in the EM algorithm per round" />
                     <param argument="cell_change_threshold" type="float" value="0.01" label="Define an ending condition for the EM algorithm" help="0.01 means that when fewer than 1% of the total number of cells do not change identity, the algorithm will stop" />
@@ -78,17 +95,18 @@
                         </sanitizer>
                     </param>
                     <param argument="test_size" type="float" value="1" min="0.1" max="10" label="Specify the point size for plotting cells" />
-                    <param argument="height" type="integer" value="12" min="5" max="20" label="Specify the height of the figure (inches)" />
-                    <param argument="width" type="integer" value="12" min="5" max="20" label="Specify the width of the figure (inches)" />
+                    <param argument="height" type="integer" value="12" min="4" max="20" label="Specify the height of the figure (inches)" />
+                    <param argument="width" type="integer" value="12" min="4" max="20" label="Specify the width of the figure (inches)" />
                     <param argument="dpi" type="integer" value="300" min="50" max="500" label="Specify the DPI of the figure" />
                 </repeat>
             </when>
         </conditional>
     </inputs>
     <outputs>
-        <data name="plot_expression_output" format="png" label="CELESTA plot expression output">
+        <collection name="marker_expression_plots" type="list" label="Marker expression probability plots">
+            <discover_datasets pattern="__name_and_ext__" directory="marker_exp_plots" ext="png" />
             <filter>runmode['selected_mode'] == "plot_expression"</filter>
-        </data>
+        </collection>     
         <data name="assign_cells_output" format="h5ad" label="CELESTA assign cells output" from_work_dir="result.h5ad" >
             <filter>runmode['selected_mode'] == "assign_cells"</filter>
         </data>
@@ -97,7 +115,7 @@
         </data>
         <collection name="cell_assign_plots" type="list" label="Cell assignment plots">
             <discover_datasets pattern="__name_and_ext__" directory="cell_assign_plots" ext="png" />
-            <filter>len(runmode['plot_cells']) != 0</filter>
+            <filter>runmode['selected_mode'] == "assign_cells" and len(runmode['plot_cells']) != 0</filter>
         </collection>     
     </outputs>
     <tests>

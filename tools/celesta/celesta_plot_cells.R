@@ -21,7 +21,7 @@ option_list = list(
               help="Path to prior marker info file"),
   make_option(c("-c", "--celltypes"), action="store", default=NA, type='character',
               help="Comma-separated list of cell types to plot"),
-  make_option(c("-s", "--size"), action="store", default=NA, type='character',
+  make_option(c("-s", "--size"), action="store", default=1, type='double',
               help="Point size for plotting"),
   make_option(c("--width"), action="store", default=12, type='integer',
               help="Width of plot (inches)"),
