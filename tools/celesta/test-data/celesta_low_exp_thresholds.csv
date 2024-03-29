@@ -1,0 +1,17 @@
+,anchor,index
+vasculature,1,1
+tumor cells,1,1
+aSMA+ stroma,1,1
+lymphatics,1,1
+immune cells,1,1
+CD3+ T cells,1,1
+CD15+ granulocytes,1,1
+B cells,1,1
+CD11c+ DCs,0.9,1
+CD68+CD163+ macrophages,1,1
+plasma cells,1,1
+NK cells,0.9,1
+CD8+ T cells,1,1
+CD4+ T cells,1,1
+CD4+ T cells CD45RO+,1,1
+Tregs,1,1
