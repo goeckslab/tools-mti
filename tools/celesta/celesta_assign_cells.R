@@ -23,7 +23,7 @@ option_list = list(
             help="Name of column in adata.obs containing X coordinate"),
   make_option(c("-y", "--ycol"), action="store", default=NA, type='character',
             help="Name of column in adata.obs containing Y coordinate"),
-  make_option(c("--filter"), action="store_true", type='logical',
+  make_option(c("--filter"), action="store_true", type='logical', default=FALSE,
               help="Boolean to filter cells or not (default: no filtering)"),
   make_option(c("--highfilter"), action="store", default=0.9, type='double',
               help="High marker threshold if filtering cells (default: 0.9)"),
@@ -93,10 +93,10 @@ CelestaObj <- CreateCelestaObject(
 # if filtering is specified, filter out cells outside high and low thresholds
 if (opt$filter) {
   print("filtering cells based on expression")
-    CelestaObj <- FilterCells(
-        CelestaObj, 
-        high_marker_threshold = opt$highfilter, 
-        low_marker_threshold = opt$lowfilter)
+  CelestaObj <- FilterCells(
+    CelestaObj, 
+    high_marker_threshold = opt$highfilter, 
+    low_marker_threshold = opt$lowfilter)
 } else {
   print("Proceeding to cell type assignment without cell filtering")
 }
@@ -104,6 +104,7 @@ if (opt$filter) {
 # check for non-default expression threshold files 
 if (opt$highexpthresh != 'default_high_thresholds') {
   # read high thresholds 
+  print("Using custom high expression thresholds")
   high_expression_thresholds <- read.csv(opt$highexpthresh)
   high_expression_threshold_anchor <- high_expression_thresholds$anchor
   high_expression_threshold_index <- high_expression_thresholds$index
@@ -115,6 +116,7 @@ if (opt$highexpthresh != 'default_high_thresholds') {
 
 if (opt$lowexpthresh != 'default_low_thresholds') {
   # read low thresholds 
+  print("Using custom low expression thresholds")
   low_expression_thresholds <- read.csv(opt$highexpthresh)
   low_expression_threshold_anchor <- low_expression_thresholds$anchor
   low_expression_threshold_index <- low_expression_thresholds$index

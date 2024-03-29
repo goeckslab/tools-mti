@@ -22,7 +22,13 @@ option_list = list(
   make_option(c("-c", "--celltypes"), action="store", default=NA, type='character',
               help="Comma-separated list of cell types to plot"),
   make_option(c("-s", "--size"), action="store", default=NA, type='character',
-              help="point size for plotting")
+              help="Point size for plotting"),
+  make_option(c("--width"), action="store", default=12, type='integer',
+              help="Width of plot (inches)"),
+  make_option(c("--height"), action="store", default=12, type='integer',
+              help="Height of plot (inches)"),
+  make_option(c("--dpi"), action="store", default=300, type='integer',
+              help="DPI (dots per inch) of plot")
 )
 
 # parse args 
@@ -63,8 +69,8 @@ ggsave(
     path = 'cell_assign_plots',
     filename = output_name,
     plot = g,
-    width = 12,
-    height = 12,
+    width = opt$width,
+    height = opt$height,
     units = "in",
-    dpi = 300
+    dpi = opt$dpi
 )

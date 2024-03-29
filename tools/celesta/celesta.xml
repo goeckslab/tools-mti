@@ -12,24 +12,38 @@
             Rscript '$__tool_directory__/celesta_assign_cells.R'
                 --imagingdata $anndata
                 --prior $prior_info
-                --xcol $x_coord
+                --xcol $x_coord 
                 --ycol $y_coord  
-                --maxiteration $max_iteration
-                --changethresh $cell_change_threshold  
-        #if {$filter_cells.filter} == "filter"
+                --maxiteration $max_iteration 
+                --changethresh $cell_change_threshold 
+        #if str($filter_cells.filter) == "filter":
                 --filter
                 --lowfilter $low_threshold
                 --highfilter $high_threshold
         #end if
-                ;
+        #if $low_thresholds_file:
+                --lowexpthresh $low_thresholds_file
+        #end if
+        #if $high_thresholds_file:
+                --highexpthresh $high_thresholds_file
+        #end if  
+                &&
 
         #for $p in $plot_cells:
             Rscript '$__tool_directory__/celesta_plot_cells.R'
                 --prior $prior_info
                 --celltypes '${p.cell_types}'
-                --size $p.test_size ;
+                --size $p.test_size 
+                --height $p.height 
+                --width $p.width 
+                --dpi $p.dpi 
+                &&
         #end for
         #end if
+
+        ##final command to satisfy double ampersands 
+        echo 'CELESTA' $runmode.selected_mode 'complete'
+
         ]]>
     </command>
     <configfiles>
@@ -55,6 +69,7 @@
                     <param argument="cell_change_threshold" type="float" value="0.01" label="Define an ending condition for the EM algorithm" help="0.01 means that when fewer than 1% of the total number of cells do not change identity, the algorithm will stop" />
                     <param name="low_thresholds_file" type="data" format="csv" optional="true" label="Provide a file mapping low anchor and index cell assignment thresholds to cell types" />
                     <param name="high_thresholds_file" type="data" format="csv" optional="true" label="Provide a file mapping high anchor and index cell assignment thresholds to cell types" />
+                    <param name="save_rds" type="boolean" checked="false" label="Also save CELESTA object as RDS file" help="Saving CELESTA object as RDS can allow for easier downstream analysis in R" />
                 </section>
                 <repeat name="plot_cells" title="Plot combinations of resulting cell type assignments" min="0">
                     <param name="cell_types" type="text" label="Provide a comma-separated list of cell type names to plot together">                    
@@ -62,7 +77,10 @@
                             <valid initial="string.printable"/>
                         </sanitizer>
                     </param>
-                    <param argument="test_size" type="integer" value="1" label="Specify the point size for plotting cells" />
+                    <param argument="test_size" type="float" value="1" min="0.1" max="10" label="Specify the point size for plotting cells" />
+                    <param argument="height" type="integer" value="12" min="5" max="20" label="Specify the height of the figure (inches)" />
+                    <param argument="width" type="integer" value="12" min="5" max="20" label="Specify the width of the figure (inches)" />
+                    <param argument="dpi" type="integer" value="300" min="50" max="500" label="Specify the DPI of the figure" />
                 </repeat>
             </when>
         </conditional>
@@ -73,6 +91,9 @@
         </data>
         <data name="assign_cells_output" format="h5ad" label="CELESTA assign cells output" from_work_dir="result.h5ad" >
             <filter>runmode['selected_mode'] == "assign_cells"</filter>
+        </data>
+        <data name="assign_cells_rds" format="rds" label="CELESTA object RDS" from_work_dir="celestaobj.rds" >
+            <filter>runmode['selected_mode'] == "assign_cells" and runmode['options']['save_rds']</filter>
         </data>
         <collection name="cell_assign_plots" type="list" label="Cell assignment plots">
             <discover_datasets pattern="__name_and_ext__" directory="cell_assign_plots" ext="png" />
