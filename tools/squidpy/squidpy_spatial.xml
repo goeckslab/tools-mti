@@ -82,7 +82,7 @@
                 <param argument="cluster_key" type="text" value="" optional="false" label="Key in anndata.AnnData.obs where clustering is stored" />
                 <expand macro="squidpy_spatial_options">
                     <param argument="spatial_key" type="text" value="spatial" optional="false" label="The Key where spatial coordinates are stored" help="Key in `anndata.AnnData.obsm`." />
-                    <param argument="n_steps" type="integer" value="50" label="Number of distance thresholds at which co-occurrence is computed" />
+                    <param argument="interval" type="integer" value="50" label="Number of distance thresholds at which co-occurrence is computed" />
                     <param argument="n_splits" type="integer" value="" optional="true" label="Number of splits in which to divide the spatial coordinates" help="In anndata.AnnData.obsm ['{spatial_key}']." />
                 </expand>
                 <expand macro="squidpy_plotting_options">
