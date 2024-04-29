@@ -1,8 +1,22 @@
-FROM ubuntu:20.04
+FROM ubuntu:jammy
 
-ENV VERSION=1.1.2
-RUN apt-get update && \
-    apt-get install -y git python3 python3-pip unzip wget && \
+ARG squidpy_version='1.4.1'
+ARG python_version='3.10.*'
+
+RUN apt update && \
+    apt install -y \
+        --no-install-recommends \
+        python3=$python_version \
+        python3-pip && \
+    rm -rf /var/lib/apt/lists/* && \
     ln -s /usr/bin/python3 /usr/bin/python
 
-RUN pip install squidpy==$VERSION
+RUN pip install \
+        --no-cache-dir \
+        --no-compile \
+        squidpy==$squidpy_version
+
+ENV \
+    TMPDIR='/tmp/' \
+    MPLCONFIGDIR='/tmp/mpl/' \
+    NUMBA_CACHE_DIR="/tmp/numba/"
