@@ -13,25 +13,17 @@
 
         @CMD_BEGIN@ 
 
-        ##Supply images
-        #for $i in $root:
-            -r '$i'
-        #end for
+        ##Supply image
+        --root $root
 
         ##Supply markers
-        #for $i in $markers:
-            -m '$i'
-        #end for
+        --markers $markers
 
         ##Name output image file
-        #for $i in $output:
-            -o '$i'
-        #end for
+        --output out.ome.tiff
 
         ##Name output markers file
-        #for $i in $marker-output:
-            -mo '$i'
-        #end for
+        --marker-output out.tsv
 
         ##Additional arguments
         #if $adv.pixel_size
@@ -49,24 +41,34 @@
     ]]></command>
 
     <inputs>
-        <param name="root" type="data_collection" format="ome.tiff" optional="false" label="File path to root image file"/>
-        <param name="markers" type="data_collection" format="csv" optional="false" label="File path to required markers.csv file"/>
+        <param name="root" type="data" format="ome.tiff" optional="false" label="File path to root image file"/>
+        <param name="markers" type="data" format="csv" optional="false" label="File path to required markers.csv file"/>
         <section name="adv" title="Advanced Options" expanded="false">
-            <param name="pixel-size" type="float" optional="true" label="Pixel size in microns"/>
-            <param name="tile-size" type="integer" optional="true" label="Tile size for pyramid generation (default 1024)"/>
-            <param name="chunk-size" type="integer" optional="true" label="Chunk size for dask array (e.g for chunksize 1000, the image will be split into 1000x1000 chunks) (default 5000)"/>
+            <param name="pixel_size" type="float" optional="true" label="Pixel size in microns"/>
+            <param name="tile_size" type="integer" optional="true" label="Tile size for pyramid generation (default 1024)"/>
+            <param name="chunk_size" type="integer" optional="true" label="Chunk size for dask array (e.g for chunksize 1000, the image will be split into 1000x1000 chunks) (default 5000)"/>
         </section>
     </inputs>
 
     <outputs>
         <data format="ome.tiff" name="output" from_work_dir="out.ome.tiff" label="${tool.name} on ${on_string}: OutputTiff"/>
-        <data format="csv" name="marker-output" from_work_dir="out.csv" label="${tool.name} on ${on_string}: OutputMarkers"/>
+        <data format="csv" name="marker_output" from_work_dir="out.csv" label="${tool.name} on ${on_string}: OutputMarkers"/>
     </outputs>
 
     <tests>
-        <test>
-            <element name="m" value="stacked_AF488_FDX1_crop.csv" />
-            <element name="r" value="stacked_AF488_FDX1_crop.ome.tiff" />
+        <test expect_num_outputs="2">
+            <param name="markers" value="stacked_AF488_FDX1_crop.csv" />
+            <param name="root" value="stacked_AF488_FDX1_crop.ome.tiff" />
+            <output name="output" value="out.ome.tiff" ftype="ome.tiff">
+                <assert_contents>
+                    <has_size value="2000000" delta="1900000" />
+                </assert_contents>
+            </output>
+            <output name="marker_output" value="out.csv" ftype="csv">
+                <assert_contents>
+                    <has_size value="5000" delta="4999" />
+                </assert_contents>
+            </output>
         </test>
     </tests>
     <help><![CDATA[

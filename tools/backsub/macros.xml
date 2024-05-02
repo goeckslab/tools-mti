@@ -19,14 +19,7 @@
     <token name="@TOOL_VERSION@">0.4.1</token>
     <token name="@VERSION_SUFFIX@">0</token>
     <token name="@CMD_BEGIN@">backsub</token>
-    <token name="@PROFILE@">23.2</token>
-
-
-    if [ -f '/app/background_sub.py' ]; then
-        export BACKSUB_PATH='python /app/background_sub.py';
-    else
-        export BACKSUB_PATH='background_sub.py';
-    fi
-    ></token>
+    <token name="@PROFILE@">21.0</token>
+    <token name="@BACKSUB_PATH@">background_sub.py</token>
 
 </macros>
