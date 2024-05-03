@@ -20,7 +20,7 @@
         <![CDATA[
         export JAVA_TOOL_OPTIONS="-Xms\$((\$GALAXY_MEMORY_MB/64))m -Xmx\$((\$GALAXY_MEMORY_MB/4))m" &&
         export JAVA_TOOL_OPTIONS="-Xms\$((\$GALAXY_MEMORY_MB/64))m -Xmx\$((\$GALAXY_MEMORY_MB/4))m" &&
-        export BF_MAX_MEM="\$((\$GALAXY_MEMORY_MB/32))m" &&
+        export BF_MAX_MEM="\$((\$GALAXY_MEMORY_MB/4))m" &&
         mkdir -p '${output.files_path}/A/0' &&
         ln -sf '$image' '${output.files_path}/A/0/image01.ome.tiff' &&
         #if $masks
