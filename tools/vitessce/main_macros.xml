@@ -5,7 +5,7 @@
 
     <xml name="vitessce_requirements">
         <requirements>
-            <container type="docker">quay.io/goeckslab/vitessce:@TOOL_VERSION@v@VERSION_SUFFIX@</container>
+            <container type="docker">quay.io/goeckslab/vitessce:@TOOL_VERSION@v2</container>
         </requirements>
     </xml>
 
@@ -19,7 +19,7 @@
         <command detect_errors="aggressive">
         <![CDATA[
         MAX_MEM=\${GALAXY_MEMORY_MB:-2000} &&
-        export BF_MAX_MEM="\$((\$MAX_MEM/4))m" &&
+        export BF_MAX_MEM="\$((\$MAX_MEM/2))m" &&
         mkdir -p '${output.files_path}/A/0' &&
         ln -sf '$image' '${output.files_path}/A/0/image01.ome.tiff' &&
         #if $masks
