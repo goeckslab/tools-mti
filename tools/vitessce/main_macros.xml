@@ -18,9 +18,8 @@
     <xml name="vitessce_cmd" token_tool_id="vitessce_spatial">
         <command detect_errors="aggressive">
         <![CDATA[
-        export JAVA_TOOL_OPTIONS="-Xms\$((\$GALAXY_MEMORY_MB/64))m -Xmx\$((\$GALAXY_MEMORY_MB/4))m" &&
-        export JAVA_TOOL_OPTIONS="-Xms\$((\$GALAXY_MEMORY_MB/64))m -Xmx\$((\$GALAXY_MEMORY_MB/4))m" &&
-        export BF_MAX_MEM="\$((\$GALAXY_MEMORY_MB/4))m" &&
+        MAX_MEM=\${GALAXY_MEMORY_MB:-2000} &&
+        export BF_MAX_MEM="\$((\$MAX_MEM/4))m" &&
         mkdir -p '${output.files_path}/A/0' &&
         ln -sf '$image' '${output.files_path}/A/0/image01.ome.tiff' &&
         #if $masks
