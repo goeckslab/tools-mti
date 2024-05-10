@@ -30,12 +30,12 @@ markers_to_normalize = marker_df['marker_name'].to_list()
 AF_markers = [x for x in list(marker_df['${AF_method.AF_col}'].unique()) if x != 'None']
 print(f'Detected {quant[AF_markers].eq(0.0).any(axis=1).sum()} cells with AF values of zero in the dataset')
 
-#if $AF_filter == 'filter':
+#if $AF_method.AF_filter == 'filter':
 pre_filter_count = len(quant)
 quant = quant.loc[quant[AF_markers].ne(0.0).any(axis=1),:]
 print(f'Filtered out {pre_filter_count - len(quant)} cells that had AF values of 0.0')
 
-#elif $AF_filter == 'clip':
+#elif $AF_method.AF_filter == 'clip':
 print('Clipping all AF values equal to 0.0 to the minimum non-zero AF value')
 for af in AF_markers:
     quant[af] = quant[af].clip(lower = quant[af][quant[af].ne(0.0)].min())
