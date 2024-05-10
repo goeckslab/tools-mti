@@ -1,0 +1,57 @@
+<tool id="scimap_anndata_to_csv" name="Convert Anndata to CSV" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>Convert Anndata object to CSV</description>
+    <macros>
+        <import>main_macros.xml</import>
+    </macros>
+    <expand macro="scimap_requirements" />
+    <expand macro="macro_stdio" />
+    <version_command>echo "@VERSION@"</version_command>
+    <command detect_errors="aggressive">
+        <![CDATA[
+        python '$__tool_directory__/anndata_to_csv.py'
+            --inputs '$inputs'
+            --anndata '$anndata'
+            --outfile '$outfile'
+
+        ]]>
+    </command>
+    <configfiles>
+        <inputs name="inputs" data_style="paths"/>
+    </configfiles>
+    <inputs>
+        <param name="anndata" type="data" format="h5ad" label="Select the input anndata" />
+        <conditional name="rep">
+            <param name="representation" type="select" label="Select representation of data to export">
+                <option value="scaled">adata.X</option>
+                <option value="raw">adata.raw.X</option>
+                <option value="log">log1p(adata.raw.X)</option>
+            </param>
+        </conditional>
+        <param name="cellid" type="text" value="CellID" label="Name of column containing Cell IDs" />
+    </inputs>
+    <outputs>
+        <data format="csv" name="outfile" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="image_path" value="mcmicro_output.csv" ftype="csv" />
+            <param name="drop_markers" value="PERK,NOS2,BG1,BG2,BG3,ACTIN" />
+            <output name="outfile" file="tutorial_data.h5ad" compare="sim_size" delta="5" />
+        </test>
+    </tests>
+    <help>
+        <![CDATA[
+**What it does**
+
+The tool converts the quantification output from [mcmicro](https://mcmicro.org/) to Anndata which is needed for downstrem analyses, such as phenotyping, neighbourhood identification, and so on.
+
+
+**Return**
+
+Anndata.
+
+        ]]>
+    </help>
+    <citations>
+    </citations>
+</tool>
