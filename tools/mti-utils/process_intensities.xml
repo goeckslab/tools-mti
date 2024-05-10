@@ -30,12 +30,12 @@ markers_to_normalize = marker_df['marker_name'].to_list()
 AF_markers = [x for x in list(marker_df['${AF_method.AF_col}'].unique()) if x != 'None']
 print(f'Detected {quant[AF_markers].eq(0.0).any(axis=1).sum()} cells with AF values of zero in the dataset')
 
-#if $filter.AF_filter == 'filter':
+#if $AF_filter == 'filter':
 pre_filter_count = len(quant)
 quant = quant.loc[quant[AF_markers].ne(0.0).any(axis=1),:]
 print(f'Filtered out {pre_filter_count - len(quant)} cells that had AF values of 0.0')
 
-#elif $filter.AF_filter == 'clip':
+#elif $AF_filter == 'clip':
 print('Clipping all AF values equal to 0.0 to the minimum non-zero AF value')
 for af in AF_markers:
     quant[af] = quant[af].clip(lower = quant[af][quant[af].ne(0.0)].min())
@@ -91,14 +91,10 @@ quant.to_csv(os.path.join(cwd, 'processed_quant.csv'))
             </when>
             <when value="SBR">
                 <param name="AF_col" type="text" value="AF_channel" label="Name of column in markers file containing respective AF channel for each marker" />
-                <conditional name="filter">
-                    <param name="AF_filter" type="select" label="Select whether to clip or filter out AF values equal to 0">
-                        <option value="clip">Clip autofluorescence values of 0.0 to the minimum non-zero autofluorescence value</option>
-                        <option value="filter">Filter out cells with autofluorescence values equal to 0.0</option>
-                    </param>
-                    <when value="clip" />
-                    <when value="filter" />
-                </conditional>
+                <param name="AF_filter" type="select" label="Select whether to clip or filter out AF values equal to 0">
+                    <option value="clip">Clip autofluorescence values of 0.0 to the minimum non-zero autofluorescence value</option>
+                    <option value="filter">Filter out cells with autofluorescence values equal to 0.0</option>
+                </param>
             </when>
         </conditional>
     </inputs>
@@ -114,9 +110,7 @@ quant.to_csv(os.path.join(cwd, 'processed_quant.csv'))
             </conditional>
             <conditional name="AF_method">
                 <param name="select_method" value="SBR" />
-                <conditional name="filter">
                     <param name="AF_filter" value="clip" />
-                </conditional>
             </conditional>
             <output name="processed_quant" ftype="csv">
                 <assert_contents>
