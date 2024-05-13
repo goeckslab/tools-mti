@@ -64,11 +64,6 @@
                 <expand macro="squidpy_spatial_options">
                     <param argument="connectivity_key" type="text" value="" optional="true" label="Key in anndata.AnnData.obsp where spatial connectivities are stored" />
                     <param argument="n_perms" type="integer" value="1000" label="Number of permutations for the permutation test" />
-                    <param argument="numba_parallel" type="select" label="Whether to use numba.prange or not">
-                        <option value="false" selected="true">No -- Recommended for small datasets or small number of interactions</option>
-                        <option value="true">Yes</option>
-                        <option value="none">Auto</option>
-                    </param>
                     <param argument="seed" type="integer" value="" optional="true" label="Randomness seed" />
                 </expand>
                 <expand macro="squidpy_plotting_options_more">
@@ -180,11 +175,6 @@
                     <param argument="corr_axis" type="select" label="Axis over which to perform the FDR correction" help="Only used when corr_method != None.">
                         <option value="clusters" selected="true">clusters -- correct clusters by performing FDR correction across the interactions</option>
                         <option value="interactions">interactions -- correct interactions by performing FDR correction across the clusters</option>
-                    </param>
-                    <param argument="numba_parallel" type="select" label="Whether to use numba.prange or not">
-                        <option value="false" selected="true">No -- Recommended for small datasets or small number of interactions</option>
-                        <option value="true">Yes</option>
-                        <option value="none">Auto</option>
                     </param>
                     <param argument="key_added" type="text" value="" optional="true" label="Key in anndata to store the result" help="In `anndata.AnnData.uns`. If None, '{cluster_key}_ligrec' will be used." />
                     <param argument="gene_symbols" type="text" value="" optional="true" label="Key in anndata.AnnData.var to use instead of anndata.AnnData.var_names" help="Optional." />

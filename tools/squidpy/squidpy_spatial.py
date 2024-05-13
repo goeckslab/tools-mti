@@ -38,6 +38,15 @@ def main(inputs, anndata, output, output_plot):
     tool_func = getattr(sq.gr, tool)
 
     options = params['analyses']['options']
+    progress_bar_tools = [
+        'centrality_scores',
+        'co_occurrence',
+        'nhood_enrichment',
+        'sepal',
+        'spatial_autocorr'
+        ]
+    if tool in progress_bar_tools:
+        options['show_progress_bar']=False
 
     for k, v in options.items():
         if not isinstance(v, str):
@@ -51,11 +60,6 @@ def main(inputs, anndata, output, output_plot):
             options[k] = [e.strip() for e in v.split(',')]
         elif k == 'radius':    # for spatial_neighbors
             options[k] = ast.literal_eval(v)
-        elif k == 'numba_parallel':    # for nhood_enrichment and ligrec
-            if v == 'false':
-                options[k] = False
-            elif v == 'true':
-                options[k] = True
         elif k == 'interactions':    # for ligrec
             options[k] = pd.read_csv(v, sep="\t")
         elif k == 'max_neighs':
