@@ -44,9 +44,9 @@ def main(inputs, anndata, output, output_plot):
         'nhood_enrichment',
         'sepal',
         'spatial_autocorr'
-        ]
+    ]
     if tool in progress_bar_tools:
-        options['show_progress_bar']=False
+        options['show_progress_bar'] = False
 
     for k, v in options.items():
         if not isinstance(v, str):
