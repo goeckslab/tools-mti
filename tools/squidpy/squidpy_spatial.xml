@@ -11,6 +11,7 @@
     <version_command>echo "@TOOL_VERSION@"</version_command>
     <command detect_errors="aggressive">
         <![CDATA[
+        export TQDM_DISABLE=True &&
         python '$__tool_directory__/squidpy_spatial.py'
             --inputs '$inputs'
             --anndata '$anndata'
