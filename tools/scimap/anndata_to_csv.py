@@ -2,10 +2,11 @@ import argparse
 import json
 import warnings
 
+from anndata import read_h5ad
 import scimap as sm
 
 
-def main(inputs, anndata, outfile):
+def main(inputs, outfile):
     """
     Parameters
     ---------
@@ -21,7 +22,7 @@ def main(inputs, anndata, outfile):
     with open(inputs, 'r') as param_handler:
         params = json.load(param_handler)
 
-    adata = read_h5ad(anndata)
+    adata = read_h5ad(params['anndata'])
 
     df = sm.hl.scimap_to_csv(
         adata = adata, 
@@ -29,7 +30,7 @@ def main(inputs, anndata, outfile):
         CellID = params['cellid'],
     )
 
-    df.to_csv(outfile)
+    df.to_csv(outfile, index = False)
 
 
 if __name__ == '__main__':
