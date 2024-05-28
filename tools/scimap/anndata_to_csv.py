@@ -24,9 +24,12 @@ def main(inputs, outfile):
 
     adata = read_h5ad(params['anndata'])
 
+    if params['adata_layer']['layer'] == 'x':
+        params['adata_layer']['layer'] = None
+
     df = sm.hl.scimap_to_csv(
         adata = adata, 
-        data_type = params['rep']['representation'],
+        layer = params['adata_layer']['layer'],
         CellID = params['cellid'],
     )
 

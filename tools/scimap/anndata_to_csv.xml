@@ -19,11 +19,10 @@
     </configfiles>
     <inputs>
         <param name="anndata" type="data" format="h5ad" label="Select the input anndata" />
-        <conditional name="rep">
-            <param name="representation" type="select" label="Select representation of data to export">
-                <option value="scaled">adata.X</option>
+        <conditional name="adata_layer">
+            <param name="layer" type="select" label="Select the Anndata layer to export">
+                <option value="x">adata.X</option>
                 <option value="raw">adata.raw.X</option>
-                <option value="log">Log transformation of adata.raw.X</option>
             </param>
         </conditional>
         <param name="cellid" type="text" value="CellID" label="Name of column containing Cell IDs" />
@@ -34,7 +33,7 @@
     <tests>
         <test>
             <param name="anndata" value="imc.h5ad" />
-            <param name="representation" value="scaled" />
+            <param name="layer" value="x" />
             <output name="outfile" ftype="csv">
                 <assert_contents>
                     <has_n_columns n="36" sep="," />
