@@ -5,7 +5,7 @@
 
     <xml name="vitessce_requirements">
         <requirements>
-            <container type="docker">quay.io/goeckslab/vitessce:@TOOL_VERSION@v2</container>
+            <container type="docker">quay.io/goeckslab/vitessce:@TOOL_VERSION@v3</container>
         </requirements>
     </xml>
 
