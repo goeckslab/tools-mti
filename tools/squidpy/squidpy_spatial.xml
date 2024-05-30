@@ -1,13 +1,17 @@
-<tool id="squidpy_spatial" name="Squidpy Graph and Plotting" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
-    <description>for spatial analysis </description>
+<tool id="squidpy_spatial" name="Analyze and visualize spatial multi-omics data" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>with Squidpy</description>
     <macros>
         <import>main_macros.xml</import>
     </macros>
+    <edam_operations>
+        <edam_operation>operation_3443</edam_operation>
+    </edam_operations>
     <expand macro="squidpy_requirements"/>
     <expand macro="macro_stdio" />
     <version_command>echo "@TOOL_VERSION@"</version_command>
     <command detect_errors="aggressive">
         <![CDATA[
+        export TQDM_DISABLE=True &&
         python '$__tool_directory__/squidpy_spatial.py'
             --inputs '$inputs'
             --anndata '$anndata'
@@ -61,11 +65,6 @@
                 <expand macro="squidpy_spatial_options">
                     <param argument="connectivity_key" type="text" value="" optional="true" label="Key in anndata.AnnData.obsp where spatial connectivities are stored" />
                     <param argument="n_perms" type="integer" value="1000" label="Number of permutations for the permutation test" />
-                    <param argument="numba_parallel" type="select" label="Whether to use numba.prange or not">
-                        <option value="false" selected="true">No -- Recommended for small datasets or small number of interactions</option>
-                        <option value="true">Yes</option>
-                        <option value="none">Auto</option>
-                    </param>
                     <param argument="seed" type="integer" value="" optional="true" label="Randomness seed" />
                 </expand>
                 <expand macro="squidpy_plotting_options_more">
@@ -79,7 +78,7 @@
                 <param argument="cluster_key" type="text" value="" optional="false" label="Key in anndata.AnnData.obs where clustering is stored" />
                 <expand macro="squidpy_spatial_options">
                     <param argument="spatial_key" type="text" value="spatial" optional="false" label="The Key where spatial coordinates are stored" help="Key in `anndata.AnnData.obsm`." />
-                    <param argument="n_steps" type="integer" value="50" label="Number of distance thresholds at which co-occurrence is computed" />
+                    <param argument="interval" type="integer" value="50" label="Number of distance thresholds at which co-occurrence is computed" />
                     <param argument="n_splits" type="integer" value="" optional="true" label="Number of splits in which to divide the spatial coordinates" help="In anndata.AnnData.obsm ['{spatial_key}']." />
                 </expand>
                 <expand macro="squidpy_plotting_options">
@@ -178,11 +177,6 @@
                         <option value="clusters" selected="true">clusters -- correct clusters by performing FDR correction across the interactions</option>
                         <option value="interactions">interactions -- correct interactions by performing FDR correction across the clusters</option>
                     </param>
-                    <param argument="numba_parallel" type="select" label="Whether to use numba.prange or not">
-                        <option value="false" selected="true">No -- Recommended for small datasets or small number of interactions</option>
-                        <option value="true">Yes</option>
-                        <option value="none">Auto</option>
-                    </param>
                     <param argument="key_added" type="text" value="" optional="true" label="Key in anndata to store the result" help="In `anndata.AnnData.uns`. If None, '{cluster_key}_ligrec' will be used." />
                     <param argument="gene_symbols" type="text" value="" optional="true" label="Key in anndata.AnnData.var to use instead of anndata.AnnData.var_names" help="Optional." />
                     <param argument="seed" type="integer" value="" label="Randomness seed" />
@@ -257,7 +251,7 @@
         </data>
     </outputs>
     <tests>
-        <test>
+        <test expect_num_outputs="1">
             <param name="anndata" value="imc.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="spatial_neighbors" />
             <output name="output">
@@ -266,7 +260,7 @@
                 </assert_contents>
             </output>
         </test>
-        <test>
+        <test expect_num_outputs="2">
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="nhood_enrichment" />
             <param name="cluster_key" value="cell type" />
@@ -277,7 +271,7 @@
             </output>
             <output name="output_plot" file="imc_nhood_enrichment.png" compare="sim_size" delta="2000" />
         </test>
-        <test>
+        <test expect_num_outputs="2">
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="co_occurrence" />
             <param name="cluster_key" value="cell type" />
@@ -288,7 +282,7 @@
             </output>
             <output name="output_plot" file="imc_co_occurrence.png" compare="sim_size" delta="2000" />
         </test>
-        <test>
+        <test expect_num_outputs="2">
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="centrality_scores" />
             <param name="cluster_key" value="cell type" />
@@ -299,7 +293,7 @@
             </output>
             <output name="output_plot" file="imc_centrality_scores.png" compare="sim_size" delta="2000" />
         </test>
-        <test>
+        <test expect_num_outputs="2">
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="interaction_matrix" />
             <param name="cluster_key" value="cell type" />
@@ -310,7 +304,7 @@
             </output>
             <output name="output_plot" file="imc_interaction_matrix.png" compare="sim_size" delta="2000" />
         </test>
-        <test>
+        <test expect_num_outputs="2">
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
             <param name="selected_tool" value="ripley" />
             <param name="cluster_key" value="cell type" />
@@ -341,6 +335,5 @@ This tool includes various of single cell spatial analysis utils provided by Squ
 
         ]]>
     </help>
-    <citations>
-    </citations>
+    <expand macro="citations" />
 </tool>

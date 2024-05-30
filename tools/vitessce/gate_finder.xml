@@ -1,8 +1,11 @@
-<tool id="gate_finder" name="Gate Finder" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
-    <description>displays a series of gating outcomes using Vitessce</description>
+<tool id="gate_finder" name="Perform gating" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>with Vitessce</description>
     <macros>
         <import>main_macros.xml</import>
     </macros>
+    <edam_operations>
+        <edam_operation>operation_3443</edam_operation>
+    </edam_operations>
     <expand macro="vitessce_requirements"/>
     <expand macro="macro_stdio" />
     <version_command>echo "@VERSION@"</version_command>
@@ -14,7 +17,7 @@
         <param name="image" type="data" format="ome.tiff" label="Select the image (OME-TIFF)" />
         <param name="masks" type="data" format="tiff,ome.tiff" optional="true" label="Select masks for the OME Tiff image (Optional)" />
         <section name="do_phenotyping" title=" ">
-            <param name="phenotyping_choice" type="hidden" value="true"/>
+            <param name="phenotyping_choice" type="hidden" value="add_h5ad"/>
         </section>
         <param name="phenotyping_choice" type="hidden" value="yes" />
         <param name="anndata" type="data" format="h5ad" label="Select the anndata containing marker intensities" />

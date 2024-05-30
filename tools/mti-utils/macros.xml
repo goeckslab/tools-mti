@@ -11,10 +11,11 @@
     </xml>
     <xml name="citations">
         <citations>
+        <citation type="doi">10.1101/2022.08.18.504436</citation>
         </citations>
     </xml>
-
+    
     <token name="@TOOL_VERSION@">0.0.1</token>
-    <token name="@VERSION_SUFFIX@">1</token>
+    <token name="@VERSION_SUFFIX@">5</token>
     <token name="@PROFILE@">19.01</token>
 </macros>
