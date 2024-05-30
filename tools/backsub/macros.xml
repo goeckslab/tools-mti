@@ -2,8 +2,7 @@
 <macros>
     <xml name="requirements">
         <requirements>
-            <requirement type="package" version="@TOOL_VERSION@">background-subtraction</requirement>
-            <container type="docker">kbestak/background_sub:latest</container>
+            <container type="docker">ghcr.io/schapirolabor/background_subtraction:v@TOOL_VERSION@</container>
         </requirements>
     </xml>
 
@@ -16,10 +15,9 @@
         </citations>
     </xml>
 
+    <token name="@PROFILE@">21.0</token>
     <token name="@TOOL_VERSION@">0.4.1</token>
     <token name="@VERSION_SUFFIX@">0</token>
-    <token name="@CMD_BEGIN@">backsub</token>
-    <token name="@PROFILE@">21.0</token>
-    <token name="@BACKSUB_PATH@">background_sub.py</token>
+    <token name="@CMD_BEGIN@">python /background_subtraction/background_sub.py</token>
 
 </macros>
