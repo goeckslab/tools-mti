@@ -1,6 +1,6 @@
-<tool id="backsub" name="BACKSUB" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+<tool id="backsub" name="Background subtraction" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
 
-    <description>Autofluorescence subtraction module for sequential immunofluorescene images.</description>
+    <description>for sequential immunofluorescence images.</description>
 
     <macros>
         <import>macros.xml</import>
@@ -23,7 +23,7 @@
         --output out.ome.tiff
 
         ##Name output markers file
-        --marker-output out.tsv
+        --marker-output out.csv
 
         ##Additional arguments
         #if $adv.pixel_size
@@ -33,52 +33,45 @@
         #if $adv.tile_size
         --tile-size $adv.tile_size
         #end if
-
-        #if $adv.chunk_size
-        --chunk-size $adv.chunk_size
-        #end if
         
     ]]></command>
 
     <inputs>
-        <param name="root" type="data" format="ome.tiff" optional="false" label="File path to root image file"/>
-        <param name="markers" type="data" format="csv" optional="false" label="File path to required markers.csv file"/>
+        <param name="root" type="data" format="ome.tiff" optional="false" label="Image to process"/>
+        <param name="markers" type="data" format="csv" optional="false" label="Markers file mapping channels to subtract" help="Expected columns: marker_name, background, exposure, remove"/>
         <section name="adv" title="Advanced Options" expanded="false">
-            <param name="pixel_size" type="float" optional="true" label="Pixel size in microns"/>
+            <param name="pixel_size" type="float" optional="true" label="Pixel size in microns" help="If not supplied, finds resolution in XML metadata, otherwise defaults to 1"/>
             <param name="tile_size" type="integer" optional="true" label="Tile size for pyramid generation (default 1024)"/>
-            <param name="chunk_size" type="integer" optional="true" label="Chunk size for dask array (e.g for chunksize 1000, the image will be split into 1000x1000 chunks) (default 5000)"/>
         </section>
     </inputs>
 
     <outputs>
-        <data format="ome.tiff" name="output" from_work_dir="out.ome.tiff" label="${tool.name} on ${on_string}: OutputTiff"/>
-        <data format="csv" name="marker_output" from_work_dir="out.csv" label="${tool.name} on ${on_string}: OutputMarkers"/>
+        <data format="ome.tiff" name="image_output" from_work_dir="out.ome.tiff" label="${tool.name} on ${on_string}: Subtracted Image"/>
+        <data format="csv" name="marker_output" from_work_dir="out.csv" label="${tool.name} on ${on_string}: Markers"/>
     </outputs>
 
     <tests>
         <test expect_num_outputs="2">
-            <param name="markers" value="stacked_AF488_FDX1_crop.csv" />
-            <param name="root" value="stacked_AF488_FDX1_crop.ome.tiff" />
-            <output name="output" value="out.ome.tiff" ftype="ome.tiff">
+            <param name="root" value="test.ome.tiff" />
+            <param name="markers" value="test_markers.csv" />
+            <param name="tile_size" value="256" />
+            <output name="image_output" ftype="ome.tiff">
                 <assert_contents>
-                    <has_size value="2000000" delta="1900000" />
+                    <has_size value="520000" delta="10000" />
                 </assert_contents>
             </output>
-            <output name="marker_output" value="out.csv" ftype="csv">
+            <output name="marker_output" ftype="csv">
                 <assert_contents>
-                    <has_size value="5000" delta="4999" />
+                    <has_n_columns n="3" sep="," />
+                    <has_n_lines n="3" />
                 </assert_contents>
             </output>
         </test>
     </tests>
     <help><![CDATA[
---------------------------------------------------------------------------------
-BACKSUB: BACKground SUBtraction for multichannel and multicycle images
---------------------------------------------------------------------------------
+**Background autofluorescence subtraction for cyclic imaging data**
 
-**MCMICRO's Background autofluorescence subtraction for cyclic imaging data**
-
-**BACKSUB** performs Pixel-by-pixel channel subtraction scaled by exposure times
+Performs Pixel-by-pixel channel subtraction scaled by exposure times
 primarily developed for images produced by the COMET platform and to work within
 the MCMICRO pipeline. Main usecase is autuofluorescence subtraction for
 multichannel and multicycle images for visualization of images from tissues with
@@ -86,7 +79,18 @@ high autofluroescence (FFPE), improved segmentation, and quantification (if the
 previous two usecases aren't necessary, downstream subtraction of
 autofluorescent signal is encouraged as the script is memory inefficent).
 
-*Visit https://github.com/SchapiroLabor/Background_subtraction/ for the most up-to-date information on BACKSUB.*
+The markers file (CSV) gives details about the channels and needs to contain 
+the following columns: "marker_name", "background", "exposure", "remove"
+
+The "marker_name" column should indicate the marker for the acquired channel and all values should be unique. 
+The "background" column should indicate the marker name of the channel which needs to be subtracted. 
+This value must match the "marker_name" value of the background channel. 
+The "exposure" column should contain the exposure time used for channel acquisition, 
+and the measure unit should be consistent across the column. Exposure time is used for scaling the 
+value of the background to be comparable to the processed channel. The "remove" column should contain 
+logical `TRUE` values for channels which should be exluded in the output image.
+
+*Visit https://github.com/SchapiroLabor/Background_subtraction/ for the most up-to-date information*
     ]]></help>
     <expand macro="citations" />
 </tool>
