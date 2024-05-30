@@ -1,54 +1,79 @@
 {% set name = "scimap" %}
-{% set version = "0.17.7" %}
+{% set version = "2.1.0" %}
 
 package:
-  name: "{{ name|lower }}"
-  version: "{{ version }}"
+  name: {{ name|lower }}
+  version: {{ version }}
 
 source:
-  url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
-  sha256: 319eba50ca29045ba2fc8e2289b3af15b123abd2826f60a821c85d0b5a13aba1
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/scimap-{{ version }}.tar.gz
+  sha256: b65dba41a51b30e53252f76f64ccb7a993b2794b4535048373da6254931338de
 
 build:
+  entry_points:
+    - scimap-mcmicro = scimap.cli._scimap_mcmicro:mcmicro_wrap
+    - scimap-clustering = scimap.cli._scimap_mcmicro:clustering
+    - scimap-merge-h5ad = scimap.cli._scimap_mcmicro:merge
+  noarch: python
+  script:
+    - {{ PYTHON }} -m pip install https://files.pythonhosted.org/packages/fc/37/4aa1d8c2ded0c612031d32ad8606b6222243f9326ca28754122e306680be/PhenoGraph-1.5.7-py3-none-any.whl
+    - {{ PYTHON }} -m pip install https://files.pythonhosted.org/packages/24/fc/02b94724719fe2ee6557133c5b3eb2b3a6c2b0a193dc09f808bfc4c8a246/combat-0.3.3.tar.gz 
+    - {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
 
 requirements:
   host:
-    - numpy >=1.18.5,<2.0.0
+    - python >=3.9,<3.11
+    - poetry-core
     - pip
-    - python >=3.7,<3.8
-    - scanpy >=1.6.0,<2.0.0
-    - poetry
   run:
-    - anndata >=0.7.4,<0.8.0
-    - dask[array] >=2.30.0,<3.0.0
-    - gensim >=3.8.3,<4.0.0
-    - llvmlite <=0.34.0
-    - matplotlib >=3.2.1,<4.0.0
-    - mkdocs >=1.1.2,<2.0.0
-    - mkdocs-material >=7.1.1,<8.0.0
-    - napari >=0.4.2,<0.5.0
-    - numba <=0.51.2
-    - numpy >=1.18.5,<2.0.0
-    - pandas >=1.0.4,<2.0.0
-    - plotly >=4.12.0,<5.0.0
-    - pytest >=5.4.3,<6.0.0
-    - pytest-xvfb >=2.0.0,<3.0.0
-    - python >=3.7,<3.8
-    - scanpy >=1.6.0,<2.0.0
-    - scipy >=1.4.1,<2.0.0
-    - seaborn >=0.11.0,<0.12.0
-    - shapely >=1.7.1,<2.0.0
-    - tifffile >=2020.11.18,<2021.0.0
-    - tifffile >=2020.6.3,<2021.0.0
-    - zarr >=2.5.0,<3.0.0
+    - python >=3.9,<3.11
+    - pytest >=7.4.3,<8.0.0
+    - anndata >=0.10.5,<0.10.6
+    - pandas >=2.1.3,<3.0.0
+    - scipy 1.12.0
+    - seaborn >=0.13.2,<0.14.0
+    - tifffile >=2023.9.26,<2024.0.0
+    - numpy >=1.26.2,<2.0.0
+    - pytest-xvfb >=3.0.0,<4.0.0
+    - matplotlib-base >=3.8.1,<4.0.0
+    - scanpy >=1.9.6,<2.0.0
+    - mkdocs >=1.5.3,<2.0.0
+    - plotly >=5.18.0,<6.0.0
+    - dask-core >=2023.11.0,<2024.0.0
+    - zarr 2.10.3
+    - numba >=0.58.1
+    - shapely >=2.0.2,<3.0.0
+    - gensim >=4.3.2,<5.0.0
+    - mkdocs-material >=9.4.8,<10.0.0
+    - llvmlite >=0.41.1,<0.42.0
+    - mpl-scatter-density >=0.7.0,<0.8.0
+    - scikit-learn >=1.4.2,<2.0.0
+    - mpmath 1.1.0
+    - leidenalg >=0.8.2
+    - psutil >4.0.0
+  run_constrained:
+    - napari >=0.4.18,<0.5.0
+    - napari-ome-zarr >=0.4.0,<0.5.0
+    - pyqt6 >=6.6.1,<7.0.0
 
 test:
   imports:
     - scimap
+  commands:
+    - pip check
+    - scimap-mcmicro --help
+    - scimap-clustering --help
+    - scimap-merge-h5ad --help
+  requires:
+    - pip
 
 about:
-  home: "https://pypi.org/project/scimap"
+  home: https://pypi.org/project/scimap/
+  summary: Spatial Single-Cell Analysis Toolkit
   license: MIT
-  summary: "Spatial Single-Cell Analysis Toolkit"
+  license_file: LICENSE
 
+extra:
+  recipe-maintainers:
+    - CameronFRWatson
