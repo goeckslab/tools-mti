@@ -110,6 +110,5 @@ Anndata with a corresponding key added.
 
         ]]>
     </help>
-    <citations>
-    </citations>
+    <expand macro="citations" />
 </tool>

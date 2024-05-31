@@ -24,7 +24,7 @@ def main(
     output : str
         File path to the output AnnData.
     log: bool
-        Boolean whether to log the input data prior to rescaling 
+        Boolean whether to log the input data prior to rescaling
     gating_workflow : str
         File path to the gating workflow.
     gating_workflow_ext : str
@@ -44,13 +44,22 @@ def main(
         sep = ',' if manual_gates_ext == 'csv' else '\t'
         manual_gates = pd.read_csv(manual_gates, sep=sep)
 
-    adata = sm.pp.rescale(adata, gate=manual_gates, log = log, random_state = random_state)
+    adata = sm.pp.rescale(
+        adata,
+        gate=manual_gates,
+        log=log,
+        random_state=random_state
+    )
 
     # Phenotype cells
     # Load the gating workflow
     sep = ',' if gating_workflow_ext == 'csv' else '\t'
     phenotype = pd.read_csv(gating_workflow, sep=sep)
-    adata = sm.tl.phenotype_cells(adata, phenotype=phenotype, label="phenotype")
+    adata = sm.tl.phenotype_cells(
+        adata,
+        phenotype=phenotype,
+        label="phenotype"
+    )
 
     # Summary of the phenotyping
     print(adata.obs['phenotype'].value_counts())
@@ -63,24 +72,49 @@ if __name__ == '__main__':
     aparser.add_argument("-a", "--adata", dest="adata", required=True)
     aparser.add_argument("-o", "--output", dest="output", required=True)
     aparser.add_argument("-l", "--log", dest="log", action="store_true")
-    aparser.add_argument("-g", "--gating_workflow", dest="gating_workflow", required=True)
-    aparser.add_argument("-s", "--gating_workflow_ext", dest="gating_workflow_ext", required=True)
-    aparser.add_argument("-m", "--manual_gates", dest="manual_gates", required=False)
-    aparser.add_argument("-S", "--manual_gates_ext", dest="manual_gates_ext", required=False)
-    aparser.add_argument("--random_state", dest="random_state", type=int, required=False)
+    aparser.add_argument(
+        "-g",
+        "--gating_workflow",
+        dest="gating_workflow",
+        required=True
+    )
+    aparser.add_argument(
+        "-s",
+        "--gating_workflow_ext",
+        dest="gating_workflow_ext",
+        required=True
+    )
+    aparser.add_argument(
+        "-m",
+        "--manual_gates",
+        dest="manual_gates",
+        required=False
+    )
+    aparser.add_argument(
+        "-S",
+        "--manual_gates_ext",
+        dest="manual_gates_ext",
+        required=False
+    )
+    aparser.add_argument(
+        "--random_state",
+        dest="random_state",
+        type=int,
+        required=False
+    )
 
     args = aparser.parse_args()
 
     if args.log:
         print("\n adata.raw.X will be log1p transformed \n")
-  
-    main(    
-        adata = args.adata,
-        output = args.output,
-        log = args.log,
-        gating_workflow = args.gating_workflow,
-        gating_workflow_ext = args.gating_workflow_ext,
-        manual_gates = args.manual_gates,
-        manual_gates_ext = args.manual_gates_ext,
-        random_state = args.random_state
+
+    main(
+        adata=args.adata,
+        output=args.output,
+        log=args.log,
+        gating_workflow=args.gating_workflow,
+        gating_workflow_ext=args.gating_workflow_ext,
+        manual_gates=args.manual_gates,
+        manual_gates_ext=args.manual_gates_ext,
+        random_state=args.random_state
     )

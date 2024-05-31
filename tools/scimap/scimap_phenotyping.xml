@@ -72,6 +72,5 @@ Anndata with "obs/phenotype" added.
 
         ]]>
     </help>
-    <citations>
-    </citations>
+    <expand macro="citations" />
 </tool>

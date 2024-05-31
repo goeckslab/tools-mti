@@ -19,12 +19,10 @@
     </configfiles>
     <inputs>
         <param name="anndata" type="data" format="h5ad" label="Select the input anndata" />
-        <conditional name="adata_layer">
-            <param name="layer" type="select" label="Select the Anndata layer to export">
-                <option value="x">adata.X</option>
-                <option value="raw">adata.raw.X</option>
-            </param>
-        </conditional>
+        <param name="layer" type="select" label="Select the Anndata layer to export">
+            <option value="x">adata.X</option>
+            <option value="raw">adata.raw.X</option>
+        </param>
         <param name="cellid" type="text" value="CellID" label="Name of column containing Cell IDs" />
     </inputs>
     <outputs>
@@ -48,12 +46,11 @@
 
 This scimap function converts from Anndata format to CSV.
 There are three options for the data matrix returned: 
-    1) the current contents of adata.X
-    2) the current contents of adata.raw.X
-    3) the current contents of adata.raw.X with a log+1 transformation applied 
+1) the current contents of adata.X
+2) the current contents of adata.raw.X
+3) the current contents of adata.raw.X with a log+1 transformation applied 
 
         ]]>
     </help>
-    <citations>
-    </citations>
+    <expand macro="citations" />
 </tool>

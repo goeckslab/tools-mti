@@ -28,12 +28,12 @@ def main(inputs, outfile):
         params['adata_layer']['layer'] = None
 
     df = sm.hl.scimap_to_csv(
-        adata = adata, 
-        layer = params['adata_layer']['layer'],
-        CellID = params['cellid'],
+        adata=adata,
+        layer=params['adata_layer']['layer'],
+        CellID=params['cellid'],
     )
 
-    df.to_csv(outfile, index = False)
+    df.to_csv(outfile, index=False)
 
 
 if __name__ == '__main__':

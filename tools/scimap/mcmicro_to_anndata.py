@@ -31,7 +31,11 @@ def main(inputs, outfile):
         if v == '':
             options[k] = None
 
-    adata = sm.pp.mcmicro_to_scimap(image_path, drop_markers=drop_markers, **options)
+    adata = sm.pp.mcmicro_to_scimap(
+        image_path,
+        drop_markers=drop_markers,
+        **options
+    )
 
     adata.write(outfile)
 
