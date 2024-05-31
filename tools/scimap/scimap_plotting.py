@@ -1,12 +1,12 @@
 import argparse
 import json
-import warnings
 import os
+import warnings
 
 import matplotlib.pylab as plt
 import numpy as np
-import seaborn as sns
 import scimap as sm
+import seaborn as sns
 from anndata import read_h5ad
 
 sns.set(color_codes=True)
