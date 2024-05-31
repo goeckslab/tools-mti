@@ -1,14 +1,14 @@
-import os
 import argparse
+import os
 import json
 import warnings
 
+import matplotlib.pylab as plt
+import seaborn as sns
+import numpy as np
 import scimap as sm
 from anndata import read_h5ad
 
-import numpy as np
-import matplotlib.pylab as plt
-import seaborn as sns
 sns.set(color_codes=True)
 
 
@@ -51,7 +51,7 @@ def main(inputs, anndata, output):
         df = sm.pl.stacked_barplot(adata, **options)
 
         # Pick cmap to use
-        num_phenotypes = len(df.columns)-1
+        num_phenotypes = len(df.columns) - 1
         if num_phenotypes <= 9:
             matplotlib_cmap = "Set1"
         elif num_phenotypes > 9 and num_phenotypes <= 20:

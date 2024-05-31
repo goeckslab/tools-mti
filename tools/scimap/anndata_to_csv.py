@@ -2,8 +2,8 @@ import argparse
 import json
 import warnings
 
-from anndata import read_h5ad
 import scimap as sm
+from anndata import read_h5ad
 
 
 def main(inputs, outfile):
@@ -24,12 +24,12 @@ def main(inputs, outfile):
 
     adata = read_h5ad(params['anndata'])
 
-    if params['adata_layer']['layer'] == 'x':
-        params['adata_layer']['layer'] = None
+    if params['layer'] == 'x':
+        params['layer'] = None
 
     df = sm.hl.scimap_to_csv(
         adata=adata,
-        layer=params['adata_layer']['layer'],
+        layer=params['layer'],
         CellID=params['cellid'],
     )
 

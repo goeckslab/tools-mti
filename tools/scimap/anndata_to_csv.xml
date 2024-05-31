@@ -30,12 +30,12 @@
     </outputs>
     <tests>
         <test>
-            <param name="anndata" value="imc.h5ad" />
+            <param name="anndata" value="tutorial_data.h5ad" />
             <param name="layer" value="x" />
             <output name="outfile" ftype="csv">
                 <assert_contents>
-                    <has_n_columns n="36" sep="," />
-                    <has_n_lines n="4669" />
+                    <has_n_columns n="41" sep="," />
+                    <has_n_lines n="500" />
                 </assert_contents>
             </output>
         </test>

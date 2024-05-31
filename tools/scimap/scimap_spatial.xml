@@ -166,7 +166,7 @@
     </outputs>
     <tests>
         <test>
-            <param name="anndata" value="imc.h5ad" />
+            <param name="anndata" value="tutorial_data_pheno.h5ad" />
             <conditional name="analyses">
                 <param name="selected_tool" value="cluster" />
                 <param name="method" value="kmeans" />
