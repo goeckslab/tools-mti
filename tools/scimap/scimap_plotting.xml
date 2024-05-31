@@ -88,7 +88,7 @@
             </conditional>
             <output name="output">
                 <assert_contents>
-                    <has_size value="506000" delta="10000" />
+                    <has_size value="510000" delta="10000" />
                 </assert_contents>
             </output>
         </test>

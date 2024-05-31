@@ -1,11 +1,11 @@
 import argparse
-import os
 import json
 import warnings
+import os
 
 import matplotlib.pylab as plt
-import seaborn as sns
 import numpy as np
+import seaborn as sns
 import scimap as sm
 from anndata import read_h5ad
 
