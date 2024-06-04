@@ -18,6 +18,5 @@
     <token name="@PROFILE@">21.0</token>
     <token name="@TOOL_VERSION@">0.4.1</token>
     <token name="@VERSION_SUFFIX@">0</token>
-    <token name="@CMD_BEGIN@">python /background_subtraction/background_sub.py</token>
 
 </macros>
