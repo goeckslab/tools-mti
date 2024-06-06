@@ -22,8 +22,8 @@
         </citations>
     </xml>
 
-    <token name="@TOOL_VERSION@">1.5.3</token>
-    <token name="@VERSION_SUFFIX@">1</token>
+    <token name="@TOOL_VERSION@">1.6.0</token>
+    <token name="@VERSION_SUFFIX@">2</token>
     <token name="@CMD_BEGIN@"><![CDATA[
     QUANT_PATH='' &&
     if [ -f '/app/CommandSingleCellExtraction.py' ]; then
