@@ -1,0 +1,9 @@
+owner: goeckslab
+name: backsub
+description: "Background autofluorescence subtraction for MCMICRO"
+long_description: |
+  "Pixel-by-pixel channel subtraction scaled by exposure times, primarily developed for images produced by the COMET platform and to work within the MCMICRO pipeline. Main usecase is autuofluorescence subtraction for multichannel and multicycle images for visualization of images from tissues with high autofluroescence (FFPE), improved segmentation, and quantification (if the previous two usecases aren't necessary, downstream subtraction of autofluorescent signal is encouraged as the script is memory inefficent)."
+remote_repository_url: https://github.com/goeckslab/tools-mti/tree/main/tools/background-subtraction
+homepage_url: https://github.com/SchapiroLabor/Background_subtraction
+categories: 
+  - "Imaging"

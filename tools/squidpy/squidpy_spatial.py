@@ -51,11 +51,6 @@ def main(inputs, anndata, output, output_plot):
             options[k] = [e.strip() for e in v.split(',')]
         elif k == 'radius':    # for spatial_neighbors
             options[k] = ast.literal_eval(v)
-        elif k == 'numba_parallel':    # for nhood_enrichment and ligrec
-            if v == 'false':
-                options[k] = False
-            elif v == 'true':
-                options[k] = True
         elif k == 'interactions':    # for ligrec
             options[k] = pd.read_csv(v, sep="\t")
         elif k == 'max_neighs':

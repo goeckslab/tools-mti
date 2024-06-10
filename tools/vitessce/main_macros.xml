@@ -1,11 +1,11 @@
 <macros>
     <token name="@TOOL_VERSION@">1.0.4</token>
-    <token name="@VERSION_SUFFIX@">3</token>
+    <token name="@VERSION_SUFFIX@">5</token>
     <token name="@PROFILE@">20.01</token>
 
     <xml name="vitessce_requirements">
         <requirements>
-            <container type="docker">quay.io/goeckslab/vitessce:@TOOL_VERSION@</container>
+            <container type="docker">quay.io/goeckslab/vitessce:@TOOL_VERSION@v3</container>
         </requirements>
     </xml>
 
@@ -18,7 +18,8 @@
     <xml name="vitessce_cmd" token_tool_id="vitessce_spatial">
         <command detect_errors="aggressive">
         <![CDATA[
-        export BF_MAX_MEM="\${GALAXY_MEMORY_MB}m" &&
+        MAX_MEM=\${GALAXY_MEMORY_MB:-2000} &&
+        export BF_MAX_MEM="\$((\$MAX_MEM/2))m" &&
         mkdir -p '${output.files_path}/A/0' &&
         ln -sf '$image' '${output.files_path}/A/0/image01.ome.tiff' &&
         #if $masks
