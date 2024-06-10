@@ -1,5 +1,5 @@
 <tool id="scimap_anndata_to_csv" name="Convert Anndata to CSV" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
-    <description>Convert Anndata object to CSV</description>
+    <description>with Scimap</description>
     <macros>
         <import>main_macros.xml</import>
     </macros>
