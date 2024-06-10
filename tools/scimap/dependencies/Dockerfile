@@ -1,8 +1,5 @@
-FROM ubuntu:20.04
+FROM python:3.10
 
-ENV VERSION=0.17.7
-RUN apt-get update && \
-    apt-get install -y git python3 python3-pip unzip wget && \
-    ln -s /usr/bin/python3 /usr/bin/python
+ENV VERSION=2.1.0
 
-RUN pip install scimap==$VERSION
+RUN pip install scimap==$VERSION anndata==0.10.5.post1
