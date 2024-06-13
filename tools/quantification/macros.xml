@@ -3,8 +3,8 @@
     <xml name="requirements">
         <requirements>
             <!--
-            <requirement type="package" version="3.9">python</requirement>
-            <requirement type="package" version="0.18.0">scikit-image</requirement>
+            <requirement type="package" version="3.11">python</requirement>
+            <requirement type="package" version="0.23.2">scikit-image</requirement>
             <requirement type="package">h5py</requirement>
             <requirement type="package">pandas</requirement>
             <requirement type="package">numpy</requirement>
@@ -19,18 +19,11 @@
     </xml>
     <xml name="citations">
         <citations>
+            <citation type="doi">10.1038/s41592-021-01308-y</citation>
         </citations>
     </xml>
 
     <token name="@TOOL_VERSION@">1.6.0</token>
     <token name="@VERSION_SUFFIX@">2</token>
-    <token name="@CMD_BEGIN@"><![CDATA[
-    QUANT_PATH='' &&
-    if [ -f '/app/CommandSingleCellExtraction.py' ]; then
-        export QUANT_PATH='python /app/CommandSingleCellExtraction.py';
-    else
-        export QUANT_PATH='CommandSingleCellExtraction.py';
-    fi &&
-    \$QUANT_PATH
-    ]]></token>
+    <token name="@CMD_BEGIN@">mcquant</token>
 </macros>
