@@ -24,6 +24,6 @@
     </xml>
 
     <token name="@TOOL_VERSION@">1.6.0</token>
-    <token name="@VERSION_SUFFIX@">2</token>
+    <token name="@VERSION_SUFFIX@">0</token>
     <token name="@CMD_BEGIN@">mcquant</token>
 </macros>
