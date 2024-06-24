@@ -144,6 +144,7 @@
                     <param argument="knn" type="integer" value="10" optional="true" label="Number of cells considered for defining the local neighbhourhood" />
                     <param argument="num_motifs" type="integer" value="10" optional="true" label="The number of requested latent motifs to be extracted from the training corpus" />
                     <param argument="random_state" type="integer" value="0" optional="true" label="The seed number for random state" />
+                    <param argument="max_weight_assignment" type="boolean" checked="false" optional="true" label="Assign cells to motifs based on maximum LDA weight" />
                 </expand>
             </when>
             <when value="spatial_pscore">
@@ -163,6 +164,11 @@
     </inputs>
     <outputs>
         <data format="h5ad" name="output" label="Scimap.tools.${analyses.selected_tool} on ${on_string}" />
+        <collection name="tabular_outputs" type="list" label="Tabular outputs from Scimap.tools.${analyses.selected_tool} on ${on_string}">
+            <data format="txt" name="lda_weights" from_work_dir="lda_weights.txt" label="LDA weights from Scimap.tools.${analyses.selected_tool} on ${on_string}" />
+            <data format="txt" name="lda_probabilities" from_work_dir="lda_probabilities.txt" label="LDA probabilites from Scimap.tools.${analyses.selected_tool} on ${on_string}" />
+            <filter>analyses['selected_tool'] == 'spatial_lda'</filter>
+        </collection>
     </outputs>
     <tests>
         <test>
