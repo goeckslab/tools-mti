@@ -1,0 +1,114 @@
+<tool id="scimap_plotting" name="Spatial plotting functions" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>from Scimap</description>
+    <macros>
+        <import>main_macros.xml</import>
+    </macros>
+
+    <expand macro="scimap_requirements"/>
+    <expand macro="macro_stdio" />
+    <version_command>echo "@VERSION@"</version_command>
+    <command detect_errors="aggressive">
+        <![CDATA[
+        python '$__tool_directory__/scimap_plotting.py'
+            --inputs '$inputs'
+            --anndata '$anndata'
+            --output '$output'
+
+        ]]>
+    </command>
+    <configfiles>
+        <inputs name="inputs" />
+    </configfiles>
+    <inputs>
+        <param name="anndata" type="data" format="h5ad" label="Select the input anndata" />
+        <conditional name="analyses">
+            <param name="selected_tool" type="select" label="Select a plotting function to run">
+                <option value="stacked_barplot">Stacked barplot</option>
+                <option value="voronoi">Voronoi</option>
+            </param>
+            <when value="stacked_barplot">
+                <param argument="x_axis" type="text" value="imageid" label="Categorical column in adata.obs to be plotted on the x axis" />
+                <param argument="y_axis" type="text" value="phenotype" label="Categorical column in adata.obs to be plotted on the y axis" />
+                <param name="method" type="select" label="Select the metric for plotting">
+                    <option value="percent" selected="true">Percent abundance</option>
+                    <option value="absolute">Absolute abundance</option>
+                </param>
+                <section name="options" title="Advanced Options" expanded="false">
+                    <param argument="subset_xaxis" type="text" value="" optional="true" label="Subset x-axis prior to plotting. Type in a list of categories to include on x-axis" help="Optional. Comma delimited. Default is all categories in x-axis variable" />
+                    <param argument="subset_yaxis" type="text" value="" optional="true" label="Subset y-axis prior to plotting. Type in a list of categories to include on y-axis" help="Optional. Comma delimited. Default is all categories in y-axis variable" />
+                    <param argument="order_xaxis" type="text" value="" optional="true" label="Type in a list of categories to order to x-axis" help="Optional. Comma delimited. Default ordering is alphabetical" />
+                    <param argument="order_yaxis" type="text" value="" optional="true" label="Type in a list of categories to order to y-axis" help="Optional. Comma delimited. Default ordering is alphabetical" />
+                </section>
+            </when>
+            <when value="voronoi">
+                <param argument="color_by" type="text" value="phenotype" optional="false" label="Pass the name of the categorical variable by which to color the voronoi diagram" />
+                <param argument="x_coordinate" type="text" value="X_centroid" optional="false" label="Pass the name of the column containing cell X coordinates" />
+                <param argument="y_coordinate" type="text" value="Y_centroid" optional="false" label="Pass the name of the column containing cell Y coordinates" />
+                <section name="options" title="Advanced Options" expanded="false">
+                    <param argument="imageid" type="text" value="imageid" optional="true" label="Pass the name of the column containing image IDs" help="Only necessary if subsetting one image out of a multi-image file" />
+                    <param argument="subset" type="text" value="" optional="true" label="Image ID of a single image to be subsetted for plotting" />
+                    <param argument="x_lim" type="text" value="" optional="true" label="Type in a list of limits for the x-axis" help="Optional. Comma delimited: xmin,xmax" />
+                    <param argument="y_lim" type="text" value="" optional="true" label="Type in a list of limits for the y-axis" help="Optional. Comma delimited: ymin,ymax" />
+                    <param argument="flip_y" type="boolean" truevalue="True" falsevalue="False" label="Flip Y-axis" />
+                    <param argument="voronoi_edge_color" type="text" value="black" optional="true" label="Specify a Matplotlib color for marking the edges of the voronoi cells" />
+                    <param argument="voronoi_line_width" type="float" value="0.1" optional="true" label="The linewidth of the marker edges" />
+                    <param argument="voronoi_alpha" type="float" value="0.5" optional="true" label="The alpha blending value for voronoi cells" help="between 0 (transparent) and 1 (opaque)" />
+                    <param argument="size_max" type="float" value="" optional="true" label="The maximum size for the Voronoi cells" help="Default is Inf" />
+                    <param argument="overlay_points" type="text" value="" optional="true" label="Pass the name of the column which contains categorical variable to be overlayed" help="overlays a scatter plot on top of the voronoi diagram" />
+                    <param argument="overlay_points_categories" type="text" value="" optional="true" label="Subset overlay categories to plotting. Type in a list of categories to include" help="Optional. Comma delimited. Default is all categories" />
+                    <param argument="overlay_drop_categories" type="text" value="" optional="true" label="Specify a list of categories to exclude from overlay plotting." help="Convenience alternative to specifying categories to keep" />
+                    <param argument="overlay_point_size" type="integer" value="5" optional="true" label="Overlay point size" />
+                    <param argument="overlay_point_alpha" type="float" value="1" optional="true" label="The alpha blending value for overlay points" help="between 0 (transparent) and 1 (opaque)" />
+                    <param argument="plot_legend" type="boolean" checked="true" truevalue="True" falsevalue="False" label="Whether to include a legend" />
+                    <param argument="legend_size" type="integer" value="6" label="Point size of legend text" />
+                </section>
+            </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data from_work_dir="out.png" format="png" name="output" label="Scimap.pl.${analyses.selected_tool} on ${on_string}" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="anndata" value="tutorial_data_pheno.h5ad" />
+            <conditional name="analyses">
+                <param name="selected_tool" value="stacked_barplot" />
+                <param name="method" value="percent" />
+            </conditional>
+            <output name="output">
+                <assert_contents>
+                    <has_size value="147000" delta="10000" />
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="anndata" value="tutorial_data_pheno.h5ad" />
+            <conditional name="analyses">
+                <param name="selected_tool" value="voronoi" />
+            </conditional>
+            <output name="output">
+                <assert_contents>
+                    <has_size value="510000" delta="10000" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help>
+        <![CDATA[
+**What it does**
+
+This tool does various single cell spatial analyses with Scimap.
+
+**Input**
+
+AnnData.
+
+**Output**
+
+Anndata with a corresponding key added.
+
+
+        ]]>
+    </help>
+    <expand macro="citations" />
+</tool>

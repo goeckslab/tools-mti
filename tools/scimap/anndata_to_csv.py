@@ -3,41 +3,37 @@ import json
 import warnings
 
 import scimap as sm
+from anndata import read_h5ad
 
 
 def main(inputs, outfile):
     """
-    Parameter
+    Parameters
     ---------
     inputs : str
         File path to galaxy tool parameter.
-
-    outfile : str
-        File path to estimator.
+    anndata : str
+        File path to anndata.
+    output : str
+        File path to output.
     """
     warnings.simplefilter('ignore')
 
     with open(inputs, 'r') as param_handler:
         params = json.load(param_handler)
 
-    image_path = params['image_path']
-    drop_markers = params['drop_markers']
-    if not drop_markers:
-        drop_markers = None
-    else:
-        drop_markers = [x.strip() for x in drop_markers.split(',')]
-    options = params['options']
-    for k, v in options.items():
-        if v == '':
-            options[k] = None
+    adata = read_h5ad(params['anndata'])
 
-    adata = sm.pp.mcmicro_to_scimap(
-        image_path,
-        drop_markers=drop_markers,
-        **options
+    if params['layer'] == 'x':
+        params['layer'] = None
+
+    df = sm.hl.scimap_to_csv(
+        adata=adata,
+        layer=params['layer'],
+        CellID=params['cellid'],
     )
 
-    adata.write(outfile)
+    df.to_csv(outfile, index=False)
 
 
 if __name__ == '__main__':

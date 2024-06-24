@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<macros>
+    <xml name="requirements">
+        <requirements>
+            <container type="docker">ghcr.io/schapirolabor/background_subtraction:v@TOOL_VERSION@</container>
+        </requirements>
+    </xml>
+
+    <xml name="version_cmd">
+        <version_command>echo @TOOL_VERSION@</version_command>
+    </xml>
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1038/s41592-021-01308-y</citation>
+        </citations>
+    </xml>
+
+    <token name="@PROFILE@">21.0</token>
+    <token name="@TOOL_VERSION@">0.4.1</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+
+</macros>
