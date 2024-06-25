@@ -171,7 +171,7 @@
         </collection>
     </outputs>
     <tests>
-        <test>
+        <test expect_num_outputs="1">
             <param name="anndata" value="tutorial_data_pheno.h5ad" />
             <conditional name="analyses">
                 <param name="selected_tool" value="cluster" />
@@ -183,7 +183,7 @@
                 </assert_contents>
             </output>
         </test>
-        <test>
+        <test expect_num_outputs="1">
             <param name="anndata" value="tutorial_data_pheno.h5ad" />
             <conditional name="analyses">
                 <param name="selected_tool" value="spatial_aggregate" />
@@ -193,6 +193,34 @@
                     <has_h5_keys keys="obs/spatial_aggregate" />
                 </assert_contents>
             </output>
+        </test>
+        <test expect_num_outputs="4">
+            <param name="anndata" value="tutorial_data_pheno.h5ad" />
+            <conditional name="analyses">
+                <param name="selected_tool" value="spatial_lda" />
+                <section name="options">
+                    <param name="max_weight_assignment" value="True" />
+                </section>
+            </conditional>
+            <output name="output">
+                <assert_contents>
+                    <has_h5_keys keys="obs/neighborhood_motif" />
+                </assert_contents>
+            </output>
+            <output_collection name="tabular_outputs" type="list">
+                <element name="lda_weights">
+                    <assert_contents>
+                        <has_n_lines n="500" />
+                        <has_n_columns n="12" />
+                    </assert_contents>
+                </element>
+                <element name="lda_probabilities">
+                    <assert_contents>
+                        <has_n_lines n="11" />
+                        <has_n_columns n="15" />
+                    </assert_contents>
+                </element>
+            </output_collection>
         </test>
     </tests>
     <help>
