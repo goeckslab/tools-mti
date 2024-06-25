@@ -2,8 +2,8 @@ import argparse
 import json
 import warnings
 
-import scimap as sm
 import pandas as pd
+import scimap as sm
 from anndata import read_h5ad
 
 
