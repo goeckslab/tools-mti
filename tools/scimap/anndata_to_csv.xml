@@ -1,0 +1,56 @@
+<tool id="scimap_anndata_to_csv" name="Convert Anndata to CSV" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>with Scimap</description>
+    <macros>
+        <import>main_macros.xml</import>
+    </macros>
+    <expand macro="scimap_requirements" />
+    <expand macro="macro_stdio" />
+    <version_command>echo "@VERSION@"</version_command>
+    <command detect_errors="aggressive">
+        <![CDATA[
+        python '$__tool_directory__/anndata_to_csv.py'
+            --inputs '$inputs'
+            --outfile '$outfile'
+
+        ]]>
+    </command>
+    <configfiles>
+        <inputs name="inputs" data_style="paths"/>
+    </configfiles>
+    <inputs>
+        <param name="anndata" type="data" format="h5ad" label="Select the input anndata" />
+        <param name="layer" type="select" label="Select the Anndata layer to export">
+            <option value="x">adata.X</option>
+            <option value="raw">adata.raw.X</option>
+        </param>
+        <param name="cellid" type="text" value="CellID" label="Name of column containing Cell IDs" />
+    </inputs>
+    <outputs>
+        <data format="csv" name="outfile" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="anndata" value="tutorial_data.h5ad" />
+            <param name="layer" value="x" />
+            <output name="outfile" ftype="csv">
+                <assert_contents>
+                    <has_n_columns n="41" sep="," />
+                    <has_n_lines n="500" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help>
+        <![CDATA[
+**What it does**
+
+This scimap function converts from Anndata format to CSV.
+There are three options for the data matrix returned: 
+1) the current contents of adata.X
+2) the current contents of adata.raw.X
+3) the current contents of adata.raw.X with a log+1 transformation applied 
+
+        ]]>
+    </help>
+    <expand macro="citations" />
+</tool>

@@ -37,15 +37,12 @@
                     <option value="kmeans" selected="true">kmeans</option>
                     <option value="phenograph">phenograph</option>
                     <option value="leiden">leiden</option>
-                    <option value="parc">parc</option>
                 </param>
                 <section name="options" title="Advanced Options" expanded="false">
                     <param argument="subset_genes" type="text" value="" optional="true" label="Type in a list of genes  that should be included for the purpose of clustering" help="Optional. Comma delimited. By default the algorithm uses all genes in the dataset." />
                     <param argument="sub_cluster" type="boolean" checked="false" optional="true" label="Whether to do sub-clustering on existing clustering or phenotyping " />
                     <param argument="sub_cluster_column" type="text" value="phenotype" optional="true" label="Type in the name of a column to be sub-clustered" help="This is only required when sub_cluster is set to True." />
                     <param argument="sub_cluster_group" type="text" value="" optional="true" label="Type in a list of group names within the sub-cluster column" help="Optional. Comma delimited. By default the program will sub-cluster all groups within column passed through the argument sub_cluster_column." />
-                    <param argument="parc_small_pop" type="integer" value="50" optional="true" label="Smallest cluster population to be considered a community in PARC clustering" />
-                    <param argument="parc_too_big_factor" type="float" value="0.4" optional="true" label="If a cluster exceeds this share of the entire cell population, then the PARC will be run on the large cluster" />
                     <param argument="k" type="integer" value="10" optional="true" label="Number of clusters to return when using K-Means clustering" />
                     <param argument="n_pcs" type="integer" value="" optional="true" label="Number of PC's to be used in leiden clustering" help="By default it uses all PC's" />
                     <param argument="resolution" type="float" value="1" optional="true" label="A parameter value controlling the coarseness of the clustering" help="Higher values lead to more clusters." />
@@ -147,6 +144,7 @@
                     <param argument="knn" type="integer" value="10" optional="true" label="Number of cells considered for defining the local neighbhourhood" />
                     <param argument="num_motifs" type="integer" value="10" optional="true" label="The number of requested latent motifs to be extracted from the training corpus" />
                     <param argument="random_state" type="integer" value="0" optional="true" label="The seed number for random state" />
+                    <param argument="max_weight_assignment" type="boolean" checked="false" optional="true" label="Assign cells to motifs based on maximum LDA weight" />
                 </expand>
             </when>
             <when value="spatial_pscore">
@@ -166,10 +164,15 @@
     </inputs>
     <outputs>
         <data format="h5ad" name="output" label="Scimap.tools.${analyses.selected_tool} on ${on_string}" />
+        <collection name="tabular_outputs" type="list" label="Tabular outputs from Scimap.tools.${analyses.selected_tool} on ${on_string}">
+            <data format="tabular" name="lda_weights" from_work_dir="lda_weights.txt" label="LDA weights from Scimap.tools.${analyses.selected_tool} on ${on_string}" />
+            <data format="tabular" name="lda_probabilities" from_work_dir="lda_probabilities.txt" label="LDA probabilites from Scimap.tools.${analyses.selected_tool} on ${on_string}" />
+            <filter>analyses['selected_tool'] == 'spatial_lda'</filter>
+        </collection>
     </outputs>
     <tests>
-        <test>
-            <param name="anndata" value="imc.h5ad" />
+        <test expect_num_outputs="1">
+            <param name="anndata" value="tutorial_data_pheno.h5ad" />
             <conditional name="analyses">
                 <param name="selected_tool" value="cluster" />
                 <param name="method" value="kmeans" />
@@ -180,7 +183,7 @@
                 </assert_contents>
             </output>
         </test>
-        <test>
+        <test expect_num_outputs="1">
             <param name="anndata" value="tutorial_data_pheno.h5ad" />
             <conditional name="analyses">
                 <param name="selected_tool" value="spatial_aggregate" />
@@ -190,6 +193,34 @@
                     <has_h5_keys keys="obs/spatial_aggregate" />
                 </assert_contents>
             </output>
+        </test>
+        <test expect_num_outputs="4">
+            <param name="anndata" value="tutorial_data_pheno.h5ad" />
+            <conditional name="analyses">
+                <param name="selected_tool" value="spatial_lda" />
+                <section name="options">
+                    <param name="max_weight_assignment" value="True" />
+                </section>
+            </conditional>
+            <output name="output">
+                <assert_contents>
+                    <has_h5_keys keys="obs/neighborhood_motif" />
+                </assert_contents>
+            </output>
+            <output_collection name="tabular_outputs" type="list">
+                <element name="lda_weights">
+                    <assert_contents>
+                        <has_n_lines n="500" />
+                        <has_n_columns n="12" />
+                    </assert_contents>
+                </element>
+                <element name="lda_probabilities">
+                    <assert_contents>
+                        <has_n_lines n="11" />
+                        <has_n_columns n="15" />
+                    </assert_contents>
+                </element>
+            </output_collection>
         </test>
     </tests>
     <help>
@@ -209,6 +240,5 @@ Anndata with a corresponding key added.
 
         ]]>
     </help>
-    <citations>
-    </citations>
+    <expand macro="citations" />
 </tool>
