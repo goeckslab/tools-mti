@@ -148,5 +148,11 @@ colnames(celesta_assignments) <- paste0("celesta_", colnames(celesta_assignments
 # merge celesta assignments into anndata object
 adata$obs <- cbind(adata$obs,celesta_assignments)
 
+# print cell type value_counts to standard output 
+print('----------------------------------------')
+print('Final cell type counts')
+print(adata$obs %>% dplyr::count(celesta_final_cell_type, sort = TRUE))
+print('----------------------------------------')
+
 # write output anndata file 
 write_h5ad(adata, 'result.h5ad')
