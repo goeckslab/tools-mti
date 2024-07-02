@@ -1,6 +1,8 @@
 owner: perssond
 name:  quantification
 description: "Module for single-cell data extraction given a segmentation mask and multi-channel image"
-remote_repository_url: https://github.com/goeckslab/tools-mti
+long_description: "Module for single-cell data extraction given a segmentation mask and multi-channel image. The CSV structure is aligned with histoCAT output."
+remote_repository_url: https://github.com/goeckslab/tools-mti/tree/main/tools/quantification
+homepage_url: https://github.com/labsyspharm/quantification
 categories: 
   - "Imaging"
