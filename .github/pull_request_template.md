@@ -12,10 +12,12 @@
 
 **If updating an existing tool to a newer major version**
 - [ ] I have updated the `TOOL_VERSION` token in the tool's macros file 
-- [ ] I have reset the `VERSION_SUFFIX` to 0
+- [ ] I have reset the `VERSION_SUFFIX` to `0` in the tool's macros file 
 
 ---
 
 ### Provide details here
 
-**Cite relevant [issues](https://github.com/goeckslab/tools-mti/issues) if applicable. If fixing a bug, please add any relevant error or traceback**
+- Cite relevant [issues](https://github.com/goeckslab/tools-mti/issues) if applicable
+- If fixing a bug, please add any relevant error or traceback
+- If adding or updating tools, please describe how tool requirements are satisfied (Examples: "Created new Docker container for scimap", "Added scimap to Bioconda", etc.)
