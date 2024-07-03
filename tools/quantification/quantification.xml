@@ -57,7 +57,7 @@
         </data>
      </outputs>
      <tests>
-        <test>
+        <test expect_num_outputs="2">
             <param name="image" value="test.tiff" />
             <param name="primary_mask" value="mask.tiff" />
             <param name="supp_mask" value="supp_mask.tiff" />
