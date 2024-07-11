@@ -2,12 +2,12 @@
 <macros>
     <xml name="requirements">
         <requirements>
-            <container type="docker">quay.io/goeckslab/mti_utils:0.0.1</container>
+            <container type="docker">quay.io/goeckslab/mti_utils:@TOOL_VERSION@</container>
         </requirements>
     </xml>
 
     <xml name="version_cmd">
-        <version_command>echo @VERSION@</version_command>
+        <version_command>echo @TOOL_VERSION@</version_command>
     </xml>
     <xml name="citations">
         <citations>
@@ -15,7 +15,7 @@
         </citations>
     </xml>
     
-    <token name="@TOOL_VERSION@">0.0.1</token>
-    <token name="@VERSION_SUFFIX@">5</token>
+    <token name="@TOOL_VERSION@">0.0.2</token>
+    <token name="@VERSION_SUFFIX@">0</token>
     <token name="@PROFILE@">19.01</token>
 </macros>
