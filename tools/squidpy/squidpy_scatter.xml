@@ -1,0 +1,72 @@
+<tool id="squidpy_scatter" name="Create spatial scatterplot" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>with Squidpy</description>
+    <macros>
+        <import>main_macros.xml</import>
+    </macros>
+    <edam_operations>
+        <edam_operation>operation_3443</edam_operation>
+    </edam_operations>
+    <expand macro="squidpy_requirements"/>
+    <expand macro="macro_stdio" />
+    <version_command>echo "@TOOL_VERSION@"</version_command>
+    <command detect_errors="aggressive">
+        <![CDATA[
+        export TQDM_DISABLE=True &&
+        python '$__tool_directory__/squidpy_scatter.py'
+            --inputs '$inputs'
+            --output_plot image.png
+        ]]>
+    </command>
+    <configfiles>
+        <inputs name="inputs" data_style="paths"/>
+    </configfiles>
+    <inputs>
+        <param name="anndata" type="data" format="h5ad" label="Select the input anndata" />
+        <param name="x_coord" type="text" value="X_centroid" label="Key for X spatial coordinate in adata.obs" />
+        <param name="y_coord" type="text" value="Y_centroid" label="Key for Y spatial coordinate in adata.obs" />
+        <param argument="color" type="text" value="phenotype" label="Key for annotations in adata.obs or variables/genes" />
+        <section name="plot_opts" title="Advanced Plot Options" expanded="false">
+            <param argument="groups" type="text" optional="true" label="For discrete annotation in color, select which values to plot" />
+            <param argument="use_raw" type="boolean" checked="false" label="Use adata.raw.X instead of adata.X" />
+            <param argument="crop_coord" type="text" optional="true" label="Coordinates to crop scatterplot by" help="x1,y1,x2,y2" />
+        </section>
+        <section name="legend_opts" title="Legend Options" expanded="false">
+            <param argument="legend_loc" type="text" value="right margin" optional="true" label="Location of the legend" />
+            <param argument="legend_fontsize" type="integer" value="8" optional="true" label="Font size for the legend" />
+            <param argument="legend_fontweight" type="text" value="bold" optional="true" label="Font weight for the legend" />
+            <param argument="legend_fontoutline" type="integer" value="" optional="true" label="Font outline for the legend" />
+            <param argument="legend_na" type="boolean" checked="true" label="Show NA values in the legend" />
+        </section>
+        <section name="aesthetic_opts" title="Figure Aesthetic Options" expanded="false">
+            <param argument="size" type="integer" value="3" label="Size of the scatter point/shape" />
+            <param argument="alpha" type="float" min="0.01" max="1.0" value="1.0" label="Alpha value for scatter point/shape" />
+            <param argument="cmap" type="text" value="viridis" optional="true" label="Matplotlib colormap for continuous annotations" help="Refer to `matplotlib.pyplot.cmap`." />
+            <param argument="colorbar" type="boolean" checked="true" label="Show the colorbar" />
+            <param argument="scalebar_dx" type="float" min="0.01" max="1.0" value="" optional="true" label="Size of one pixel in units specified by scalebar_units" />
+            <param argument="scalebar_units" type="text" value="" optional="true" label="Units for scalebar" />
+            <param argument="title" type="text" optional="true" label="Figure title" />
+            <param argument="figsize" type="text" value="" optional="true" label="Size of the figure in inches" help="width,height"/>
+            <param argument="dpi" type="integer" value="300" optional="true" label="Dots per inch" />
+        </section>
+    </inputs>
+    <outputs>
+        <data from_work_dir="figures/image.png" format="png" name="output_plot" label="Squidpy spatial scatterplot on ${on_string}" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
+            <param name="color" value="cell type" />
+            <output name="output_plot" file="scatter_image.png" compare="sim_size" delta="2000" />
+        </test>
+    </tests>
+    <help>
+        <![CDATA[
+This is a limited implementation of the squidpy.pl.spatial_scatter() function 
+
+See Squidpy documentation for more information: 
+
+https://squidpy.readthedocs.io/en/stable/index.html
+        ]]>
+    </help>
+    <expand macro="citations" />
+</tool>
