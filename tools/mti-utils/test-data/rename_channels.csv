@@ -1,2 +1,3 @@
 channel_number,cycle_number,marker_name,Filter,excitation_wavelength,emission_wavelength
 0,6,DNA_6,DAPI,395,431
+0,6,DNA_7,DAPI,395,431
