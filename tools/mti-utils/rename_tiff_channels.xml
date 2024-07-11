@@ -33,10 +33,26 @@
 import os
 import sys 
 import argparse
+from itertools import cycle
 import pandas as pd
 import ome_types
-from ome_types.model import channel
+from ome_types.model import channel, Color
 from tifffile import tiffcomment
+
+# setting default colors to match avivator
+colors = [
+    (0,0,255,1.0),     # blue
+    (0,255,0,1.0),     # green
+    (255,0,255,1.0),   # magenta
+    (255,255,0,1.0),   # yellow
+    (255,127,0,1.0),   # orange
+    (0,255,255,1.0),   # cyan
+    (255,255,255,1.0), # white
+    (255,0,0,1.0)      # red
+]
+
+# convert to repeatable object of primitive int colors 
+color_cycle = cycle([Color(c).as_int32() for c in colors])
 
 cwd = os.getcwd()
 
@@ -51,6 +67,7 @@ for l_idx, level in enumerate(working_ome.images):
 
         new_name = channels_df.loc[c_idx, 'marker_name']
         channel.name = new_name
+        channel.color = next(color_cycle)
 
         if l_idx == 0:
 
