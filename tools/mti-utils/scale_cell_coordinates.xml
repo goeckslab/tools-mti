@@ -1,5 +1,5 @@
 <tool id="scale_cell_coordinates" name="Scale cell coordinates" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
-    <description></description>
+    <description>in single-cell spatial data</description>
     <macros>
         <import>macros.xml</import>
     </macros>
