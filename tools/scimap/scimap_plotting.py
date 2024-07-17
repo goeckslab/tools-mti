@@ -4,10 +4,10 @@ import os
 import warnings
 
 import matplotlib.pyplot as plt
-from matplotlib import colormaps
 import numpy as np
 import scimap as sm
 import seaborn as sns
+from matplotlib import colormaps
 from anndata import read_h5ad
 
 sns.set(color_codes=True)
