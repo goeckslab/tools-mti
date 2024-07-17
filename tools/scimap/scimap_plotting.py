@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scimap as sm
 import seaborn as sns
-from matplotlib import colormaps
 from anndata import read_h5ad
+from matplotlib import colormaps
 
 sns.set(color_codes=True)
 
