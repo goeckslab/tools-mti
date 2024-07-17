@@ -3,7 +3,8 @@ import json
 import os
 import warnings
 
-import matplotlib.pylab as plt
+import matplotlib.pyplot as plt
+from matplotlib import colormaps
 import numpy as np
 import scimap as sm
 import seaborn as sns
@@ -37,9 +38,11 @@ def main(inputs, anndata, output):
 
         # parse list text arguments
         for o in options.copy():
-            opt_list = options.pop(o)
-            if opt_list:
-                options[o] = [x.strip() for x in opt_list.split(',')]
+            opt = options.pop(o)
+            if o == 'matplotlib_cmap':
+                matplotlib_cmap = opt
+            elif opt != "":
+                options[o] = [x.strip() for x in opt.split(',')]
 
         # add base args into options dict to pass to tool
         options['x_axis'] = params['analyses']['x_axis']
@@ -51,13 +54,18 @@ def main(inputs, anndata, output):
         df = sm.pl.stacked_barplot(adata, **options)
 
         # Pick cmap to use
-        num_phenotypes = len(df.columns) - 1
-        if num_phenotypes <= 9:
-            matplotlib_cmap = "Set1"
-        elif num_phenotypes > 9 and num_phenotypes <= 20:
-            matplotlib_cmap = plt.cm.tab20
-        else:
-            matplotlib_cmap = plt.cm.gist_ncar
+        if matplotlib_cmap not in list(colormaps):
+            print('Using default color options')
+            print('For different y-axis category colors,')
+            print('enter one of the following strings for the colormap param:')
+            print(list(colormaps))
+            num_phenotypes = len(df.columns) - 1
+            if num_phenotypes <= 9:
+                matplotlib_cmap = "Set1"
+            elif num_phenotypes > 9 and num_phenotypes <= 20:
+                matplotlib_cmap = plt.cm.tab20
+            else:
+                matplotlib_cmap = plt.cm.gist_ncar
 
         # Plotting
         sns.set_theme(style="white")

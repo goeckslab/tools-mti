@@ -38,6 +38,7 @@
                     <param argument="subset_yaxis" type="text" value="" optional="true" label="Subset y-axis prior to plotting. Type in a list of categories to include on y-axis" help="Optional. Comma delimited. Default is all categories in y-axis variable" />
                     <param argument="order_xaxis" type="text" value="" optional="true" label="Type in a list of categories to order to x-axis" help="Optional. Comma delimited. Default ordering is alphabetical" />
                     <param argument="order_yaxis" type="text" value="" optional="true" label="Type in a list of categories to order to y-axis" help="Optional. Comma delimited. Default ordering is alphabetical" />
+                    <param argument="matplotlib_cmap" type="text" value="" optional="true" label="Matplotlib colormap to use for y-axis categories" help="Optional. If not specified, cmap is determined based on number of categories" />
                 </section>
             </when>
             <when value="voronoi">
