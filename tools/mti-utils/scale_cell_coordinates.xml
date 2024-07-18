@@ -1,0 +1,59 @@
+<tool id="scale_cell_coordinates" name="Scale cell coordinates" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>in single-cell spatial data</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <edam_operations>
+        <edam_operation>operation_3443</edam_operation>
+    </edam_operations>
+    <expand macro="requirements" />
+    <command detect_errors="aggressive">
+        <![CDATA[
+        python '$__tool_directory__/scale_cell_coordinates.py'
+            --inputs '$inputs'
+            --output '$output'
+        ]]>
+    </command>
+    <configfiles>
+        <inputs name="inputs" data_style="paths"/>
+    </configfiles>
+    <inputs>
+        <param name="anndata" type="data" format="h5ad" label="Input anndata file" />
+        <param name="x_coord" type="text" value="X_centroid" label="Key for X spatial coordinate in adata.obs" />
+        <param name="y_coord" type="text" value="Y_centroid" label="Key for Y spatial coordinate in adata.obs" />
+        <param name="resolution" type="float" value="" min="0.01" max="1.0" label="Value to multiply pixel coordinates by" help="Units would be target_unit/pixel (Example: um/pixel)" />
+        <param name="unit" type="text" value="um" optional="true" label="Unit for scaled coordinates" help="Will be appended to new column name (Example: 'X_centroid_um')" />
+    </inputs>
+    <outputs>
+        <data format="h5ad" name="output" label="Cell coordinate scaling on ${on_string}" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="anndata" value="pixels.h5ad" />
+            <param name="resolution" value="0.65" />
+            <output name="output" ftype="h5ad">
+                <assert_contents>
+                    <has_h5_keys keys="obs/X_centroid_um,obs/Y_centroid_um" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help>
+        <![CDATA[
+
+This tool allows a user to scale x,y pixel coordinates to the physical distance (microns, for example)
+
+**Inputs**
+- anndata h5ad file with x,y coordinates in pixels 
+- column names for pixel coordinates in adata.obs 
+- Physical resolution of the image (microns per pixel, for example)
+- Unit for the resulting physical distance ('um', for example)
+
+**Outputs**
+- anndata h5ad file with new columns, with column names formatted with 
+the existing column name and physical distance appended ('X_centroid_um', for example)
+
+        ]]>
+    </help>
+    <expand macro="citations" />
+</tool>
