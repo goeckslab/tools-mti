@@ -38,6 +38,20 @@
                     <param argument="subset_yaxis" type="text" value="" optional="true" label="Subset y-axis prior to plotting. Type in a list of categories to include on y-axis" help="Optional. Comma delimited. Default is all categories in y-axis variable" />
                     <param argument="order_xaxis" type="text" value="" optional="true" label="Type in a list of categories to order to x-axis" help="Optional. Comma delimited. Default ordering is alphabetical" />
                     <param argument="order_yaxis" type="text" value="" optional="true" label="Type in a list of categories to order to y-axis" help="Optional. Comma delimited. Default ordering is alphabetical" />
+                    <param argument="matplotlib_cmap" type="select" label="Matplotlib colormap to use for y-axis categories" help="See link below for colormaps explanation">
+                        <option value="Pastel1">Pastel1</option>
+                        <option value="Pastel2">Pastel2</option>
+                        <option value="Paired">Paired</option>
+                        <option value="Accent">Accent</option>
+                        <option value="Dark2">Dark2</option>
+                        <option selected="true" value="Set1">Set1</option>
+                        <option value="Set2">Set2</option>
+                        <option value="Set3">Set3</option>
+                        <option value="tab10">tab10</option>
+                        <option value="tab20">tab20</option>
+                        <option value="tab20b">tab20b</option>
+                        <option value="tab20c">tab20c</option>
+                    </param>
                 </section>
             </when>
             <when value="voronoi">
@@ -97,16 +111,9 @@
         <![CDATA[
 **What it does**
 
-This tool does various single cell spatial analyses with Scimap.
+This tool creates stacked barplots or Voronoi plots from single-cell spatial data using Scimap
 
-**Input**
-
-AnnData.
-
-**Output**
-
-Anndata with a corresponding key added.
-
+For the stacked barplot tool, find colormap descriptions here: https://matplotlib.org/stable/users/explain/colors/colormaps.html
 
         ]]>
     </help>
