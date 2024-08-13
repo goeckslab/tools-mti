@@ -1,0 +1,27 @@
+<tool id="visinity_preprocess" name="Create Visinity Archive" version="0.0.3" profile="22.01">
+    <description>Create an archive of pre-processed Visinity files</description>
+    <requirements>
+        <container type="docker">quay.io/sargentl/vis_test:0.0.3</container>
+    </requirements>
+    <configfiles>
+	    <inputs name='inputs' filename='inputs.json' data_style='paths'/>
+    </configfiles>
+    <inputs>
+        <param label='Dataset Name CSV' name='dataset_names' type='data' format='csv'/>
+        <param label='Channel Files' name='channel_files' type='data_collection' collection_type='list' format='ome.tiff'/>
+        <param label='Segmentation File' name='label_files' type='data_collection' collection_type='list' format='tiff'/>
+        <param label='Quantification CSV' name='quant_csvs' type='data_collection' collection_type='list' format='csv'/>
+        <param label='Neighborhood Radius (microns > 0)' name='n_radius' type='integer' value='20' min='1' max='1000'/>
+        <param label='Cell Type CSV' name='celltype_csv' type='data' format='csv'/>
+    </inputs>
+    <command><![CDATA[
+    cp inputs.json /visinity/ &&
+    cd /visinity/ &&
+    cp "$__tool_directory__/archive_generate.py" "./archive_generate.py" &&
+    CONDAFY="micromamba run /bin/bash -c" &&
+    \$CONDAFY "python archive_generate.py inputs.json '$out_archive'";
+    ]]></command>
+    <outputs>
+        <data name="out_archive" format="zip"/>
+    </outputs>
+</tool>

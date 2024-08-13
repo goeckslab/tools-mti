@@ -1,0 +1,31 @@
+<tool id="visinity_postprocess" name="Visualize Visinity Archive" tool_type="interactive" version="0.0.1" profile="22.01">
+    <description>Visualize pre-processed Visinity archives</description>
+    <requirements>
+        <container type="docker">quay.io/sargentl/vis_test:0.0.3</container>
+    </requirements>
+    <entry_points>
+        <entry_point name="Visualize Visinity Archive" requires_domain="True">
+            <port>8000</port>
+            <url>/</url>
+        </entry_point>
+    </entry_points>
+    <configfiles>
+	    <inputs name='inputs' filename='inputs.json' data_style='paths'/>
+    </configfiles>
+    <inputs>
+        <param label='Linked Visinity Archive(s)' name='vis_archive' type='data' format='zip'/>
+        <param label='Original Channel Files' name='channel_files' type='data_collection' collection_type='list' format='ome.tiff'/>
+        <param label='Original Segmentation File' name='label_files' type='data_collection' collection_type='list' format='tiff'/>
+    </inputs>
+    <command><![CDATA[
+    cp working/inputs.json /visinity/ &&
+    cp "$__tool_directory__/archive_ingest.py" /visinity/archive_ingest.py &&
+    cd /visinity/ &&
+    CONDAFY="micromamba run /bin/bash -c" &&
+    \$CONDAFY "python archive_ingest.py inputs.json" &&
+    \$CONDAFY "python run.py";
+    ]]></command>
+    <outputs>
+        <data name="output" format="txt"/>
+    </outputs>
+</tool>
