@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<macros>
+    <xml name="requirements">
+        <requirements>
+            <container type="docker">quay.io/sargentl/vis_test:0.0.3</container>
+        </requirements>
+    </xml>
+    <xml name="stdio">
+        <stdio>
+            <exit_code range="1:" level="fatal" description="Error occurred. Please check Tool Standard Error" />
+        </stdio>
+    </xml>
+    <xml name="version_cmd">
+        <version_command>echo @TOOL_VERSION@</version_command>
+    </xml>
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1109/TVCG.2022.3209378</citation>
+        </citations>
+    </xml>
+
+    <token name="@TOOL_VERSION@">0.0.3</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+</macros>
