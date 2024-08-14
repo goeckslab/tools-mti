@@ -1,0 +1,23 @@
+owner: goeckslab
+homepage_url: https://github.com/labsyspharm/visinity
+remote_repository_url: https://github.com/goeckslab/tools-mti/tree/main/tools/visinity
+description: Visual Spatial Neighborhood Analysis for Multiplexed Tissue Imaging Data
+long_description: |
+  A scalable visual analytics system to analyze cell interaction 
+  patterns across cohorts of whole-slide multiplexed tissue images
+categories:
+  - Imaging
+  - Proteomics
+  - Transcriptomics
+  - Visualization
+exclude:
+  - dependencies
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "Wrapper for Visinity tool: {{ tool_name }}"
+suite:
+  name: suite_visinity
+  description: Visual Spatial Neighborhood Analysis for Multiplexed Tissue Imaging Data
+  long_description: |
+  A scalable visual analytics system to analyze cell interaction 
+  patterns across cohorts of whole-slide multiplexed tissue images
