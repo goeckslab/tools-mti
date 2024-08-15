@@ -48,7 +48,11 @@
                 </collection>
             </param>
             <param name="celltype_csv" value="celltypes.csv" />
-            <output name="out_archive" file="output_archive.zip" compare="sim_size" />
+            <output name="out_archive">
+                <assert_contents>
+                    <has_size value="680000" delta="10000" />
+                </assert_contents>
+            </output>
             <!-- FIXME: replace with chunk below once CI is upgraded to Galaxy v24 -->
             <!-- <output name="out_archive">
                 <has_archive_member path="./config.json"/>
