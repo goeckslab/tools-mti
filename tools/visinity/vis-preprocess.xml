@@ -34,31 +34,26 @@
             <param name="dataset_names" value="dataset_names.csv" />
             <param name="channel_files">
                 <collection type="list">
-                    <element name="i1" value="img_1.ome.tiff" />
-                    <element name="i2" value="img_2.ome.tiff" />
+                    <element name="i1" value="test_image.ome.tiff" />
                 </collection>
             </param>
             <param name="label_files">
                 <collection type="list">
-                    <element name="m1" value="mask_1.tiff" />
-                    <element name="m2" value="mask_2.tiff" />
+                    <element name="m1" value="test_mask.tiff" />
                 </collection>
             </param>
             <param name="quant_csvs">
                 <collection type="list">
-                    <element name="q1" value="quant_1.csv" />
-                    <element name="q2" value="quant_2.csv" />
+                    <element name="q1" value="test_quant.csv" />
                 </collection>
             </param>
             <param name="celltype_csv" value="celltypes.csv" />
-            <output name="out_archive" file="test_visinity_archive.zip" compare="sim_size" />
+            <output name="out_archive" file="output_archive.zip" compare="sim_size" />
             <!-- FIXME: replace with chunk below once CI is upgraded to Galaxy v24 -->
             <!-- <output name="out_archive">
                 <has_archive_member path="./config.json"/>
-                <has_archive_member path="./img_1/embedding.npy"/>
-                <has_archive_member path="./img_2/embedding.npy"/>
-                <has_archive_member path="./img_1/neighborhood.npy"/>
-                <has_archive_member path="./img_2/neighborhood.npy"/>
+                <has_archive_member path="./test_image/embedding.npy"/>
+                <has_archive_member path="./test_image/neighborhood.npy"/>
             </output> -->
         </test>
     </tests>
