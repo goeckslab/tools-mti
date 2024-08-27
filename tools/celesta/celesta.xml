@@ -31,28 +31,28 @@
                 --ycol '$y_coord'  
                 --maxiteration '$max_iteration' 
                 --changethresh '$cell_change_threshold' 
-        #if str($filter_cells.filter) == 'filter':
-                --filter
-                --lowfilter '$low_threshold'
-                --highfilter '$high_threshold'
-        #end if
-        #if $low_thresholds_file:
-                --lowexpthresh '$low_thresholds_file'
-        #end if
-        #if $high_thresholds_file:
-                --highexpthresh '$high_thresholds_file'
-        #end if  
-                &&
-        #for $p in $plot_cells:
-            Rscript '$__tool_directory__/celesta_plot_cells.R'
-                --prior '$prior_info'
-                --celltypes '${p.cell_types}'
-                --size '$p.test_size' 
-                --height '$p.height' 
-                --width '$p.width' 
-                --dpi '$p.dpi' 
-                &&
-        #end for
+            #if str($filter_cells.filter) == 'filter':
+                    --filter
+                    --lowfilter '$low_threshold'
+                    --highfilter '$high_threshold'
+            #end if
+            #if $low_thresholds_file:
+                    --lowexpthresh '$low_thresholds_file'
+            #end if
+            #if $high_thresholds_file:
+                    --highexpthresh '$high_thresholds_file'
+            #end if  
+                    &&
+            #for $p in $plot_cells:
+                Rscript '$__tool_directory__/celesta_plot_cells.R'
+                    --prior '$prior_info'
+                    --celltypes '${p.cell_types}'
+                    --size '$p.test_size' 
+                    --height '$p.height' 
+                    --width '$p.width' 
+                    --dpi '$p.dpi' 
+                    &&
+            #end for
         #end if
 
         ##final command to satisfy double ampersands 
