@@ -41,7 +41,7 @@ cell_types_to_plot <- strsplit(opt$celltypes, ",")[[1]]
 prior <- read.csv(opt$prior, row.names = 1)
 
 # get indices of cell types to plot from the prior marker table
-cell_type_indices <- which(row.names(prior) %in% cell_types_to_plot) 
+cell_type_indices <- which(row.names(prior) %in% cell_types_to_plot)
 
 print(cell_types_to_plot)
 print(cell_type_indices)
@@ -52,16 +52,16 @@ print(row.names(prior))
 dir.create("cell_assign_plots")
 
 # create the cell type plot
-g <- PlotCellsAnyCombination(cell_type_assignment_to_plot=CelestaObj@final_cell_type_assignment[,(CelestaObj@total_rounds+1)],
-                            coords = CelestaObj@coords,
-                            prior_info = prior_marker_info,
-                            cell_number_to_use=cell_type_indices,
-                            test_size=1,
-                            save_plot = FALSE)
+g <- PlotCellsAnyCombination(cell_type_assignment_to_plot = CelestaObj@final_cell_type_assignment[, (CelestaObj@total_rounds+1)],
+                             coords = CelestaObj@coords,
+                             prior_info = prior_marker_info,
+                             cell_number_to_use = cell_type_indices,
+                             test_size = 1,
+                             save_plot = FALSE)
 
 # create a unique output name for the plot based on the input cell types
 cell_types_cleaned <- paste(make_clean_names(cell_types_to_plot), collapse = "")
-output_name <- paste(c("plot_cells_",cell_types_cleaned,".png"), collapse = "")
+output_name <- paste(c("plot_cells_", cell_types_cleaned, ".png"), collapse = "")
 
 # save to subdir
 # FIXME: may want to expose plotting params to galaxy

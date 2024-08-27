@@ -20,9 +20,9 @@ option_list <- list(
   make_option(c("-p", "--prior"), action = "store", default = NA, type = "character",
               help = "Path to prior marker info file"),
   make_option(c("-x", "--xcol"), action = "store", default = NA, type = "character",
-            help = "Name of column in adata.obs containing X coordinate"),
+              help = "Name of column in adata.obs containing X coordinate"),
   make_option(c("-y", "--ycol"), action = "store", default = NA, type = "character",
-            help = "Name of column in adata.obs containing Y coordinate"),
+              help = "Name of column in adata.obs containing Y coordinate"),
   make_option(c("--filter"), action = "store_true", type = "logical", default = FALSE,
               help = "Boolean to filter cells or not (default: no filtering)"),
   make_option(c("--highfilter"), action = "store", default = 0.9, type = "double",
@@ -38,7 +38,7 @@ option_list <- list(
 )
 
 ### Functions
-anndata_to_celesta <- function(input_adata, x_col, y_col) { 
+anndata_to_celesta <- function(input_adata, x_col, y_col) {
 
   #' Function to convert anndata object to dataframe readable by CELESTA
   #' Coordinates columns in adata.obs are renamed to "X" and "Y", and placed at beginning of dataframe
@@ -48,8 +48,8 @@ anndata_to_celesta <- function(input_adata, x_col, y_col) {
   celesta_input_dataframe <- data.frame(input_adata$obs)
 
   # subset to X and Y coordinates from obs only
-  celesta_input_dataframe <- celesta_input_dataframe %>% 
-      dplyr::select({{x_col}},{{y_col}})
+  celesta_input_dataframe <- celesta_input_dataframe %>%
+    dplyr::select({{x_col}}, {{y_col}})
 
   # rename X,Y column names to what CELESTA wants
   colnames(celesta_input_dataframe) <- c("X", "Y")
@@ -77,8 +77,7 @@ prior <- read.csv(opt$prior, check.names = FALSE)
 prior_original_names <- colnames(prior)
 prior <- janitor::clean_names(prior, case = "all_caps")
 
-# clean input dataframe names, keeping a copy of originals for writing output
-celesta_input_df_original_names <- colnames(celesta_input_df)
+# clean input dataframe names
 celesta_input_df <- janitor::clean_names(celesta_input_df, case = "all_caps")
 
 # instantiate celesta object
@@ -91,10 +90,9 @@ CelestaObj <- CreateCelestaObject(
 # if filtering is specified, filter out cells outside high and low thresholds
 if (opt$filter) {
   print("filtering cells based on expression")
-  CelestaObj <- FilterCells(
-    CelestaObj, 
-    high_marker_threshold = opt$highfilter, 
-    low_marker_threshold = opt$lowfilter)
+  CelestaObj <- FilterCells(CelestaObj,
+                            high_marker_threshold = opt$highfilter,
+                            low_marker_threshold = opt$lowfilter)
 } else {
   print("Proceeding to marker expression plotting without cell filtering")
 }

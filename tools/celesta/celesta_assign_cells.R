@@ -24,7 +24,7 @@ option_list <- list(
   make_option(c("-y", "--ycol"), action = "store", default = NA, type = "character",
               help = "Name of column in adata.obs containing Y coordinate"),
   make_option(c("--filter"), action = "store_true", type = "logical", default = FALSE,
-              help="Boolean to filter cells or not (default: no filtering)"),
+              help = "Boolean to filter cells or not (default: no filtering)"),
   make_option(c("--highfilter"), action = "store", default = 0.9, type = "double",
               help = "High marker threshold if filtering cells (default: 0.9)"),
   make_option(c("--lowfilter"), action = "store", default = 0.4, type = "double",
@@ -32,7 +32,7 @@ option_list <- list(
   make_option(c("--maxiteration"), action = "store", default = 10, type = "integer",
               help = "Maximum iterations allowed in the EM algorithm per round"),
   make_option(c("--changethresh"), action = "store", default = 0.01, type = "double",
-              help = "Ending condition for the EM algorithm"), 
+              help = "Ending condition for the EM algorithm"),
   make_option(c("--highexpthresh"), action = "store", default = "default_high_thresholds", type = "character",
               help = "Path to file specifying high expression thresholds for anchor and index cells"),
   make_option(c("--lowexpthresh"), action = "store", default = "default_low_thresholds", type = "character",
@@ -50,7 +50,7 @@ anndata_to_celesta <- function(input_adata, x_col, y_col) {
   celesta_input_dataframe <- data.frame(input_adata$obs)
 
   # subset to X and Y coordinates from obs only
-  celesta_input_dataframe <- celesta_input_dataframe %>% 
+  celesta_input_dataframe <- celesta_input_dataframe %>%
     dplyr::select({{x_col}}, {{y_col}})
 
   # rename X,Y column names to what CELESTA wants
@@ -75,12 +75,8 @@ celesta_input_df <- anndata_to_celesta(adata, x_col = opt$xcol, y_col = opt$ycol
 # read prior marker info
 prior <- read.csv(opt$prior, check.names = FALSE)
 
-# clean prior names, keeping a copy of originals for writing output
-prior_original_names <- colnames(prior)
+# clean prior names and input dataframe names
 prior <- janitor::clean_names(prior, case = "all_caps")
-
-# clean input dataframe names, keeping a copy of originals for writing output
-celesta_input_df_original_names <- colnames(celesta_input_df)
 celesta_input_df <- janitor::clean_names(celesta_input_df, case = "all_caps")
 
 # instantiate celesta object
@@ -93,10 +89,9 @@ CelestaObj <- CreateCelestaObject(
 # if filtering is specified, filter out cells outside high and low thresholds
 if (opt$filter) {
   print("filtering cells based on expression")
-  CelestaObj <- FilterCells(
-    CelestaObj, 
-    high_marker_threshold = opt$highfilter, 
-    low_marker_threshold = opt$lowfilter)
+  CelestaObj <- FilterCells(CelestaObj,
+                            high_marker_threshold = opt$highfilter,
+                            low_marker_threshold = opt$lowfilter)
 } else {
   print("Proceeding to cell type assignment without cell filtering")
 }
@@ -109,7 +104,7 @@ if (opt$highexpthresh != "default_high_thresholds") {
   hi_exp_thresh_anchor <- high_expression_thresholds$anchor
   hi_exp_thresh_index <- high_expression_thresholds$index
 } else {
-  print("Using default high expression thresholds -- this may need adjustment") 
+  print("Using default high expression thresholds -- this may need adjustment")
   hi_exp_thresh_anchor <- rep(0.7, length = 50)
   hi_exp_thresh_index <- rep(0.5, length = 50)
 }
@@ -121,7 +116,7 @@ if (opt$lowexpthresh != "default_low_thresholds") {
   low_exp_thresh_anchor <- low_expression_thresholds$anchor
   low_exp_thresh_index <- low_expression_thresholds$index
 } else {
-  print("Using default low expression thresholds") 
+  print("Using default low expression thresholds")
   low_exp_thresh_anchor <- rep(0.9, length = 50)
   low_exp_thresh_index <- rep(1, length = 50)
 }
@@ -146,7 +141,7 @@ celesta_assignments <- janitor::clean_names(celesta_assignments)
 colnames(celesta_assignments) <- paste0("celesta_", colnames(celesta_assignments))
 
 # merge celesta assignments into anndata object
-adata$obs <- cbind(adata$obs,celesta_assignments)
+adata$obs <- cbind(adata$obs, celesta_assignments)
 
 # print cell type value_counts to standard output
 print("----------------------------------------")
