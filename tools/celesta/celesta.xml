@@ -22,7 +22,6 @@
                 --lowfilter '$low_threshold'
                 --highfilter '$high_threshold'
         #end if
-                &&
         #else if str($runmode.selected_mode) == 'assign_cells':
             Rscript '$__tool_directory__/celesta_assign_cells.R'
                 --imagingdata '$anndata'
@@ -42,22 +41,16 @@
             #if $high_thresholds_file:
                     --highexpthresh '$high_thresholds_file'
             #end if  
-                    &&
             #for $p in $plot_cells:
-                Rscript '$__tool_directory__/celesta_plot_cells.R'
+                && Rscript '$__tool_directory__/celesta_plot_cells.R'
                     --prior '$prior_info'
                     --celltypes '${p.cell_types}'
                     --size '$p.test_size' 
                     --height '$p.height' 
                     --width '$p.width' 
                     --dpi '$p.dpi' 
-                    &&
             #end for
         #end if
-
-        ##final command to satisfy double ampersands 
-        echo 'CELESTA' $runmode.selected_mode 'complete'
-
         ]]>
     </command>
     <configfiles>
