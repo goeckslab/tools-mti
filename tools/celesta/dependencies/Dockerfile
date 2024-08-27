@@ -2,7 +2,7 @@ FROM jupyter/base-notebook:latest
 
 RUN conda config --add channels bioconda \
     && mamba install -y \
-    pandas \
+    pandas=1.5.3 \
     anndata \
     r-optparse \
     r-janitor \
@@ -23,11 +23,11 @@ RUN conda config --add channels bioconda \
     r-mgcv \
     r-isoband \
     r-gtable \
-    r-sf \
     r-s2 \
     r-rcppeigen \
     r-ggplot2 \
     && mamba clean -yaf
 
 RUN R -e "devtools::install_github('plevritis/CELESTA')" \
-    && R -e "devtools::install_github('scverse/anndataR')"
+    && R -e "devtools::install_github('scverse/anndataR@220f977c15669a22207b37d437fc6d00b060b95f')" \
+    && R -e "devtools::install_github('r-spatial/sf')"

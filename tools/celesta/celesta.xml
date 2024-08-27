@@ -119,16 +119,59 @@
         </collection>     
     </outputs>
     <tests>
-        <test>
-            <param name="anndata" value="test.h5ad" />
+        <test expect_num_outputs="1">
+            <param name="anndata" value="celesta_image.h5ad" />
+            <param name="prior_info" value="celesta_prior.csv" />
+            <conditional name="runmode">
+                <param name="selected_mode" value="plot_expression" />
+            </conditional>
+            <output_collection name="marker_expression_plots" type="list" count="18">
+                <element name="CD31_VASCULATURE_CYC_19_CH_3_exp_prob" file="CD31_VASCULATURE_CYC_19_CH_3_exp_prob.png" compare="sim_size" />
+            </output_collection>
+        </test>
+        <test expect_num_outputs="1">
+            <param name="anndata" value="celesta_image.h5ad" />
+            <param name="prior_info" value="celesta_prior.csv" />
             <conditional name="runmode">
                 <param name="selected_mode" value="assign_cells" />
             </conditional>
             <output name="assign_cells_output">
                 <assert_contents>
-                    <has_h5_keys keys="obs/cell_type" />
+                    <has_h5_keys keys="obs/celesta_final_cell_type" />
                 </assert_contents>
             </output>
+            <assert_stdout>
+                <has_text text="vasculature 273" />
+            </assert_stdout>
+        </test>
+        <test expect_num_outputs="3">
+            <param name="anndata" value="celesta_image.h5ad" />
+            <param name="prior_info" value="celesta_prior.csv" />
+            <param name="filter" value="filter" />
+            <conditional name="runmode">
+                <param name="selected_mode" value="assign_cells" />
+            </conditional>
+            <param name="high_thresholds_file" value="celesta_high_exp_thresholds.csv" />
+            <repeat name="plot_cells">
+                <param name="cell_types" value="vasculature" />
+            </repeat>
+            <param name="save_rds" value="true" />
+            <output name="assign_cells_output">
+                <assert_contents>
+                    <has_h5_keys keys="obs/celesta_final_cell_type" />
+                </assert_contents>
+            </output>
+            <output_collection name="cell_assign_plots" type="list" count="1">
+                <element name="plot_cells_vasculature" file="plot_cells_vasculature.png" compare="sim_size" />
+            </output_collection>
+            <output name="assign_cells_rds">
+                <assert_contents>
+                    <has_size value="1400000" delta="100000" />
+                </assert_contents>
+            </output>
+            <assert_stdout>
+                <has_text text="vasculature 168" />
+            </assert_stdout>
         </test>
     </tests>
     <help>
@@ -137,6 +180,7 @@
 
 CELESTA (CELl typE identification with SpaTiAl information) is an algorithm aiming to perform
 automated cell type identification for multiplexed in situ imaging data. 
+
 CELESTA makes use of both protein expressions and cell spatial neighborhood information 
 from segmented imaging data for the cell type identification.
 
@@ -148,18 +192,20 @@ This Galaxy implementation of CELESTA has two run modes:
 
 `Cell-type signature matrix` -- Comma-separated text file containing the following information and formatting: 
 
-    (1) The first column has to contain the cell types to be inferred
-    (2) The second column has the lineage information for each cell type. The lineage information has three numbers 
-        connected by “_” (underscore). The first number indicates round. Cell types with the same lineage level are 
-        inferred at the same round. Increasing number indicates increasing cell-type resolution. For example, 
-        immune cells -> CD3+ T cells –> CD4+ T cells. The third number is a number assigned to the cell type, 
-        i.e, cell type number. The middle number tells the previous lineage cell type number for the current cell type. 
-        For example, the middle number for CD3+ T cells is 5, because it is a subtype of immune cells which have cell 
-        type number assigned to 5.
-    (3) Starting from column three, each column is a protein marker. If the protein marker is known to be expressed 
-        for that cell type, then it is denoted by “1”. If the protein marker is known to not express for a cell type, 
-        then it is denoted by “0”. If the protein marker is irrelevant or uncertain to express for a cell type, 
-        then it is denoted by “NA”.
+(1) The first column has to contain the cell types to be inferred
+
+(2) The second column has the lineage information for each cell type. The lineage information has three numbers 
+    connected by “_” (underscore). The first number indicates round. Cell types with the same lineage level are 
+    inferred at the same round. Increasing number indicates increasing cell-type resolution. For example, 
+    immune cells -> CD3+ T cells –> CD4+ T cells. The third number is a number assigned to the cell type, 
+    i.e, cell type number. The middle number tells the previous lineage cell type number for the current cell type. 
+    For example, the middle number for CD3+ T cells is 5, because it is a subtype of immune cells which have cell 
+    type number assigned to 5.
+
+(3) Starting from column three, each column is a protein marker. If the protein marker is known to be expressed 
+    for that cell type, then it is denoted by “1”. If the protein marker is known to not express for a cell type, 
+    then it is denoted by “0”. If the protein marker is irrelevant or uncertain to express for a cell type, 
+    then it is denoted by “NA”.
 
 `Name of anndata.obs key containing cell or nucleus centroid X position` -- if using output from MCMICRO, this would be 'X_centroid'
 
@@ -199,34 +245,33 @@ This Galaxy implementation of CELESTA has two run modes:
 
     `Provide a file mapping low/high anchor and index cell assignment thresholds to cell types` -- comma separated text file containing following information and formatting:
 
-        (1) First column contains cell types to be inferred (same order as the cell type signature matrix)
-            Second column is named `anchor` and contains high or low thresholds for anchor cells 
-            Third column is named `index` and contains high or low thresholds for index cells 
+(1) First column contains cell types to be inferred (same order as the cell type signature matrix)
+    Second column is named `anchor` and contains high or low thresholds for anchor cells 
+    Third column is named `index` and contains high or low thresholds for index cells 
 
-        (2) In the `CELESTA::AssignCells()` function, it requires four vectors to define the high and low thresholds for each cell type. The length of the vector equals to the 
-            total number of cell types defined in the cell-type signature matrix. We would suggest start with the default thresholds and modify them by comparing the results 
-            with the original staining. The two vectors are required for defining the “high_expression_threshold”, one for anchor cells and one for index cells (non-anchor cells). 
-            The thresholds define how much the marker expression probability is in order to be considered as expressed.
+(2) In the `CELESTA::AssignCells()` function, it requires four vectors to define the high and low thresholds for each cell type. The length of the vector equals to the 
+    total number of cell types defined in the cell-type signature matrix. We would suggest start with the default thresholds and modify them by comparing the results 
+    with the original staining. The two vectors are required for defining the “high_expression_threshold”, one for anchor cells and one for index cells (non-anchor cells). 
+    The thresholds define how much the marker expression probability is in order to be considered as expressed.
 
-        (3) For the low thresholds, Normally 1 is assigned to this value unless there are a lot of doublets or co-staining in the data. The Low expression threshold default 
-            values in general are robust, and thus we recommend testing the High expression threshold values.
+(3) For the low thresholds, Normally 1 is assigned to this value unless there are a lot of doublets or co-staining in the data. The Low expression threshold default 
+    values in general are robust, and thus we recommend testing the High expression threshold values.
 
-    `Also save CELESTA object as RDS file` -- Boolean whether to output an RDS file in addition to the default h5ad output 
+`Also save CELESTA object as RDS file` -- Boolean whether to output an RDS file in addition to the default h5ad output 
 
-    `Plot combinations of resulting cell type assignments` -- specify any combination of cell types from the cell type signature matrix to plot. This is a repeat element, and one plot will be generated per repitition. There are additional params to control plot aesthetic attributes
+`Plot combinations of resulting cell type assignments` -- specify any combination of cell types from the cell type signature matrix to plot. This is a repeat element, and one plot will be generated per repitition. There are additional params to control plot aesthetic attributes
 
-    **Outputs**
+**Outputs**
 
-    `CELESTA assign cells output` -- The primary output, an h5ad file, with new columns containing cell type information. New columns are prepended with 'celesta_'
+`CELESTA assign cells output` -- The primary output, an h5ad file, with new columns containing cell type information. New columns are prepended with `celesta_`
 
-    `CELESTA object RDS` -- optionally output CELESTA object as RDS for downstream analysis in R 
+`CELESTA object RDS` -- optionally output CELESTA object as RDS for downstream analysis in R 
 
-    Optional collection of `.png` figures of spatial scatter plots color annotated by cell type assignment 
+Optional collection of `.png` figures of spatial scatter plots color annotated by cell type assignment 
 
 Visit github.com/plevritis-lab/CELESTA for full documentation 
 
         ]]>
     </help>
-    <citations>
-    </citations>
+    <expand macro="citations" />
 </tool>
