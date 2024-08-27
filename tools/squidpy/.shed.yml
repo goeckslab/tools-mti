@@ -14,3 +14,14 @@ categories:
   - Visualization
 exclude:
   - dependencies
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "Wrapper for Squidpy tool: {{ tool_name }}"
+suite:
+  name: suite_squidpy
+  description: Squidpy is a tool for the analysis and visualization of spatial molecular data.
+  long_description: |
+    Squidpy is a tool for the analysis and visualization of spatial molecular data. 
+    It builds on top of scanpy and anndata, from which it inherits modularity and scalability. 
+    It provides analysis tools that leverages the spatial coordinates of the data, 
+    as well as tissue images if available.

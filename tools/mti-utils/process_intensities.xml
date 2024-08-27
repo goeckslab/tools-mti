@@ -27,7 +27,7 @@ marker_df = pd.read_csv('$channel_csv')
 markers_to_normalize = marker_df['marker_name'].to_list()
 
 #if $AF_method.select_method == 'SBR':
-AF_markers = [x for x in list(marker_df['${AF_method.AF_col}'].unique()) if x != 'None']
+AF_markers = [x for x in list(marker_df['${AF_method.AF_col}'].unique()) if x not in ['None',np.nan]]
 print(f'Detected {quant[AF_markers].eq(0.0).any(axis=1).sum()} cells with AF values of zero in the dataset')
 
 #if $AF_method.AF_filter == 'filter':
