@@ -52,7 +52,7 @@ print(row.names(prior))
 dir.create("cell_assign_plots")
 
 # create the cell type plot
-g <- PlotCellsAnyCombination(cell_type_assignment_to_plot = CelestaObj@final_cell_type_assignment[, (CelestaObj@total_rounds+1)],
+g <- PlotCellsAnyCombination(cell_type_assignment_to_plot = CelestaObj@final_cell_type_assignment[, (CelestaObj@total_rounds + 1)],
                              coords = CelestaObj@coords,
                              prior_info = prior_marker_info,
                              cell_number_to_use = cell_type_indices,
