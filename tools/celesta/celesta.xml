@@ -10,7 +10,7 @@
         <![CDATA[
         #if str($runmode.selected_mode) == 'plot_expression':
             Rscript '$__tool_directory__/celesta_plot_expression.R'
-                --imagingdata $anndata
+                --imagingdata '$anndata'
                 --prior '$prior_info'
                 --xcol '$x_coord'
                 --ycol '$y_coord'
