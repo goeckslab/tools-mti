@@ -1,0 +1,39 @@
+<macros>
+    <token name="@TOOL_VERSION@">0.0.0.9</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+    <token name="@PROFILE@">20.01</token>
+
+    <xml name="celesta_requirements">
+        <requirements>
+            <container type="docker">quay.io/goeckslab/celesta:@TOOL_VERSION@</container>
+            <yield />
+        </requirements>
+    </xml>
+
+    <xml name="macro_stdio">
+        <stdio>
+            <exit_code range="1:" level="fatal" description="Error occurred. Please check Tool Standard Error" />
+        </stdio>
+    </xml>
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1038/s41592-022-01498-z</citation>
+        </citations>
+    </xml>
+    <xml name="celesta_base_options" token_label="celesta_base_options">
+        <param name="x_coord" type="text" value="X_centroid" optional="false" label="Name of anndata.obs key containing cell or nucleus centroid X position" />
+        <param name="y_coord" type="text" value="Y_centroid" optional="false" label="Name of anndata.obs key containing cell or nucleus centroid Y position" />
+        <conditional name="filter_cells">
+            <param name="filter" type="select" label="Choose whether to filter cells" help="FilterCells">
+                <option value="no_filter" selected="true">Do not filter cells</option>
+                <option value="filter">Filter cells based on marker intensity</option>
+            </param>
+            <when value="no_filter">
+            </when>
+            <when value="filter">
+                <param name="low_threshold" type="float" value="0.4" optional="false" label="Set the low threshold for filtering cells" help="Cells below low threshold will be filtered out" />
+                <param name="high_threshold" type="float" value="0.9" optional="false" label="Set the high threshold for filtering cells" help="Cells above high threshold will be filtered out" />
+            </when>
+        </conditional>
+    </xml>
+</macros>

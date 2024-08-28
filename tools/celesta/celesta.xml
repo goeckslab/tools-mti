@@ -1,0 +1,270 @@
+<tool id="celesta" name="CELESTA cell typing" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>Cell type identification with spatial information</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="celesta_requirements"/>
+    <expand macro="macro_stdio" />
+    <version_command>echo "@VERSION@"</version_command>
+    <command detect_errors="aggressive">
+        <![CDATA[
+        #if str($runmode.selected_mode) == 'plot_expression':
+            Rscript '$__tool_directory__/celesta_plot_expression.R'
+                --imagingdata '$anndata'
+                --prior '$prior_info'
+                --xcol '$x_coord'
+                --ycol '$y_coord'
+                --size '$test_size' 
+                --height '$height' 
+                --width '$width' 
+        #if str($filter_cells.filter) == 'filter':
+                --filter
+                --lowfilter '$low_threshold'
+                --highfilter '$high_threshold'
+        #end if
+        #else if str($runmode.selected_mode) == 'assign_cells':
+            Rscript '$__tool_directory__/celesta_assign_cells.R'
+                --imagingdata '$anndata'
+                --prior '$prior_info'
+                --xcol '$x_coord' 
+                --ycol '$y_coord'  
+                --maxiteration '$max_iteration' 
+                --changethresh '$cell_change_threshold' 
+            #if str($filter_cells.filter) == 'filter':
+                    --filter
+                    --lowfilter '$low_threshold'
+                    --highfilter '$high_threshold'
+            #end if
+            #if $low_thresholds_file:
+                    --lowexpthresh '$low_thresholds_file'
+            #end if
+            #if $high_thresholds_file:
+                    --highexpthresh '$high_thresholds_file'
+            #end if  
+            #for $p in $plot_cells:
+                && Rscript '$__tool_directory__/celesta_plot_cells.R'
+                    --prior '$prior_info'
+                    --celltypes '${p.cell_types}'
+                    --size '$p.test_size' 
+                    --height '$p.height' 
+                    --width '$p.width' 
+                    --dpi '$p.dpi' 
+            #end for
+        #end if
+        ]]>
+    </command>
+    <configfiles>
+        <inputs name="inputs" />
+    </configfiles>
+    <inputs>
+        <param name="anndata" type="data" format="h5ad" label="Input anndata" />
+        <param name="prior_info" type="data" format="csv" label="Cell-type signature matrix" />
+        <conditional name="runmode">
+            <param name="selected_mode" type="select" label="Select which CELESTA mode to run">
+                <option value="plot_expression" selected="true">Plot expression probabilities for markers in the cell type signature matrix</option>
+                <option value="assign_cells">Run the cell type assignment</option>
+            </param>
+            <when value="plot_expression">
+                <expand macro="celesta_base_options" />
+                <section name="figure_options" title="Figure Options" expanded="true">
+                    <param argument="test_size" type="float" value="1" min="0.1" max="10" label="Specify the point size for plotting cells" />
+                    <param argument="height" type="integer" value="4" min="4" max="20" label="Specify the height of the figure (inches)" />
+                    <param argument="width" type="integer" value="5" min="4" max="20" label="Specify the width of the figure (inches)" />
+                </section>
+            </when>
+            <when value="assign_cells">
+                <expand macro="celesta_base_options" />
+                <section name="options" title="Advanced Options" expanded="false">
+                    <param argument="max_iteration" type="integer" value="10" label="Define the maximum iterations allowed in the EM algorithm per round" />
+                    <param argument="cell_change_threshold" type="float" value="0.01" label="Define an ending condition for the EM algorithm" help="0.01 means that when fewer than 1% of the total number of cells do not change identity, the algorithm will stop" />
+                    <param name="low_thresholds_file" type="data" format="csv" optional="true" label="Provide a file mapping low anchor and index cell assignment thresholds to cell types" />
+                    <param name="high_thresholds_file" type="data" format="csv" optional="true" label="Provide a file mapping high anchor and index cell assignment thresholds to cell types" />
+                    <param name="save_rds" type="boolean" checked="false" label="Also save CELESTA object as RDS file" help="Saving CELESTA object as RDS can allow for easier downstream analysis in R" />
+                </section>
+                <repeat name="plot_cells" title="Plot combinations of resulting cell type assignments" min="0">
+                    <param name="cell_types" type="text" label="Provide a comma-separated list of cell type names to plot together">                    
+                        <sanitizer>
+                            <valid initial="string.printable"/>
+                        </sanitizer>
+                    </param>
+                    <param argument="test_size" type="float" value="1" min="0.1" max="10" label="Specify the point size for plotting cells" />
+                    <param argument="height" type="integer" value="12" min="4" max="20" label="Specify the height of the figure (inches)" />
+                    <param argument="width" type="integer" value="12" min="4" max="20" label="Specify the width of the figure (inches)" />
+                    <param argument="dpi" type="integer" value="300" min="50" max="500" label="Specify the DPI of the figure" />
+                </repeat>
+            </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <collection name="marker_expression_plots" type="list" label="Marker expression probability plots">
+            <discover_datasets pattern="__name_and_ext__" directory="marker_exp_plots" ext="png" />
+            <filter>runmode['selected_mode'] == "plot_expression"</filter>
+        </collection>     
+        <data name="assign_cells_output" format="h5ad" label="CELESTA assign cells output" from_work_dir="result.h5ad" >
+            <filter>runmode['selected_mode'] == "assign_cells"</filter>
+        </data>
+        <data name="assign_cells_rds" format="rds" label="CELESTA object RDS" from_work_dir="celestaobj.rds" >
+            <filter>runmode['selected_mode'] == "assign_cells" and runmode['options']['save_rds']</filter>
+        </data>
+        <collection name="cell_assign_plots" type="list" label="Cell assignment plots">
+            <discover_datasets pattern="__name_and_ext__" directory="cell_assign_plots" ext="png" />
+            <filter>runmode['selected_mode'] == "assign_cells" and len(runmode['plot_cells']) != 0</filter>
+        </collection>     
+    </outputs>
+    <tests>
+        <test expect_num_outputs="1">
+            <param name="anndata" value="celesta_image.h5ad" />
+            <param name="prior_info" value="celesta_prior.csv" />
+            <conditional name="runmode">
+                <param name="selected_mode" value="plot_expression" />
+            </conditional>
+            <output_collection name="marker_expression_plots" type="list" count="18">
+                <element name="CD31_VASCULATURE_CYC_19_CH_3_exp_prob" file="CD31_VASCULATURE_CYC_19_CH_3_exp_prob.png" compare="sim_size" />
+            </output_collection>
+        </test>
+        <test expect_num_outputs="1">
+            <param name="anndata" value="celesta_image.h5ad" />
+            <param name="prior_info" value="celesta_prior.csv" />
+            <conditional name="runmode">
+                <param name="selected_mode" value="assign_cells" />
+            </conditional>
+            <output name="assign_cells_output">
+                <assert_contents>
+                    <has_h5_keys keys="obs/celesta_final_cell_type" />
+                </assert_contents>
+            </output>
+            <assert_stdout>
+                <has_text text="vasculature 273" />
+            </assert_stdout>
+        </test>
+        <test expect_num_outputs="3">
+            <param name="anndata" value="celesta_image.h5ad" />
+            <param name="prior_info" value="celesta_prior.csv" />
+            <param name="filter" value="filter" />
+            <conditional name="runmode">
+                <param name="selected_mode" value="assign_cells" />
+            </conditional>
+            <param name="high_thresholds_file" value="celesta_high_exp_thresholds.csv" />
+            <repeat name="plot_cells">
+                <param name="cell_types" value="vasculature" />
+            </repeat>
+            <param name="save_rds" value="true" />
+            <output name="assign_cells_output">
+                <assert_contents>
+                    <has_h5_keys keys="obs/celesta_final_cell_type" />
+                </assert_contents>
+            </output>
+            <output_collection name="cell_assign_plots" type="list" count="1">
+                <element name="plot_cells_vasculature" file="plot_cells_vasculature.png" compare="sim_size" />
+            </output_collection>
+            <output name="assign_cells_rds">
+                <assert_contents>
+                    <has_size value="1400000" delta="100000" />
+                </assert_contents>
+            </output>
+            <assert_stdout>
+                <has_text text="vasculature 168" />
+            </assert_stdout>
+        </test>
+    </tests>
+    <help>
+        <![CDATA[
+**What it does**
+
+CELESTA (CELl typE identification with SpaTiAl information) is an algorithm aiming to perform
+automated cell type identification for multiplexed in situ imaging data. 
+
+CELESTA makes use of both protein expressions and cell spatial neighborhood information 
+from segmented imaging data for the cell type identification.
+
+This Galaxy implementation of CELESTA has two run modes:
+
+**Both run modes share the following inputs**
+
+`Input Anndata` -- anndata h5ad file where cells are rows, with marker expression in adata.X and cell coordinates in adata.obs 
+
+`Cell-type signature matrix` -- Comma-separated text file containing the following information and formatting: 
+
+(1) The first column has to contain the cell types to be inferred
+
+(2) The second column has the lineage information for each cell type. The lineage information has three numbers 
+    connected by “_” (underscore). The first number indicates round. Cell types with the same lineage level are 
+    inferred at the same round. Increasing number indicates increasing cell-type resolution. For example, 
+    immune cells -> CD3+ T cells –> CD4+ T cells. The third number is a number assigned to the cell type, 
+    i.e, cell type number. The middle number tells the previous lineage cell type number for the current cell type. 
+    For example, the middle number for CD3+ T cells is 5, because it is a subtype of immune cells which have cell 
+    type number assigned to 5.
+
+(3) Starting from column three, each column is a protein marker. If the protein marker is known to be expressed 
+    for that cell type, then it is denoted by “1”. If the protein marker is known to not express for a cell type, 
+    then it is denoted by “0”. If the protein marker is irrelevant or uncertain to express for a cell type, 
+    then it is denoted by “NA”.
+
+`Name of anndata.obs key containing cell or nucleus centroid X position` -- if using output from MCMICRO, this would be 'X_centroid'
+
+`Name of anndata.obs key containing cell or nucleus centroid Y position` -- if using output from MCMICRO, this would be 'Y_centroid'
+
+`Choose whether to filter cells` -- Boolean whether to filter out cells with extreme low or high marker intensity that fall outside of thresholds (`CELESTA::FilterCells()`)
+
+`Set the low threshold for filtering cells` -- high_marker_threshold param in `CELESTA::FilterCells()`
+
+`Set the high threshold for filtering cells` -- low_marker_threshold param in `CELESTA::FilterCells()`
+
+**Run modes**
+
+1. Plot expression probabilities for markers in the cell type signature matrix
+
+    This run mode generates marker expression probability plots for every marker in the cell-type signature matrix. 
+
+    **Additional inputs**
+
+    `Specify the point size for plotting cells` -- passed to `ggplot2::geom_point()` size param
+
+    `Specify the height of the figure (inches)` -- passed to `ggplot2::ggsave()` height param 
+
+    `Specify the width of the figure (inches)` -- passed to `ggplot2::ggsave()` width param 
+
+    **Outputs**
+
+    Collection of `.png` figures showing marker intensity probabilities as spatial scatter plots
+
+2. Run the cell type assignment
+
+    **Additional inputs**
+
+    `Define the maximum iterations allowed in the EM algorithm per round` -- passed to `CELESTA::AssignCells()` max_iteration param
+
+    `Define an ending condition for the EM algorithm` -- passed to `CELESTA::AssignCells()` cell_change_threshold param 
+
+    `Provide a file mapping low/high anchor and index cell assignment thresholds to cell types` -- comma separated text file containing following information and formatting:
+
+(1) First column contains cell types to be inferred (same order as the cell type signature matrix)
+    Second column is named `anchor` and contains high or low thresholds for anchor cells 
+    Third column is named `index` and contains high or low thresholds for index cells 
+
+(2) In the `CELESTA::AssignCells()` function, it requires four vectors to define the high and low thresholds for each cell type. The length of the vector equals to the 
+    total number of cell types defined in the cell-type signature matrix. We would suggest start with the default thresholds and modify them by comparing the results 
+    with the original staining. The two vectors are required for defining the “high_expression_threshold”, one for anchor cells and one for index cells (non-anchor cells). 
+    The thresholds define how much the marker expression probability is in order to be considered as expressed.
+
+(3) For the low thresholds, Normally 1 is assigned to this value unless there are a lot of doublets or co-staining in the data. The Low expression threshold default 
+    values in general are robust, and thus we recommend testing the High expression threshold values.
+
+`Also save CELESTA object as RDS file` -- Boolean whether to output an RDS file in addition to the default h5ad output 
+
+`Plot combinations of resulting cell type assignments` -- specify any combination of cell types from the cell type signature matrix to plot. This is a repeat element, and one plot will be generated per repitition. There are additional params to control plot aesthetic attributes
+
+**Outputs**
+
+`CELESTA assign cells output` -- The primary output, an h5ad file, with new columns containing cell type information. New columns are prepended with `celesta_`
+
+`CELESTA object RDS` -- optionally output CELESTA object as RDS for downstream analysis in R 
+
+Optional collection of `.png` figures of spatial scatter plots color annotated by cell type assignment 
+
+Visit github.com/plevritis-lab/CELESTA for full documentation 
+
+        ]]>
+    </help>
+    <expand macro="citations" />
+</tool>
