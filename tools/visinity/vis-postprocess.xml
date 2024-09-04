@@ -4,7 +4,6 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements"/>
-    <expand macro="stdio"/>
     <expand macro="version_cmd"/>
     <entry_points>
         <entry_point name="Visualize Visinity Archive" requires_domain="True">

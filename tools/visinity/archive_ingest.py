@@ -33,19 +33,15 @@ def reconfigure(channel, seg, old_config):
     if not subconfig['segmentation'].startswith(data_path) or not isfile(subconfig['segmentation']):
         subconfig['segmentation'] = seg
     subconfig['channelFile'] = channel
-    print(f'\tnew: {subconfig}')
     return subconfig
 
 
 new_config = {}
 
 for i, name in enumerate(name_list):
-    print(f'reconfiguring {name}')
     name = name_list[i]
     channel = og_channels[i]
     seg = og_segs[i]
-    # modify config
-    print(f'changing config:\n\told: {config[name]}')
     new_config[name] = reconfigure(channel, seg, config[name])
 
 with open(conf_path, 'w') as f:

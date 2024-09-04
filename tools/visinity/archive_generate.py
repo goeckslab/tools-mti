@@ -18,7 +18,6 @@ app.config['IS_DOCKER'] = False
 requests = app.test_client()
 
 args = sys.argv[1:]
-print(f"args: {args}")
 
 input_dict = {}
 with open(args[0], 'r') as f:
@@ -146,16 +145,16 @@ def chunkify(fullname, idx):
 
     return [
         {
-          "name": f"fullName{idx}",
-          "value": fullname
+            "name": f"fullName{idx}",
+            "value": fullname
         },
         {
-          "name": f"name{idx}",
-          "value": fullname
+            "name": f"name{idx}",
+            "value": fullname
         },
         {
-          "name": f"normalize{idx}",
-          "value": "off" if fullname.lower() in non_norm_markers else "on"
+            "name": f"normalize{idx}",
+            "value": "off" if fullname.lower() in non_norm_markers else "on"
         },
     ]
 
@@ -204,10 +203,10 @@ for header in all_headers:
     i += 1
 
 payload = {
-  'originalData': combinedChannelData,
-  'headerList': headerlist,
-  'normalizeCsv': False,
-  'idField': idfield
+    'originalData': combinedChannelData,
+    'headerList': headerlist,
+    'normalizeCsv': False,
+    'idField': idfield
 }
 
 # execute request
@@ -221,25 +220,6 @@ time.sleep(5)
 # extract relevant config.json bit
 with open(config_path, 'r') as innie:
     config = json.load(innie)
-
-
-# dataset_config = config[dataset_name]
-# dataset_config['linkedDatasets'] = []
-# segmentation_filename = label_file.split('/')[-1]
-
-# dataset_dir = f"{data_path}/{dataset_name}"
-# if os.path.isfile(f"{dataset_dir}/{segmentation_filename}"):
-#     print('its there!')
-#     seg_path = f"{dataset_dir}/{segmentation_filename}"
-# else:
-#     print('it aint there!')
-#     seg_path = label_file
-# dataset_config['segmentation'] = seg_path
-
-
-# # write it to file
-# with open(f"{dataset_dir}/subconfig.json", "w") as outtie:
-#     json.dump({dataset_name: dataset_config}, outtie)
 
 # zip it n ship it
 with ZipFile(f'{out_file}', 'w', ZIP_BZIP2) as zipped:

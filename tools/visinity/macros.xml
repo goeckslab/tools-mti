@@ -2,13 +2,8 @@
 <macros>
     <xml name="requirements">
         <requirements>
-            <container type="docker">quay.io/sargentl/vis_test:0.0.3</container>
+            <container type="docker">quay.io/goeckslab/visinity:1.17v0</container>
         </requirements>
-    </xml>
-    <xml name="stdio">
-        <stdio>
-            <exit_code range="1:" level="fatal" description="Error occurred. Please check Tool Standard Error" />
-        </stdio>
     </xml>
     <xml name="version_cmd">
         <version_command>echo @TOOL_VERSION@</version_command>
@@ -19,6 +14,6 @@
         </citations>
     </xml>
 
-    <token name="@TOOL_VERSION@">0.0.3</token>
+    <token name="@TOOL_VERSION@">1.17</token>
     <token name="@VERSION_SUFFIX@">0</token>
 </macros>
