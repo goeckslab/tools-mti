@@ -20,7 +20,6 @@ RUN <<VISINITY
     rm -rf $TAG.zip
     mv visinity-$TAG /visinity
     useradd -ms /bin/bash visinity
-    echo '. /usr/local/bin/_activate_current_env.sh' >> /etc/bash.bashrc
     echo -e '[global]\nno-cache-dir = True' >> /etc/pip.conf
     chmod -R 0777 /visinity
     chown -R visinity /visinity
@@ -28,6 +27,11 @@ RUN <<VISINITY
     micromamba install -n base -y -f /visinity/requirements.yml
     micromamba clean --all --force-pkgs-dirs -y
 VISINITY
+
+RUN <<ENVMAKER
+    echo -e '#!/bin/bash\nmicromamba activate base\n$*' >> /bin/vis-env
+    chmod 755 /bin/vis-env
+ENVMAKER
 
 USER visinity
 

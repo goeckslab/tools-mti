@@ -16,9 +16,8 @@
     cp working/inputs.json /visinity/ &&
     cp "$__tool_directory__/archive_ingest.py" /visinity/archive_ingest.py &&
     cd /visinity/ &&
-    CONDAFY="micromamba run /bin/bash -c" &&
-    \$CONDAFY "python archive_ingest.py inputs.json" &&
-    \$CONDAFY "python run.py";
+    vis-env python archive_ingest.py inputs.json &&
+    vis-env python run.py;
         ]]>
     </command>
     <configfiles>
