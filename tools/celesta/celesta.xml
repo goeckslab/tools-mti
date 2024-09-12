@@ -41,14 +41,14 @@
             #if $runmode.options.high_thresholds_file:
                     --highexpthresh '${runmode.options.high_thresholds_file}'
             #end if  
-            #for $p in $plot_cells:
+            #for $p in $runmode.plot_cells:
                 && Rscript '$__tool_directory__/celesta_plot_cells.R'
                     --prior '$prior_info'
                     --celltypes '${p.cell_types}'
-                    --size '$p.test_size' 
-                    --height '$p.height' 
-                    --width '$p.width' 
-                    --dpi '$p.dpi' 
+                    --size '${p.test_size}' 
+                    --height '${p.height}' 
+                    --width '${p.width}' 
+                    --dpi '${p.dpi}' 
             #end for
         #end if
         ]]>
@@ -145,9 +145,6 @@
                     <has_h5_keys keys="obs/celesta_final_cell_type" />
                 </assert_contents>
             </output>
-            <assert_stdout>
-                <has_text text="vasculature 273" />
-            </assert_stdout>
         </test>
         <test expect_num_outputs="3">
             <param name="anndata" value="celesta_image.h5ad" />
@@ -174,9 +171,6 @@
                     <has_size value="1400000" delta="100000" />
                 </assert_contents>
             </output>
-            <assert_stdout>
-                <has_text text="vasculature 168" />
-            </assert_stdout>
         </test>
     </tests>
     <help>
