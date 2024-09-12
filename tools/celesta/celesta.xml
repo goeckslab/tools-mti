@@ -14,32 +14,32 @@
                 --prior '$prior_info'
                 --xcol '$x_coord'
                 --ycol '$y_coord'
-                --size '$test_size' 
-                --height '$height' 
-                --width '$width' 
+                --size '${runmode.figure_options.test_size}' 
+                --height '${runmode.figure_options.height}' 
+                --width '${runmode.figure_options.width}' 
         #if str($filter_cells.filter) == 'filter':
                 --filter
-                --lowfilter '$low_threshold'
-                --highfilter '$high_threshold'
+                --lowfilter '${filter_cells.low_threshold}'
+                --highfilter '${filter_cells.high_threshold}'
         #end if
         #else if str($runmode.selected_mode) == 'assign_cells':
             Rscript '$__tool_directory__/celesta_assign_cells.R'
                 --imagingdata '$anndata'
                 --prior '$prior_info'
-                --xcol '$x_coord' 
-                --ycol '$y_coord'  
-                --maxiteration '$max_iteration' 
-                --changethresh '$cell_change_threshold' 
+                --xcol '$x_coord'
+                --ycol '$y_coord'
+                --maxiteration '${runmode.options.max_iteration}' 
+                --changethresh '${runmode.options.cell_change_threshold}' 
             #if str($filter_cells.filter) == 'filter':
                     --filter
-                    --lowfilter '$low_threshold'
-                    --highfilter '$high_threshold'
+                    --lowfilter '${filter_cells.low_threshold}'
+                    --highfilter '${filter_cells.high_threshold}'
             #end if
-            #if $low_thresholds_file:
-                    --lowexpthresh '$low_thresholds_file'
+            #if $runmode.options.low_thresholds_file:
+                    --lowexpthresh '${runmode.options.low_thresholds_file}'
             #end if
-            #if $high_thresholds_file:
-                    --highexpthresh '$high_thresholds_file'
+            #if $runmode.options.high_thresholds_file:
+                    --highexpthresh '${runmode.options.high_thresholds_file}'
             #end if  
             #for $p in $plot_cells:
                 && Rscript '$__tool_directory__/celesta_plot_cells.R'
@@ -59,13 +59,26 @@
     <inputs>
         <param name="anndata" type="data" format="h5ad" label="Input anndata" />
         <param name="prior_info" type="data" format="csv" label="Cell-type signature matrix" />
+        <param name="x_coord" type="text" value="X_centroid" optional="false" label="Name of anndata.obs key containing cell or nucleus centroid X position" />
+        <param name="y_coord" type="text" value="Y_centroid" optional="false" label="Name of anndata.obs key containing cell or nucleus centroid Y position" />
+        <conditional name="filter_cells">
+            <param name="filter" type="select" label="Choose whether to filter cells" help="FilterCells">
+                <option value="no_filter" selected="true">Do not filter cells</option>
+                <option value="filter">Filter cells based on marker intensity</option>
+            </param>
+            <when value="no_filter">
+            </when>
+            <when value="filter">
+                <param name="low_threshold" type="float" value="0.4" optional="false" label="Set the low threshold for filtering cells" help="Cells below low threshold will be filtered out" />
+                <param name="high_threshold" type="float" value="0.9" optional="false" label="Set the high threshold for filtering cells" help="Cells above high threshold will be filtered out" />
+            </when>
+        </conditional>
         <conditional name="runmode">
             <param name="selected_mode" type="select" label="Select which CELESTA mode to run">
                 <option value="plot_expression" selected="true">Plot expression probabilities for markers in the cell type signature matrix</option>
                 <option value="assign_cells">Run the cell type assignment</option>
             </param>
             <when value="plot_expression">
-                <expand macro="celesta_base_options" />
                 <section name="figure_options" title="Figure Options" expanded="true">
                     <param argument="test_size" type="float" value="1" min="0.1" max="10" label="Specify the point size for plotting cells" />
                     <param argument="height" type="integer" value="4" min="4" max="20" label="Specify the height of the figure (inches)" />
@@ -73,7 +86,6 @@
                 </section>
             </when>
             <when value="assign_cells">
-                <expand macro="celesta_base_options" />
                 <section name="options" title="Advanced Options" expanded="false">
                     <param argument="max_iteration" type="integer" value="10" label="Define the maximum iterations allowed in the EM algorithm per round" />
                     <param argument="cell_change_threshold" type="float" value="0.01" label="Define an ending condition for the EM algorithm" help="0.01 means that when fewer than 1% of the total number of cells do not change identity, the algorithm will stop" />
