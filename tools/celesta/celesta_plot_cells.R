@@ -36,7 +36,7 @@ CelestaObj <- readRDS(opt$rds)
 cell_types_to_plot <- strsplit(opt$celltypes, ",")[[1]]
 
 # get indices of cell types to plot from the prior marker table
-cell_type_indices <- which(CelestaObj@prior_info[,1] %in% cell_types_to_plot)
+cell_type_indices <- which(CelestaObj@prior_info[, 1] %in% cell_types_to_plot)
 
 print("Cell types selected for plotting:")
 print(cell_types_to_plot)
