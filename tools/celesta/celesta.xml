@@ -43,7 +43,6 @@
             #end if  
             #for $p in $runmode.plot_cells:
                 && Rscript '$__tool_directory__/celesta_plot_cells.R'
-                    --prior '$prior_info'
                     --celltypes '${p.cell_types}'
                     --size '${p.test_size}' 
                     --height '${p.height}' 
