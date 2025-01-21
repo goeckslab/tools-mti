@@ -1,6 +1,6 @@
 <macros>
-    <token name="@TOOL_VERSION@">1.0.4</token>
-    <token name="@VERSION_SUFFIX@">5</token>
+    <token name="@TOOL_VERSION@">3.5.1</token>
+    <token name="@VERSION_SUFFIX@">0</token>
     <token name="@PROFILE@">20.01</token>
 
     <xml name="vitessce_requirements">
@@ -68,6 +68,7 @@
             --inputs '$inputs'
             --output '${output.files_path}'
             --image '${output.files_path}/A/0/image01.ome.tiff'
+            --offsets '$image.metadata.offsets'
             #if $masks
                 --masks '${output.files_path}/A/0/masks01.ome.tiff'
             #end if

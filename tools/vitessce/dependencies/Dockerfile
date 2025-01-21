@@ -1,9 +1,10 @@
 FROM ubuntu:20.04
 
-ARG python_version='3.10'
-ARG vitessce_version='1.0.4'
-ARG anndata_version='0.8.*'
+ARG python_version='3.12'
+ARG vitessce_version='3.5.1'
+ARG anndata_version='0.11.*'
 ARG numpy_version='1.23.0'
+ARG scanpy_version='1.10.2'
 ARG bftools_url='https://downloads.openmicroscopy.org/bio-formats/6.6.1/artifacts/bftools.zip'
 
 RUN apt update && \
@@ -35,4 +36,4 @@ RUN pip install \
     vitessce==$vitessce_version \
     anndata==$anndata_version \
     numpy==$numpy_version \
-    scanpy \
+    scanpy>=$scanpy_version
