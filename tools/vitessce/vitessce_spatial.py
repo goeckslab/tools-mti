@@ -41,7 +41,7 @@ def main(inputs, output, image, offsets=None, anndata=None, masks=None):
         params = json.load(param_handler)
 
     # initialize vitessce config and add OME-TIFF image, and masks if specified
-    vc = VitessceConfig(schema_version="1.0.15", name=None, description=None)
+    vc = VitessceConfig(schema_version="1.0.17", name=None, description=None)
     dataset = vc.add_dataset()
 
     # FIXME: grab offsets file for faster display. NEED TO TEST
@@ -52,22 +52,31 @@ def main(inputs, output, image, offsets=None, anndata=None, masks=None):
         )
     dataset.add_object(MultiImageWrapper(image_wrappers))
 
-    # add views for the images, status box, and the layer/channels selector
-    status = vc.add_view(
-        view_type=cm.STATUS,
-        dataset=dataset)
+    # set relative view sizes (w,h), full window dims are 12x12
+    # if no anndata file, image and layer view can take up whole window
+    if not anndata:
+        spatial_dims = (9,12)
+        lc_dims = (3,12)
+    else:
+        spatial_dims = (6,6)
+        lc_dims = (3,6)
 
+    # add views for the images, and the layer/channels selector
     spatial = vc.add_view(
         view_type=cm.SPATIAL,
-        dataset=dataset)
+        dataset=dataset,
+        w=spatial_dims[0],
+        h=spatial_dims[1])
 
     lc = vc.add_view(
         view_type=cm.LAYER_CONTROLLER,
-        dataset=dataset)
+        dataset=dataset,
+        w=lc_dims[0],
+        h=lc_dims[1])
 
     # if no anndata file, export the config with these minimal components
     if not anndata:
-        vc.layout(status / lc | spatial)
+        vc.layout(lc | spatial)
         config_dict = vc.export(
             to='files',
             base_url='http://localhost',
@@ -137,34 +146,46 @@ def main(inputs, output, image, offsets=None, anndata=None, masks=None):
 
     # add views
     cellsets = vc.add_view(
-        view_type=cm.CELL_SETS, 
-        dataset=dataset)
+        view_type=cm.OBS_SETS, 
+        dataset=dataset,
+        w=3,
+        h=3)
 
     scatterplot = vc.add_view(
         view_type=cm.SCATTERPLOT,
         dataset=dataset,
-        mapping=mappings_obsm_name)
+        mapping=mappings_obsm_name,
+        w=3,
+        h=6)
 
     heatmap = vc.add_view(
         view_type=cm.HEATMAP,
-        dataset=dataset)
+        dataset=dataset,
+        w=3,
+        h=3)
 
     genes = vc.add_view(
-        view_type=cm.GENES,
-        dataset=dataset)
+        view_type=cm.FEATURE_LIST,
+        dataset=dataset,
+        w=3,
+        h=3)
 
     cell_set_sizes = vc.add_view(
-        view_type=cm.CELL_SET_SIZES,
-        dataset=dataset)
+        view_type=cm.OBS_SET_SIZES,
+        dataset=dataset,
+        w=3,
+        h=3)
 
     cell_set_expression = vc.add_view(
-        view_type=cm.CELL_SET_EXPRESSION,
-        dataset=dataset)
+        view_type=cm.OBS_SET_FEATURE_VALUE_DISTRIBUTION,
+        dataset=dataset,
+        w=3,
+        h=6)
 
     # define the dashboard layout
     vc.layout(
-        (status / genes / cell_set_expression)
-        | (cellsets / lc / scatterplot)
+        (cellsets / genes / cell_set_expression)
+        | (lc / scatterplot)
         | (cell_set_sizes / heatmap / spatial)
     )
 
