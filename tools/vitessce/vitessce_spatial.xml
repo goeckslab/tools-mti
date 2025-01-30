@@ -1,5 +1,5 @@
-<tool id="vitessce_spatial" name="Run multi-modal single-cell visualization" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
-    <description>with Vitessce</description>
+<tool id="vitessce_spatial" name="Vitessce" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>Visual Integration Tool for the Exploration of Spatial Single-Cell Experiments</description>
 
     <macros>
         <import>main_macros.xml</import>

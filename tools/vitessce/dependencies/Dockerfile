@@ -1,39 +1,25 @@
-FROM ubuntu:20.04
+FROM --platform=linux/amd64 python:3.12-slim-bookworm
 
-ARG python_version='3.12'
-ARG vitessce_version='3.5.1'
-ARG anndata_version='0.11.*'
-ARG numpy_version='1.23.0'
-ARG scanpy_version='1.10.2'
-ARG bftools_url='https://downloads.openmicroscopy.org/bio-formats/6.6.1/artifacts/bftools.zip'
-
-RUN apt update && \
-    ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONTAINER_TIMEZONE > /etc/timezone && \
-    apt install -y \
-        --no-install-recommends \
-        software-properties-common && \
-    add-apt-repository -y ppa:deadsnakes/ppa && \
-    apt update && \
-    apt install -y \
-        --no-install-recommends \
-        curl \
-        git \
-        openjdk-8-jdk \
-        unzip \
-        wget \
-        python$python_version \
-        python3-pip && \
-    rm -rf /var/lib/apt/lists/* && \
-    ln -s /usr/bin/python3 /usr/bin/python
-
-RUN wget $bftools_url -O bftools.zip && \
-    unzip -j bftools.zip "bftools/*" -d /usr/local/bin/ && \
-    rm -f bftools.zip
+SHELL ["/bin/bash", "-c"]
 
 RUN pip install \
     --no-cache-dir \
     --no-compile \
-    vitessce==$vitessce_version \
-    anndata==$anndata_version \
-    numpy==$numpy_version \
-    scanpy>=$scanpy_version
+    vitessce[all]==3.5.1 && \
+    useradd -ms /bin/bash vitessce && \
+    apt update && \
+    apt install -y --no-install-recommends \
+    openjdk-17-jdk \
+    wget \
+    unzip \
+    && \
+    apt clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    wget 'https://downloads.openmicroscopy.org/bio-formats/6.6.1/artifacts/bftools.zip' -O bftools.zip && \
+    unzip -n -j bftools.zip "bftools/*" -d /usr/local/bin/ && \
+    rm -f bftools.zip
+
+USER vitessce
+WORKDIR /home/vitessce
+
+CMD ['bash']

@@ -5,7 +5,7 @@
 
     <xml name="vitessce_requirements">
         <requirements>
-            <container type="docker">quay.io/goeckslab/vitessce:@TOOL_VERSION@v3</container>
+            <container type="docker">quay.io/goeckslab/vitessce:@TOOL_VERSION@</container>
         </requirements>
     </xml>
 
@@ -76,9 +76,8 @@
             --anndata '$anndata'
             #end if
             &&
-        cp -R '$__tool_directory__/static' '${output.files_path}' &&
         cp '$__tool_directory__/index.html' '$output';
-
+        echo "export var config = \$(cat ${output.files_path}/config.json)" >> '${output.files_path}/config.js';
         ]]>
         </command>
     </xml>
