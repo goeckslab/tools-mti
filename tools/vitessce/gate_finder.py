@@ -1,6 +1,7 @@
 import argparse
 import json
 import warnings
+from os.path import join, isdir
 from pathlib import Path
 
 import numpy as np
@@ -52,7 +53,7 @@ def get_gmm_phenotype(data):
     return get_gate_phenotype(gate, np.ravel(data_norm))
 
 
-def main(inputs, output, image, anndata, masks=None):
+def main(inputs, output, image, anndata, offsets=None, masks=None):
     """
     Parameter
     ---------
@@ -113,7 +114,7 @@ def main(inputs, output, image, anndata, masks=None):
     # initialize vitessce config and add OME-TIFF image
     vc = VitessceConfig(schema_version="1.0.17", name=None, description=None)
     dataset = vc.add_dataset()
-    image_wrappers = [OmeTiffWrapper(img_path=image, name='OMETIFF')]
+    image_wrappers = [OmeTiffWrapper(img_path=image, offsets_path=offsets, name='OMETIFF')]
     if masks:
         image_wrappers.append(
             OmeTiffWrapper(img_path=masks, name='MASKS', is_bitmask=True)
@@ -126,7 +127,7 @@ def main(inputs, output, image, anndata, masks=None):
         adata = optimize_adata(
             adata,
             obs_cols=gate_names,
-            obsm_keys=[mappings_obsm, 'spatial'],
+            obsm_keys=['spatial'],
             optimize_X=True
         )
         adata.write_zarr(
@@ -202,8 +203,9 @@ if __name__ == '__main__':
     aparser.add_argument("-e", "--output", dest="output", required=True)
     aparser.add_argument("-g", "--image", dest="image", required=True)
     aparser.add_argument("-a", "--anndata", dest="anndata", required=True)
+    aparser.add_argument("-f", "--offsets", dest="offsets", required=False)
     aparser.add_argument("-m", "--masks", dest="masks", required=False)
 
     args = aparser.parse_args()
 
-    main(args.inputs, args.output, args.image, args.anndata, args.masks)
+    main(args.inputs, args.output, args.image, args.anndata, args.offsets, args.masks)
