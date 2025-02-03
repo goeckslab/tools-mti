@@ -111,7 +111,7 @@ def main(inputs, output, image, anndata, masks=None):
     adata.obsm['spatial'] = adata.obs[[x_coordinate, y_coordinate]].values
 
     # initialize vitessce config and add OME-TIFF image
-    vc = VitessceConfig(schema_version="1.0.15", name=None, description=None)
+    vc = VitessceConfig(schema_version="1.0.17", name=None, description=None)
     dataset = vc.add_dataset()
     image_wrappers = [OmeTiffWrapper(img_path=image, name='OMETIFF')]
     if masks:
@@ -148,36 +148,44 @@ def main(inputs, output, image, anndata, masks=None):
     # add views
     spatial = vc.add_view(
         view_type=cm.SPATIAL,
-        dataset=dataset)
+        dataset=dataset,
+        w=6,
+        h=12)
 
     cellsets = vc.add_view(
-        view_type=cm.CELL_SETS, 
-        dataset=dataset)
-
-    status = vc.add_view(
-        view_type=cm.STATUS,
-        dataset=dataset)
+        view_type=cm.OBS_SETS, 
+        dataset=dataset,
+        w=3,
+        h=6)
 
     lc = vc.add_view(
         view_type=cm.LAYER_CONTROLLER,
-        dataset=dataset)
+        dataset=dataset,
+        w=3,
+        h=9)
 
     genes = vc.add_view(
-        view_type=cm.GENES,
-        dataset=dataset)
+        view_type=cm.FEATURE_LIST,
+        dataset=dataset,
+        w=3,
+        h=3)
 
     cell_set_sizes = vc.add_view(
-        view_type=cm.CELL_SET_SIZES,
-        dataset=dataset)
+        view_type=cm.OBS_SET_SIZES,
+        dataset=dataset,
+        w=3,
+        h=3)
 
     cell_set_expression = vc.add_view(
-        view_type=cm.CELL_SET_EXPRESSION,
-        dataset=dataset)
+        view_type=cm.OBS_SET_FEATURE_VALUE_DISTRIBUTION,
+        dataset=dataset,
+        w=3,
+        h=3)
 
     # define the dashboard layout
     vc.layout(
-        (status / genes / cell_set_expression)
-        | (cellsets / cell_set_sizes / lc)
+        (cellsets / genes / cell_set_expression)
+        | (cell_set_sizes / lc)
         | (spatial)
     )
 
