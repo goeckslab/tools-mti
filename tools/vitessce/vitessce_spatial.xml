@@ -100,7 +100,7 @@
             <output name="vitessce_config" ftype="json">
                 <assert_contents>
                     <has_json_property_with_value property="renderLayers" value="['OMETIFF']" />
-                    <has_json_property_with_text property="path" value="obs/phenotype" />
+                    <has_json_property_with_text property="path" text="obs/phenotype" />
                 </assert_contents>
             </output>
         </test>
@@ -114,7 +114,7 @@
             <output name="vitessce_config" ftype="json">
                 <assert_contents>
                     <has_json_property_with_value property="renderLayers" value="['OMETIFF','MASKS']" />
-                    <has_json_property_with_text property="path" value="obs/phenotype" />
+                    <has_json_property_with_text property="path" text="obs/phenotype" />
                 </assert_contents>
             </output>
         </test>

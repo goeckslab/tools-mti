@@ -44,8 +44,8 @@
             <output name="vitessce_config" ftype="json">
                 <assert_contents>
                     <has_json_property_with_value property="renderLayers" value="['OMETIFF','MASKS']" />
-                    <has_json_property_with_text property="name" value="DNA_1--6.0" />
-                    <has_json_property_with_text property="name" value="DNA_1--7.9" />
+                    <has_json_property_with_text property="name" text="DNA_1--6.0" />
+                    <has_json_property_with_text property="name" text="DNA_1--7.9" />
                 </assert_contents>
             </output>
         </test>
