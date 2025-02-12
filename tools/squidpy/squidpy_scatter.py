@@ -22,10 +22,16 @@ def main(inputs, output_plot):
         params = json.load(param_handler)
 
     # collapse param dict hierarchy, parse inputs
+    main_params = ['anndata', 'x_coord', 'y_coord', 'color']
     plot_opts = params.pop('plot_opts')
     legend_opts = params.pop('legend_opts')
     aes_opts = params.pop('aesthetic_opts')
-    options = {**params, **plot_opts, **legend_opts, **aes_opts}
+    options = {
+        **{k: params[k] for k in main_params},
+        **plot_opts,
+        **legend_opts,
+        **aes_opts
+    }
 
     # read input anndata file
     adata_fh = options.pop('anndata')
