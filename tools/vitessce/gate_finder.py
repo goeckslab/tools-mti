@@ -1,7 +1,7 @@
 import argparse
 import json
 import warnings
-from os.path import join, isdir
+from os.path import isdir, join
 from pathlib import Path
 
 import numpy as np
@@ -9,6 +9,7 @@ import pandas as pd
 from anndata import read_h5ad
 from sklearn.mixture import GaussianMixture
 from sklearn.preprocessing import MinMaxScaler
+
 from vitessce import (
     AnnDataWrapper,
     Component as cm,
@@ -21,6 +22,7 @@ from vitessce.data_utils import (
     optimize_adata,
     VAR_CHUNK_SIZE,
 )
+
 
 # Generate binarized phenotype for a gate
 def get_gate_phenotype(g, d):
@@ -154,7 +156,7 @@ def main(inputs, output, image, anndata, offsets=None, masks=None):
         h=12)
 
     cellsets = vc.add_view(
-        view_type=cm.OBS_SETS, 
+        view_type=cm.OBS_SETS,
         dataset=dataset,
         w=3,
         h=6)

@@ -1,11 +1,12 @@
 import argparse
 import json
 import warnings
-from os.path import join, isdir
+from os.path import isdir, join
 from pathlib import Path
 
 import scanpy as sc
 from anndata import read_h5ad
+
 from vitessce import (
     AnnDataWrapper,
     Component as cm,
@@ -55,11 +56,11 @@ def main(inputs, output, image, offsets=None, anndata=None, masks=None):
     # set relative view sizes (w,h), full window dims are 12x12
     # if no anndata file, image and layer view can take up whole window
     if not anndata:
-        spatial_dims = (9,12)
-        lc_dims = (3,12)
+        spatial_dims = (9, 12)
+        lc_dims = (3, 12)
     else:
-        spatial_dims = (6,6)
-        lc_dims = (3,6)
+        spatial_dims = (6, 6)
+        lc_dims = (3, 6)
 
     # add views for the images, and the layer/channels selector
     spatial = vc.add_view(
@@ -146,7 +147,7 @@ def main(inputs, output, image, offsets=None, anndata=None, masks=None):
 
     # add views
     cellsets = vc.add_view(
-        view_type=cm.OBS_SETS, 
+        view_type=cm.OBS_SETS,
         dataset=dataset,
         w=3,
         h=3)
