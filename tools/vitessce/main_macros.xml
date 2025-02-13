@@ -78,6 +78,7 @@
             &&
         cp '$__tool_directory__/index.html' '$output';
         echo "export var config = \$(cat ${output.files_path}/config.json)" >> '${output.files_path}/config.js';
+        cat '${output.files_path}/config.json' >> '$vitessce_config';
         ]]>
         </command>
     </xml>

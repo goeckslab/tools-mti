@@ -97,7 +97,7 @@
                 <param name="phenotyping_choice" value="add_h5ad" />
                 <param name="anndata" value="vitessce_test.h5ad" ftype="h5ad" />
             </conditional>
-            <output name="vitessce_config" ftype="json">
+            <output name="vitessce_config">
                 <assert_contents>
                     <has_json_property_with_text property="name" text="OMETIFF" />
                     <has_json_property_with_text property="path" text="obs/phenotype" />
@@ -111,7 +111,7 @@
                 <param name="phenotyping_choice" value="add_h5ad" />
                 <param name="anndata" value="vitessce_test.h5ad" ftype="h5ad" />
             </conditional>
-            <output name="vitessce_config" ftype="json">
+            <output name="vitessce_config">
                 <assert_contents>
                     <has_json_property_with_text property="name" text="OMETIFF" />
                     <has_json_property_with_text property="name" text="MASKS" />

@@ -9,7 +9,6 @@ import pandas as pd
 from anndata import read_h5ad
 from sklearn.mixture import GaussianMixture
 from sklearn.preprocessing import MinMaxScaler
-
 from vitessce import (
     AnnDataWrapper,
     Component as cm,
@@ -17,7 +16,6 @@ from vitessce import (
     OmeTiffWrapper,
     VitessceConfig,
 )
-
 from vitessce.data_utils import (
     optimize_adata,
     VAR_CHUNK_SIZE,

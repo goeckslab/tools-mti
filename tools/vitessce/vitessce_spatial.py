@@ -6,7 +6,6 @@ from pathlib import Path
 
 import scanpy as sc
 from anndata import read_h5ad
-
 from vitessce import (
     AnnDataWrapper,
     Component as cm,
@@ -14,7 +13,6 @@ from vitessce import (
     OmeTiffWrapper,
     VitessceConfig,
 )
-
 from vitessce.data_utils import (
     optimize_adata,
     VAR_CHUNK_SIZE,

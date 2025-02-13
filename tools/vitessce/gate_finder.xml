@@ -41,7 +41,7 @@
             <param name="from_gate" value="6" />
             <param name="to_gate" value="8" />
             <param name="increment" value=".1" />
-            <output name="vitessce_config" ftype="json">
+            <output name="vitessce_config">
                 <assert_contents>
                     <has_json_property_with_text property="name" text="OMETIFF" />
                     <has_json_property_with_text property="name" text="MASKS" />
