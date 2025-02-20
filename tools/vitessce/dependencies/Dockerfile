@@ -5,7 +5,7 @@ SHELL ["/bin/bash", "-c"]
 RUN pip install \
     --no-cache-dir \
     --no-compile \
-    vitessce[all]==3.5.1 && \
+    vitessce[all]==3.5.1 anndata==0.11.3 zarr==2.18.4 && \
     useradd -ms /bin/bash vitessce && \
     apt update && \
     apt install -y --no-install-recommends \
@@ -15,7 +15,7 @@ RUN pip install \
     && \
     apt clean && \
     rm -rf /var/lib/apt/lists/* && \
-    wget 'https://downloads.openmicroscopy.org/bio-formats/6.6.1/artifacts/bftools.zip' -O bftools.zip && \
+    wget 'https://downloads.openmicroscopy.org/bio-formats/8.1.0/artifacts/bftools.zip' -O bftools.zip && \
     unzip -n -j bftools.zip "bftools/*" -d /usr/local/bin/ && \
     rm -f bftools.zip
 
