@@ -1,6 +1,7 @@
 import argparse
 import json
 import warnings
+from os.path import isdir, join
 from pathlib import Path
 
 import numpy as np
@@ -15,13 +16,17 @@ from vitessce import (
     OmeTiffWrapper,
     VitessceConfig,
 )
+from vitessce.data_utils import (
+    optimize_adata,
+    VAR_CHUNK_SIZE,
+)
 
 
 # Generate binarized phenotype for a gate
 def get_gate_phenotype(g, d):
     dd = d.copy()
     dd = np.where(dd < g, 0, dd)
-    np.warnings.filterwarnings('ignore')
+    warnings.filterwarnings('ignore')
     dd = np.where(dd >= g, 1, dd)
     return dd
 
@@ -48,7 +53,7 @@ def get_gmm_phenotype(data):
     return get_gate_phenotype(gate, np.ravel(data_norm))
 
 
-def main(inputs, output, image, anndata, masks=None):
+def main(inputs, output, image, anndata, offsets=None, masks=None):
     """
     Parameter
     ---------
@@ -104,39 +109,88 @@ def main(inputs, output, image, anndata, masks=None):
     adata.obs['GMM_auto'] = get_gmm_phenotype(marker_values)
     gate_names.append('GMM_auto')
 
-    adata.obsm['XY_coordinate'] = adata.obs[[x_coordinate, y_coordinate]].values
+    adata.obsm['spatial'] = adata.obs[[x_coordinate, y_coordinate]].values
 
-    vc = VitessceConfig(name=None, description=None)
+    # initialize vitessce config and add OME-TIFF image
+    vc = VitessceConfig(schema_version="1.0.17", name=None, description=None)
     dataset = vc.add_dataset()
-    image_wrappers = [OmeTiffWrapper(img_path=image, name='OMETIFF')]
+    image_wrappers = [OmeTiffWrapper(img_path=image, offsets_path=offsets, name='OMETIFF')]
     if masks:
         image_wrappers.append(
             OmeTiffWrapper(img_path=masks, name='MASKS', is_bitmask=True)
         )
     dataset.add_object(MultiImageWrapper(image_wrappers))
 
+    # write anndata out as zarr hierarchy
+    zarr_filepath = join("data", "adata.zarr")
+    if not isdir(zarr_filepath):
+        adata = optimize_adata(
+            adata,
+            obs_cols=gate_names,
+            obsm_keys=['spatial'],
+            optimize_X=True
+        )
+        adata.write_zarr(
+            zarr_filepath,
+            chunks=[adata.shape[0], VAR_CHUNK_SIZE]
+        )
+
+    # add anndata zarr to vitessce config
     dataset.add_object(
         AnnDataWrapper(
-            adata,
-            spatial_centroid_obsm='XY_coordinate',
-            cell_set_obs=gate_names,
-            cell_set_obs_names=[obj[0].upper() + obj[1:] for obj in gate_names],
-            expression_matrix="X"
+            adata_path=zarr_filepath,
+            obs_feature_matrix_path="X",    # FIXME: provide rep options
+            obs_set_paths=['obs/' + x for x in gate_names],
+            obs_set_names=gate_names,
+            obs_locations_path='spatial'
         )
     )
-    spatial = vc.add_view(dataset, cm.SPATIAL)
-    cellsets = vc.add_view(dataset, cm.CELL_SETS)
-    status = vc.add_view(dataset, cm.STATUS)
-    lc = vc.add_view(dataset, cm.LAYER_CONTROLLER)
-    genes = vc.add_view(dataset, cm.GENES)
-    cell_set_sizes = vc.add_view(dataset, cm.CELL_SET_SIZES)
-    cell_set_expression = vc.add_view(dataset, cm.CELL_SET_EXPRESSION)
 
+    # add views
+    spatial = vc.add_view(
+        view_type=cm.SPATIAL,
+        dataset=dataset,
+        w=6,
+        h=12)
+
+    cellsets = vc.add_view(
+        view_type=cm.OBS_SETS,
+        dataset=dataset,
+        w=3,
+        h=6)
+
+    lc = vc.add_view(
+        view_type=cm.LAYER_CONTROLLER,
+        dataset=dataset,
+        w=3,
+        h=9)
+
+    genes = vc.add_view(
+        view_type=cm.FEATURE_LIST,
+        dataset=dataset,
+        w=3,
+        h=3)
+
+    cell_set_sizes = vc.add_view(
+        view_type=cm.OBS_SET_SIZES,
+        dataset=dataset,
+        w=3,
+        h=3)
+
+    cell_set_expression = vc.add_view(
+        view_type=cm.OBS_SET_FEATURE_VALUE_DISTRIBUTION,
+        dataset=dataset,
+        w=3,
+        h=3)
+
+    # define the dashboard layout
     vc.layout(
-        (status / genes / cell_set_expression)
-        | (cellsets / cell_set_sizes / lc)
+        (cellsets / genes / cell_set_expression)
+        | (cell_set_sizes / lc)
         | (spatial)
     )
+
+    # export config file
     config_dict = vc.export(to='files', base_url='http://localhost', out_dir=output)
 
     with open(Path(output).joinpath('config.json'), 'w') as f:
@@ -149,8 +203,9 @@ if __name__ == '__main__':
     aparser.add_argument("-e", "--output", dest="output", required=True)
     aparser.add_argument("-g", "--image", dest="image", required=True)
     aparser.add_argument("-a", "--anndata", dest="anndata", required=True)
+    aparser.add_argument("-f", "--offsets", dest="offsets", required=False)
     aparser.add_argument("-m", "--masks", dest="masks", required=False)
 
     args = aparser.parse_args()
 
-    main(args.inputs, args.output, args.image, args.anndata, args.masks)
+    main(args.inputs, args.output, args.image, args.anndata, args.offsets, args.masks)

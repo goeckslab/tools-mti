@@ -8,7 +8,7 @@
     </edam_operations>
     <expand macro="vitessce_requirements"/>
     <expand macro="macro_stdio" />
-    <version_command>echo "@VERSION@"</version_command>
+    <version_command>echo "@TOOL_VERSION@"</version_command>
     <expand macro="vitessce_cmd" tool_id="gate_finder" />
     <configfiles>
         <inputs name="inputs" />
@@ -30,16 +30,25 @@
     </inputs>
     <outputs>
         <data format="html" name="output" />
+        <data format="json" name="vitessce_config" from_work_dir="config.json" hidden="true" label="Vitessce config file on ${on_string}" />
     </outputs>
     <tests>
         <test>
-            <param name="image" value="cropped_reactive_core.ome.tiff" ftype="ome.tiff" />
-            <param name="anndata" value="cropped_tutorial_data_pheno.h5ad" ftype="h5ad" />
-            <param name="marker" value="CD45" />
-            <param name="from_gate" value="5" />
-            <param name="to_gate" value="9" />
-            <param name="increment" value="0.5" />
-            <output name="output" file="tutorial_vitessce.html" compare="sim_size" delta="20" />
+            <param name="image" value="vitessce_image.ome.tiff" ftype="ome.tiff" />
+            <param name="masks" value="vitessce_mask.tiff" ftype="tiff" />
+            <param name="anndata" value="vitessce_test.h5ad" ftype="h5ad" />
+            <param name="marker" value="DNA_1" />
+            <param name="from_gate" value="6" />
+            <param name="to_gate" value="8" />
+            <param name="increment" value=".1" />
+            <output name="vitessce_config">
+                <assert_contents>
+                    <has_json_property_with_text property="name" text="OMETIFF" />
+                    <has_json_property_with_text property="name" text="MASKS" />
+                    <has_json_property_with_text property="name" text="DNA_1--6.0" />
+                    <has_json_property_with_text property="name" text="DNA_1--7.9" />
+                </assert_contents>
+            </output>
         </test>
     </tests>
     <help>
