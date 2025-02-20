@@ -11,7 +11,7 @@
 
     <expand macro="vitessce_requirements"/>
     <expand macro="macro_stdio" />
-    <version_command> "@VERSION@"</version_command>
+    <version_command>echo "@TOOL_VERSION@"</version_command>
     <expand macro="vitessce_cmd" />
 
     <configfiles>
