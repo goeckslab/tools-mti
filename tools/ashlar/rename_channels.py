@@ -3,11 +3,10 @@
 # https://github.com/ohsu-comp-bio/ashlar/blob/master/pyramid_upgrade.py
 # ------------------------------------------------------------------------------------
 
-import os
-import sys 
 import argparse
 import csv
 import xml.etree.ElementTree
+
 from tifffile import tiffcomment
 
 
@@ -61,7 +60,7 @@ def main(image_fh, marker_file):
     # encode new xml and set image metadata
     fix_attrib_namespace(root)
     new_ome_xml = xml.etree.ElementTree.tostring(
-        root, 
+        root,
         encoding='utf-8',
         xml_declaration=True,
         default_namespace=xml_ns["ome"])
@@ -70,6 +69,7 @@ def main(image_fh, marker_file):
 
     print("Updated OME-TIFF metadata:")
     print(tiffcomment(image_fh))
+
 
 if __name__ == '__main__':
     aparser = argparse.ArgumentParser()
