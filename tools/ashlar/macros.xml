@@ -17,6 +17,6 @@
     </xml>
 
     <token name="@TOOL_VERSION@">1.18.0</token>
-    <token name="@VERSION_SUFFIX@">0</token>
+    <token name="@VERSION_SUFFIX@">1</token>
     <token name="@CMD_BEGIN@">ashlar</token>
 </macros>
