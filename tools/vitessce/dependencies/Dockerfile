@@ -17,9 +17,10 @@ RUN pip install \
     rm -rf /var/lib/apt/lists/* && \
     wget 'https://downloads.openmicroscopy.org/bio-formats/8.1.0/artifacts/bftools.zip' -O bftools.zip && \
     unzip -n -j bftools.zip "bftools/*" -d /usr/local/bin/ && \
-    rm -f bftools.zip
+    rm -f bftools.zip && \
+    mkdir -m 777 /vitessce
 
 USER vitessce
-WORKDIR /home/vitessce
+WORKDIR /vitessce
 
 CMD ['bash']
