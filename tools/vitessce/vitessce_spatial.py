@@ -3,6 +3,7 @@ import json
 import warnings
 from os.path import isdir, join
 from pathlib import Path
+import urllib.parse
 
 import scanpy as sc
 from anndata import read_h5ad
@@ -19,7 +20,7 @@ from vitessce.data_utils import (
 )
 
 
-def main(inputs, output, image, offsets=None, anndata=None, masks=None):
+def main(inputs, output, image, offsets=None, anndata=None, masks=None, config_path=None):
     """
     Parameter
     ---------
@@ -33,11 +34,19 @@ def main(inputs, output, image, offsets=None, anndata=None, masks=None):
         File path to anndata containing phenotyping info.
     masks : str
         File path to the image masks.
+    config_path : str
+        File path to the config file containing galaxy_url and dataset_id.
     """
     warnings.simplefilter('ignore')
 
     with open(inputs, 'r') as param_handler:
         params = json.load(param_handler)
+
+    with open(config_path) as conf_fh:
+        config = json.load(conf_fh)
+
+    galaxy_url = config["galaxy_url"]
+    dataset_id = config["dataset_id"]
 
     # initialize vitessce config and add OME-TIFF image, and masks if specified
     vc = VitessceConfig(schema_version="1.0.17", name=None, description=None)
@@ -73,12 +82,15 @@ def main(inputs, output, image, offsets=None, anndata=None, masks=None):
         w=lc_dims[0],
         h=lc_dims[1])
 
+    # Build the prefix that Vitessce should use
+    display_prefix = (f"{galaxy_url}/api/datasets/{dataset_id}/display?filename=")
+    
     # if no anndata file, export the config with these minimal components
     if not anndata:
         vc.layout(lc | spatial)
         config_dict = vc.export(
             to='files',
-            base_url='http://localhost',
+            base_url=display_prefix,
             out_dir=output)
         with open(Path(output).joinpath('config.json'), 'w') as f:
             json.dump(config_dict, f, indent=4)
@@ -191,7 +203,7 @@ def main(inputs, output, image, offsets=None, anndata=None, masks=None):
     # export the config file
     config_dict = vc.export(
         to='files',
-        base_url='http://localhost',
+        base_url=display_prefix,
         out_dir=output)
 
     with open(Path(output).joinpath('config.json'), 'w') as f:
@@ -206,7 +218,8 @@ if __name__ == '__main__':
     aparser.add_argument("-f", "--offsets", dest="offsets", required=False)
     aparser.add_argument("-a", "--anndata", dest="anndata", required=False)
     aparser.add_argument("-m", "--masks", dest="masks", required=False)
+    aparser.add_argument("--galaxy_config", dest="config_path", required=True)
 
     args = aparser.parse_args()
 
-    main(args.inputs, args.output, args.image, args.offsets, args.anndata, args.masks)
+    main(args.inputs, args.output, args.image, args.offsets, args.anndata, args.masks, args.config_path)

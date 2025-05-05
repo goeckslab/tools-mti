@@ -68,6 +68,7 @@
             --inputs '$inputs'
             --output '${output.files_path}'
             --image '${output.files_path}/A/0/image01.ome.tiff'
+            --galaxy_config '${galaxy_config}'
             --offsets '$image.metadata.offsets'
             #if $masks
                 --masks '${output.files_path}/A/0/masks01.ome.tiff'
