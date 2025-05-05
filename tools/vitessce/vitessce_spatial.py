@@ -2,8 +2,8 @@ import argparse
 import json
 import warnings
 from os.path import isdir, join
+# import urllib.parse
 from pathlib import Path
-import urllib.parse
 
 import scanpy as sc
 from anndata import read_h5ad
@@ -84,7 +84,7 @@ def main(inputs, output, image, offsets=None, anndata=None, masks=None, config_p
 
     # Build the prefix that Vitessce should use
     display_prefix = (f"{galaxy_url}/api/datasets/{dataset_id}/display?filename=")
-    
+
     # if no anndata file, export the config with these minimal components
     if not anndata:
         vc.layout(lc | spatial)
