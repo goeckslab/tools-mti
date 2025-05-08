@@ -16,6 +16,14 @@
 
     <configfiles>
         <inputs name="inputs" />
+        <configfile name="galaxy_config">
+            <![CDATA[
+            {
+            "galaxy_url": "${__app__.config.galaxy_infrastructure_url}",
+            "dataset_id": "${__app__.security.encode_id($image.dataset.id)}"
+            }
+                    ]]>
+        </configfile>
     </configfiles>
 
     <inputs>
@@ -88,7 +96,12 @@
     </inputs>
     <outputs>
         <data format="html" name="output" />
-        <data format="json" name="vitessce_config" from_work_dir="config.json" hidden="true" label="Vitessce config file on ${on_string}" />
+        <data format="json" 
+              name="vitessce_config" 
+              from_work_dir="config.json" 
+              hidden="true" 
+              label="Vitessce config file on ${on_string}">
+        </data>
     </outputs>
     <tests>
         <test>

@@ -12,6 +12,14 @@
     <expand macro="vitessce_cmd" tool_id="gate_finder" />
     <configfiles>
         <inputs name="inputs" />
+        <configfile name="galaxy_config">
+            <![CDATA[
+            {
+            "galaxy_url": "${__app__.config.galaxy_infrastructure_url}",
+            "dataset_id": "${__app__.security.encode_id($image.dataset.id)}"
+            }
+                    ]]>
+        </configfile>
     </configfiles>
     <inputs>
         <param name="image" type="data" format="ome.tiff" label="Select the image (OME-TIFF)" />

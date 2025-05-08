@@ -27,31 +27,13 @@
       import { Vitessce } from 'vitessce';
       import { config } from './config.js';
 
-      console.log('here be url: '+window.location.href);
-      var current_url = window.location.href.replace(new RegExp('\/[^\/]*$'), '');
-      console.log(current_url);
-      function rewriteURL(input) {
-        for (let k in input) {
-        if (typeof input[k] === 'string' || input[k] instanceof String) {
-            input[k] = input[k].replace('http://localhost', current_url)
-        }
-        else {
-            input[k] = rewriteURL(input[k])
-        }
-        }
-        return input;
-      };
-      var fixed_conf = {...config};
-      fixed_conf = rewriteURL(fixed_conf);
-      console.log('conf fixed:');
-      console.log(fixed_conf);
       function MyApp() {
         return React.createElement(
           Vitessce,
           {
             height: 1000,
             theme: 'dark',
-            config: fixed_conf,
+            config: config,
           }
         );
       }

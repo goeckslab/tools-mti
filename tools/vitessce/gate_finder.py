@@ -53,7 +53,7 @@ def get_gmm_phenotype(data):
     return get_gate_phenotype(gate, np.ravel(data_norm))
 
 
-def main(inputs, output, image, anndata, offsets=None, masks=None):
+def main(inputs, output, image, anndata, offsets=None, masks=None, config_path=None):
     """
     Parameter
     ---------
@@ -67,11 +67,16 @@ def main(inputs, output, image, anndata, offsets=None, masks=None):
         File path to anndata containing phenotyping info.
     masks : str
         File path to the image masks.
+    config_path : str
+        File path to the config containing galaxy_url and dataset_id.
     """
     warnings.simplefilter('ignore')
 
     with open(inputs, 'r') as param_handler:
         params = json.load(param_handler)
+
+    with open(config_path) as conf_fh:
+        config = json.load(conf_fh)
 
     marker = params['marker'].strip()
     from_gate = params['from_gate']
@@ -79,6 +84,12 @@ def main(inputs, output, image, anndata, offsets=None, masks=None):
     increment = params['increment']
     x_coordinate = params['x_coordinate'].strip() or 'X_centroid'
     y_coordinate = params['y_coordinate'].strip() or 'Y_centroid'
+
+    galaxy_url = config["galaxy_url"]
+    dataset_id = config["dataset_id"]
+
+    # Build the prefix that Vitessce should use
+    display_prefix = (f"{galaxy_url}/api/datasets/{dataset_id}/display?filename=")
 
     adata = read_h5ad(anndata)
 
@@ -191,7 +202,7 @@ def main(inputs, output, image, anndata, offsets=None, masks=None):
     )
 
     # export config file
-    config_dict = vc.export(to='files', base_url='http://localhost', out_dir=output)
+    config_dict = vc.export(to='files', base_url=display_prefix, out_dir=output)
 
     with open(Path(output).joinpath('config.json'), 'w') as f:
         json.dump(config_dict, f, indent=4)
@@ -205,7 +216,8 @@ if __name__ == '__main__':
     aparser.add_argument("-a", "--anndata", dest="anndata", required=True)
     aparser.add_argument("-f", "--offsets", dest="offsets", required=False)
     aparser.add_argument("-m", "--masks", dest="masks", required=False)
+    aparser.add_argument("--galaxy_config", dest="config_path", required=True)
 
     args = aparser.parse_args()
 
-    main(args.inputs, args.output, args.image, args.anndata, args.offsets, args.masks)
+    main(args.inputs, args.output, args.image, args.anndata, args.offsets, args.masks, args.config_path)
