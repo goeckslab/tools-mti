@@ -77,8 +77,9 @@
             --anndata '$anndata'
             #end if
             &&
-        cp '$__tool_directory__/index.html' '$output';
-        echo "export var config = \$(cat ${output.files_path}/config.json)" >> '${output.files_path}/config.js';
+        cp '$__tool_directory__/index.html' '$output' &&
+        sed -i 's|display?filename=/|display?filename=|g' ${output.files_path}/config.json &&
+        echo "export var config = \$(cat ${output.files_path}/config.json)" >> '${output.files_path}/config.js' &&
         cat '${output.files_path}/config.json' >> '$vitessce_config';
         ]]>
         </command>
