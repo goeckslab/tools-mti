@@ -28,7 +28,9 @@ def main(inputs, outfile):
         drop_markers = [x.strip() for x in drop_markers.split(',')]
     options = params['options']
     if not options.get('custom_imageid'):
-        options['custom_imageid'] = params['image_path']['element_identifier']
+        element_identifier = params['image_path']['element_identifier']
+        # Might be a list on unpatched versions of Galaxy, xref: https://github.com/galaxyproject/galaxy/pull/20438
+        options['custom_imageid'] = element_identifier if isinstance(element_identifier, str) else element_identifier[0]
     for k, v in options.items():
         if v == '':
             options[k] = None
