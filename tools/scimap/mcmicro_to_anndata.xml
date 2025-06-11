@@ -15,7 +15,7 @@
         ]]>
     </command>
     <configfiles>
-        <inputs name="inputs" data_style="paths"/>
+        <inputs name="inputs" data_style="staging_path_and_source_path"/>
     </configfiles>
     <inputs>
         <param argument="image_path" type="data" format="tabular,csv" multiple="false" label="Select the input image or images" />

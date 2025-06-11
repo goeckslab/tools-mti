@@ -20,13 +20,15 @@ def main(inputs, outfile):
     with open(inputs, 'r') as param_handler:
         params = json.load(param_handler)
 
-    image_path = params['image_path']
+    image_path = params['image_path']['source_path']
     drop_markers = params['drop_markers']
     if not drop_markers:
         drop_markers = None
     else:
         drop_markers = [x.strip() for x in drop_markers.split(',')]
     options = params['options']
+    if not options.get('custom_imageid'):
+        options['custom_imageid'] = params['image_path']['element_identifier']
     for k, v in options.items():
         if v == '':
             options[k] = None
