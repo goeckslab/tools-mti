@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<macros>
+    <xml name="requirements">
+        <requirements>
+            <container type="docker">quay.io/goeckslab/visinity:1.17v0</container>
+        </requirements>
+    </xml>
+    <xml name="version_cmd">
+        <version_command>echo @TOOL_VERSION@</version_command>
+    </xml>
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1109/TVCG.2022.3209378</citation>
+        </citations>
+    </xml>
+
+    <token name="@TOOL_VERSION@">1.17</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+</macros>
