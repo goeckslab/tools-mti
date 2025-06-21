@@ -252,7 +252,9 @@
     <tests>
         <test expect_num_outputs="1">
             <param name="anndata" value="imc.h5ad" ftype="h5ad" />
-            <param name="selected_tool" value="spatial_neighbors" />
+            <conditional name="analyses">
+                <param name="selected_tool" value="spatial_neighbors" />
+            </conditional>
             <output name="output">
                 <assert_contents>
                     <has_h5_keys keys="uns/spatial_neighbors" />
@@ -261,8 +263,10 @@
         </test>
         <test expect_num_outputs="2">
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
-            <param name="selected_tool" value="nhood_enrichment" />
-            <param name="cluster_key" value="cell type" />
+            <conditional name="analyses">
+                <param name="selected_tool" value="nhood_enrichment" />
+                <param name="cluster_key" value="cell type" />
+            </conditional>
             <output name="output">
                 <assert_contents>
                     <has_h5_keys keys="uns/cell type_nhood_enrichment" />
@@ -272,8 +276,10 @@
         </test>
         <test expect_num_outputs="2">
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
-            <param name="selected_tool" value="co_occurrence" />
-            <param name="cluster_key" value="cell type" />
+            <conditional name="analyses">
+                <param name="selected_tool" value="co_occurrence" />
+                <param name="cluster_key" value="cell type" />
+            </conditional>
             <output name="output">
                 <assert_contents>
                     <has_h5_keys keys="uns/cell type_co_occurrence" />
@@ -283,8 +289,10 @@
         </test>
         <test expect_num_outputs="2">
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
-            <param name="selected_tool" value="centrality_scores" />
-            <param name="cluster_key" value="cell type" />
+            <conditional name="analyses">
+                <param name="selected_tool" value="centrality_scores" />
+                <param name="cluster_key" value="cell type" />
+            </conditional>
             <output name="output">
                 <assert_contents>
                     <has_h5_keys keys="uns/cell type_centrality_scores" />
@@ -294,8 +302,10 @@
         </test>
         <test expect_num_outputs="2">
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
-            <param name="selected_tool" value="interaction_matrix" />
-            <param name="cluster_key" value="cell type" />
+            <conditional name="analyses">
+                <param name="selected_tool" value="interaction_matrix" />
+                <param name="cluster_key" value="cell type" />
+            </conditional>
             <output name="output">
                 <assert_contents>
                     <has_h5_keys keys="uns/cell type_interactions" />
@@ -305,8 +315,10 @@
         </test>
         <test expect_num_outputs="2">
             <param name="anndata" value="imc_sn.h5ad" ftype="h5ad" />
-            <param name="selected_tool" value="ripley" />
-            <param name="cluster_key" value="cell type" />
+            <conditional name="analyses">
+                <param name="selected_tool" value="ripley" />
+                <param name="cluster_key" value="cell type" />
+            </conditional>
             <output name="output">
                 <assert_contents>
                     <has_h5_keys keys="uns/cell type_ripley_F" />
