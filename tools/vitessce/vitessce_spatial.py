@@ -83,7 +83,7 @@ def main(inputs, output, image, offsets=None, anndata=None, masks=None, config_p
         h=lc_dims[1])
 
     # Build the prefix that Vitessce should use
-    display_prefix = (f"{galaxy_url}/api/datasets/{dataset_id}/display?filename=")
+    display_prefix = f"{galaxy_url}/api/datasets/{dataset_id}/extra_files/raw"
 
     # if no anndata file, export the config with these minimal components
     if not anndata:

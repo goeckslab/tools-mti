@@ -1,7 +1,7 @@
 <macros>
     <token name="@TOOL_VERSION@">3.5.1</token>
-    <token name="@VERSION_SUFFIX@">2</token>
-    <token name="@PROFILE@">22.01</token>
+    <token name="@VERSION_SUFFIX@">3</token>
+    <token name="@PROFILE@">25.0</token>
 
     <xml name="vitessce_requirements">
         <requirements>
@@ -78,7 +78,6 @@
             #end if
             &&
         cp '$__tool_directory__/index.html' '$output' &&
-        sed -i 's|display?filename=/|display?filename=|g' ${output.files_path}/config.json &&
         echo "export var config = \$(cat ${output.files_path}/config.json)" >> '${output.files_path}/config.js' &&
         cat '${output.files_path}/config.json' >> '$vitessce_config';
         ]]>
