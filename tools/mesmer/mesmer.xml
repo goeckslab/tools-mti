@@ -13,7 +13,7 @@
     <expand macro="stdio"/>
 
     <command detect_errors="exit_code"><![CDATA[
-    python $script
+    python '$script'
     ]]></command>
     <configfiles>
         <configfile name="script">
@@ -116,7 +116,7 @@ tifffile.imsave("mask.tif", mask)
         </configfile>
     </configfiles>
     <inputs>
-        <param name="image" type="data" format="tiff, ome.tiff" label="Image containing the all marker(s)"/>
+        <param name="image" type="data" format="tiff,ome.tiff" label="Image containing the all marker(s)"/>
         <param name="nuclear_channels" type="text" value="0" label="The numerical indices of the channel(s) for the nuclear markers" help="No quotes, separated by comma. e.g. 0, 1."/>
         <param name="image_mpp" type="float" value="0.5" label="Resolution of the image in microns-per-pixel"/>
         <param name="squeeze" type="boolean" checked="true" label="Whether to np.squeeze the outputs before saving"/>
@@ -153,7 +153,9 @@ tifffile.imsave("mask.tif", mask)
     <tests>
          <test expect_num_outputs="1">
             <param name="image" value="deepcell_test.tiff" ftype="tiff"/>
-            <param name="compartment" value="nuclear" />
+            <conditional name="compartment_select">
+                <param name="compartment" value="nuclear" />
+            </conditional>
             <param name="image_mpp" value="0.65" />
             <param name="squeeze" value="True" />
             <output name="mask" ftype="tiff">
@@ -164,9 +166,14 @@ tifffile.imsave("mask.tif", mask)
         </test>
          <test expect_num_outputs="1">
             <param name="image" value="deepcell_test.tiff" ftype="tiff"/>
-            <param name="compartment" value="whole-cell" />
-            <param name="wc_channels" value="0, 1" />
-            <param name="maxima_threshold" value="0.075" />
+            <conditional name="compartment_select">
+                <param name="compartment" value="whole-cell" />
+                <section name="wc_options">
+                    <param name="wc_channels" value="0, 1" />
+                    <param name="maxima_threshold" value="0.075" />
+                </section>
+            </conditional>
+
             <param name="image_mpp" value="0.65" />
             <param name="squeeze" value="True" />
             <output name="mask" ftype="tiff">
@@ -177,10 +184,14 @@ tifffile.imsave("mask.tif", mask)
         </test>
          <test expect_num_outputs="2">
             <param name="image" value="deepcell_test.tiff" ftype="tiff"/>
-            <param name="compartment" value="both" />
-            <param name="image_mpp" value="0.65" />
-            <param name="wc_channels" value="1" />
+            <conditional name="compartment_select">
+                <param name="compartment" value="both" />
+                <section name="wc_options">
+                    <param name="wc_channels" value="1" />
+                </section>
+            </conditional>
             <param name="nuclear_channels" value="0" />
+            <param name="image_mpp" value="0.65" />
             <param name="squeeze" value="True" />
             <output name="wc_mask" ftype="tiff">
                 <assert_contents>

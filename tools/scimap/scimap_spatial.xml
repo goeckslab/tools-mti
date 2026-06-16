@@ -3,7 +3,6 @@
     <macros>
         <import>main_macros.xml</import>
     </macros>
-
     <expand macro="scimap_requirements"/>
     <expand macro="macro_stdio" />
     <version_command>echo "@VERSION@"</version_command>
